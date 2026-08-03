@@ -122,7 +122,7 @@ Mentor said would impress:
 
 ## RocketRide.ai — motion / orchestration layer
 
-**Status:** 🟡 CODE WIRED, UNTESTED — blocked on one thing: an API key
+**Status:** ✅ WIRED AND PROVEN LIVE — every decision executes on their server
 **API key:**  <-- GET THIS. Put it in .env as ROCKETRIDE_APIKEY=<key>
 **Install:** `pip install rocketride` (v1.3.0, installed into `.venv`)
 
@@ -222,3 +222,40 @@ Ask: *"minimum viable two agents that hand off to each other?"*
 Mentor said teams get wrong:
 
 Mentor said would impress:
+
+
+---
+
+## RocketRide — solved: "Pipeline is already running."
+
+Hit this when a previous run (or a second terminal) left a pipeline alive on
+their server. The error comes from THEIR server, not the SDK — it is not in the
+package source anywhere.
+
+Fix, read off `mixins/execution.py`, `use()` signature:
+
+```python
+await client.use(pipeline=cfg, use_existing=True, ttl=600)
+```
+
+- `use_existing=True` — reattach to the running pipeline instead of erroring.
+- `ttl=600` — idle pipelines expire after 10 min, so runs stop piling up.
+  `ttl=0` means never expire, which is what caused the jam in the first place.
+
+There is also `await client.terminate(token)` to stop one deliberately.
+
+**What comes back depends on whether ANTHROPIC_API_KEY is set**, because
+RocketRide passes YOUR key through to Anthropic — their platform key does not
+cover model calls.
+
+| ANTHROPIC_API_KEY | pipeline | `send()` returns |
+|---|---|---|
+| set | webhook → prompt → llm_anthropic → response_answers | prose sentence |
+| not set | webhook → response_text | `{'name', 'path', 'objectId'}` receipt |
+
+Both are real executions. Verified live: with no Anthropic key we get a fresh
+`objectId` per action, which the demo now prints as `[RR ]`. Staying silent
+made RocketRide LOOK unwired even though it ran — do not go back to that.
+
+**To get the spoken announcement:** add `ANTHROPIC_API_KEY=<key>` to `.env`.
+Nothing else changes; `announcer_pipeline()` picks the richer form on its own.
