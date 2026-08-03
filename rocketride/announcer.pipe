@@ -1,0 +1,55 @@
+{
+  "pipeline": {
+    "project_id": "5f1c0d3e-2b7a-4c19-9e84-6a0f7d2b3c15",
+    "source": "action_in",
+    "components": [
+      {
+        "id": "action_in",
+        "provider": "webhook",
+        "config": {}
+      },
+      {
+        "id": "framing",
+        "provider": "prompt",
+        "config": {
+          "instructions": [
+            "You are satellite mission control announcing a downlink assignment you just made between contending satellites. One sentence, calm and operational, under 20 words. Name which satellite got the window and why it was fair."
+          ]
+        },
+        "input": [
+          {
+            "from": "action_in",
+            "lane": "text"
+          }
+        ]
+      },
+      {
+        "id": "brain",
+        "provider": "llm_anthropic",
+        "config": {
+          "profile": "claude-sonnet-5",
+          "claude-sonnet-5": {
+            "apikey": "${ANTHROPIC_API_KEY}"
+          }
+        },
+        "input": [
+          {
+            "from": "framing",
+            "lane": "questions"
+          }
+        ]
+      },
+      {
+        "id": "said",
+        "provider": "response_answers",
+        "config": {},
+        "input": [
+          {
+            "from": "brain",
+            "lane": "answers"
+          }
+        ]
+      }
+    ]
+  }
+}

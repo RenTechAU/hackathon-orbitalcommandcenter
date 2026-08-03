@@ -1,0 +1,24 @@
+{
+  "pipeline": {
+    "project_id": "5f1c0d3e-2b7a-4c19-9e84-6a0f7d2b3c15",
+    "source": "action_in",
+    "components": [
+      {
+        "id": "action_in",
+        "provider": "webhook",
+        "config": {}
+      },
+      {
+        "id": "said",
+        "provider": "response_text",
+        "config": {},
+        "input": [
+          {
+            "from": "action_in",
+            "lane": "text"
+          }
+        ]
+      }
+    ]
+  }
+}
