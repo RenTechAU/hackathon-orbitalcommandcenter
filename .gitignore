@@ -16,3 +16,4 @@ laser-stack/
 # docs/guild-agents/ so nothing is lost if a laptop dies.
 src/agents/advocate/
 src/agents/mission-safety/
+src/agents/coordinator/
