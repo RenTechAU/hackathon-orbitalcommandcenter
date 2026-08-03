@@ -1,0 +1,62 @@
+[
+ {
+  "name": "KH6DAD-UHF EggNOG",
+  "lat": 21.36,
+  "lon": -158.03
+ },
+ {
+  "name": "UVSD-SatNOGS",
+  "lat": 48.46,
+  "lon": -123.31
+ },
+ {
+  "name": "KN6BKT-433",
+  "lat": 34.12,
+  "lon": -118.08
+ },
+ {
+  "name": "Not Quite ESL",
+  "lat": 38.58,
+  "lon": -90.0
+ },
+ {
+  "name": "LU3ARN",
+  "lat": -34.57,
+  "lon": -58.48
+ },
+ {
+  "name": "sat-rx",
+  "lat": 51.9,
+  "lon": -8.66
+ },
+ {
+  "name": "EA3AGB",
+  "lat": 40.69,
+  "lon": 0.57
+ },
+ {
+  "name": "UX5UL",
+  "lat": 50.36,
+  "lon": 30.39
+ },
+ {
+  "name": "NUUGS2",
+  "lat": 41.35,
+  "lon": 69.2
+ },
+ {
+  "name": "HS0ZQS_900_Patch",
+  "lat": 13.87,
+  "lon": 100.5
+ },
+ {
+  "name": "Gemini_UHF",
+  "lat": 23.0,
+  "lon": 120.22
+ },
+ {
+  "name": "VK2BYF-VHF",
+  "lat": -34.85,
+  "lon": 150.6
+ }
+]

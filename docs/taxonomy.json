@@ -1,0 +1,41 @@
+{
+ "categories": {
+  "weather": 50,
+  "earth-obs": 352,
+  "comms": 42,
+  "comms-mega": 11417,
+  "science": 77,
+  "cubesat-edu": 150,
+  "defence": 33
+ },
+ "groups": {
+  "weather": 50,
+  "noaa": 0,
+  "goes": 0,
+  "resource": 164,
+  "sarsat": 0,
+  "dmc": 5,
+  "planet": 110,
+  "spire": 73,
+  "gps-ops": 0,
+  "galileo": 0,
+  "beidou": 0,
+  "glo-ops": 0,
+  "sbas": 0,
+  "intelsat": 0,
+  "ses": 0,
+  "iridium": 0,
+  "orbcomm": 14,
+  "globalstar": 28,
+  "starlink": 10766,
+  "oneweb": 651,
+  "science": 37,
+  "geodetic": 5,
+  "engineering": 35,
+  "education": 3,
+  "cubesat": 80,
+  "amateur": 67,
+  "military": 24,
+  "radar": 9
+ }
+}

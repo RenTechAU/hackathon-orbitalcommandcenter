@@ -1,0 +1,106 @@
+[
+ {
+  "year": 2014,
+  "leo_launched": 66,
+  "cum_sats": 66,
+  "dishes_added": 0,
+  "cum_dishes": 0,
+  "sats_per_dish": null
+ },
+ {
+  "year": 2015,
+  "leo_launched": 48,
+  "cum_sats": 114,
+  "dishes_added": 4,
+  "cum_dishes": 4,
+  "sats_per_dish": 28.5
+ },
+ {
+  "year": 2016,
+  "leo_launched": 41,
+  "cum_sats": 155,
+  "dishes_added": 1,
+  "cum_dishes": 5,
+  "sats_per_dish": 31.0
+ },
+ {
+  "year": 2017,
+  "leo_launched": 94,
+  "cum_sats": 249,
+  "dishes_added": 25,
+  "cum_dishes": 30,
+  "sats_per_dish": 8.3
+ },
+ {
+  "year": 2018,
+  "leo_launched": 137,
+  "cum_sats": 386,
+  "dishes_added": 343,
+  "cum_dishes": 373,
+  "sats_per_dish": 1.0
+ },
+ {
+  "year": 2019,
+  "leo_launched": 102,
+  "cum_sats": 488,
+  "dishes_added": 687,
+  "cum_dishes": 1060,
+  "sats_per_dish": 0.5
+ },
+ {
+  "year": 2020,
+  "leo_launched": 383,
+  "cum_sats": 871,
+  "dishes_added": 595,
+  "cum_dishes": 1655,
+  "sats_per_dish": 0.5
+ },
+ {
+  "year": 2021,
+  "leo_launched": 989,
+  "cum_sats": 1860,
+  "dishes_added": 479,
+  "cum_dishes": 2134,
+  "sats_per_dish": 0.9
+ },
+ {
+  "year": 2022,
+  "leo_launched": 1710,
+  "cum_sats": 3570,
+  "dishes_added": 407,
+  "cum_dishes": 2541,
+  "sats_per_dish": 1.4
+ },
+ {
+  "year": 2023,
+  "leo_launched": 2243,
+  "cum_sats": 5813,
+  "dishes_added": 421,
+  "cum_dishes": 2962,
+  "sats_per_dish": 2.0
+ },
+ {
+  "year": 2024,
+  "leo_launched": 2409,
+  "cum_sats": 8222,
+  "dishes_added": 394,
+  "cum_dishes": 3356,
+  "sats_per_dish": 2.4
+ },
+ {
+  "year": 2025,
+  "leo_launched": 4259,
+  "cum_sats": 12481,
+  "dishes_added": 622,
+  "cum_dishes": 3978,
+  "sats_per_dish": 3.1
+ },
+ {
+  "year": 2026,
+  "leo_launched": 2497,
+  "cum_sats": 14978,
+  "dishes_added": 424,
+  "cum_dishes": 4402,
+  "sats_per_dish": 3.4
+ }
+]
