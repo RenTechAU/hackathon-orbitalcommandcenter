@@ -1,0 +1,72 @@
+{
+  "priority": {
+    "windows": {
+      "SAT-1": 62,
+      "SAT-2": 79,
+      "SAT-3": 63,
+      "SAT-4": 78,
+      "SAT-5": 1,
+      "SAT-6": 0
+    },
+    "delivered": {
+      "SAT-1": 723.0,
+      "SAT-2": 861.0,
+      "SAT-3": 756.0,
+      "SAT-4": 700.0,
+      "SAT-5": 12.0,
+      "SAT-6": 0.0
+    },
+    "max_gap_min": {
+      "SAT-1": 80,
+      "SAT-2": 75,
+      "SAT-3": 75,
+      "SAT-4": 75,
+      "SAT-5": 1355,
+      "SAT-6": 1440
+    },
+    "total_windows": 283,
+    "total_gb": 3052.0,
+    "starved": 1,
+    "worst_gap_h": 24.0,
+    "fairness_ratio": null,
+    "contentions": 142,
+    "vetoes": 0,
+    "critical_max_wait_min": 40,
+    "critical_served": 6
+  },
+  "broker": {
+    "windows": {
+      "SAT-1": 32,
+      "SAT-2": 40,
+      "SAT-3": 63,
+      "SAT-4": 78,
+      "SAT-5": 31,
+      "SAT-6": 39
+    },
+    "delivered": {
+      "SAT-1": 381.0,
+      "SAT-2": 471.0,
+      "SAT-3": 756.0,
+      "SAT-4": 700.0,
+      "SAT-5": 372.0,
+      "SAT-6": 468.0
+    },
+    "max_gap_min": {
+      "SAT-1": 90,
+      "SAT-2": 80,
+      "SAT-3": 75,
+      "SAT-4": 75,
+      "SAT-5": 90,
+      "SAT-6": 80
+    },
+    "total_windows": 283,
+    "total_gb": 3148.0,
+    "starved": 0,
+    "worst_gap_h": 1.5,
+    "fairness_ratio": 2.5,
+    "contentions": 142,
+    "vetoes": 2,
+    "critical_max_wait_min": 40,
+    "critical_served": 7
+  }
+}

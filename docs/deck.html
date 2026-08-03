@@ -1,0 +1,416 @@
+<title>Orbital Contact Broker</title>
+
+<style>
+  :root{
+    --ground:#FCFCFB;
+    --panel:#F2F3F6;
+    --ink:#141A24;
+    --ink-2:#3F4A5A;
+    --ink-3:#6B7688;
+    --rule:#D8DDE5;
+    --old:#BE6A0A;
+    --new:#2563C9;
+    --crit:#B3261E;
+    --old-wash:rgba(190,106,10,.10);
+    --new-wash:rgba(37,99,201,.10);
+    --display:-apple-system,BlinkMacSystemFont,"Helvetica Neue","Segoe UI",system-ui,sans-serif;
+    --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --ground:#0E131C; --panel:#161D29; --ink:#E7ECF4; --ink-2:#A7B3C4;
+      --ink-3:#75839A; --rule:#28323F;
+      --old:#C9822E; --new:#4E8FE0;
+      --crit:#E2685E;
+      --old-wash:rgba(201,130,46,.14); --new-wash:rgba(78,143,224,.14);
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#0E131C; --panel:#161D29; --ink:#E7ECF4; --ink-2:#A7B3C4;
+    --ink-3:#75839A; --rule:#28323F;
+    --old:#C9822E; --new:#4E8FE0; --crit:#E2685E;
+    --old-wash:rgba(201,130,46,.14); --new-wash:rgba(78,143,224,.14);
+  }
+  :root[data-theme="light"]{
+    --ground:#FCFCFB; --panel:#F2F3F6; --ink:#141A24; --ink-2:#3F4A5A;
+    --ink-3:#6B7688; --rule:#D8DDE5;
+    --old:#BE6A0A; --new:#2563C9; --crit:#B3261E;
+    --old-wash:rgba(190,106,10,.10); --new-wash:rgba(37,99,201,.10);
+  }
+
+  body{
+    background:var(--ground); color:var(--ink);
+    font-family:var(--display);
+    -webkit-font-smoothing:antialiased;
+    scroll-snap-type:y proximity;
+  }
+
+  .panel{
+    scroll-snap-align:start;
+    min-height:100svh;
+    padding:clamp(28px,5vw,72px) clamp(20px,6vw,88px);
+    display:flex; flex-direction:column; gap:clamp(20px,3vh,34px);
+    justify-content:center;
+    border-bottom:1px solid var(--rule);
+    max-width:1180px; margin-inline:auto;
+  }
+
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--ink-3);
+    display:flex; gap:14px; align-items:center;
+  }
+  .eyebrow b{color:var(--new); font-weight:600;}
+  .eyebrow::after{content:""; flex:1; height:1px; background:var(--rule);}
+
+  h1{
+    font-size:clamp(34px,6.2vw,68px); line-height:.98; letter-spacing:-.032em;
+    font-weight:800; text-wrap:balance; max-width:19ch;
+  }
+  h2{
+    font-size:clamp(27px,4.1vw,44px); line-height:1.04; letter-spacing:-.026em;
+    font-weight:800; text-wrap:balance; max-width:22ch;
+  }
+  h3{
+    font-family:var(--mono); font-size:12px; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--ink-3); font-weight:600;
+  }
+  p{font-size:clamp(15px,1.5vw,18px); line-height:1.55; color:var(--ink-2); max-width:62ch;}
+  p strong{color:var(--ink); font-weight:650;}
+  .lede{font-size:clamp(17px,1.9vw,21px); color:var(--ink); max-width:56ch;}
+
+  .cols{display:grid; grid-template-columns:repeat(auto-fit,minmax(258px,1fr)); gap:clamp(16px,2.4vw,30px);}
+  .card{
+    background:var(--panel); border:1px solid var(--rule); border-radius:3px;
+    padding:20px 22px; display:flex; flex-direction:column; gap:10px;
+  }
+  .card.old{border-top:3px solid var(--old);}
+  .card.new{border-top:3px solid var(--new);}
+
+  .stat{font-family:var(--mono); font-variant-numeric:tabular-nums; font-weight:600;}
+  .stat .big{display:block; font-size:clamp(30px,4.4vw,50px); letter-spacing:-.03em; line-height:1;}
+  .stat .unit{font-size:13px; color:var(--ink-3); letter-spacing:.04em;}
+  .old .big{color:var(--old);} .new .big{color:var(--new);}
+
+  .note{font-family:var(--mono); font-size:12.5px; line-height:1.6; color:var(--ink-3);}
+  .note b{color:var(--ink-2); font-weight:600;}
+
+  figure{margin:0; overflow-x:auto;}
+  svg{display:block; width:100%; height:auto; min-width:520px;}
+  .legend{display:flex; gap:22px; font-family:var(--mono); font-size:12px; color:var(--ink-2); flex-wrap:wrap;}
+  .legend span{display:flex; align-items:center; gap:8px;}
+  .swatch{width:15px; height:3px; border-radius:2px; display:inline-block;}
+
+  table{border-collapse:collapse; font-family:var(--mono); font-size:13px; width:100%;
+        font-variant-numeric:tabular-nums;}
+  th,td{text-align:right; padding:8px 12px; border-bottom:1px solid var(--rule);}
+  th:first-child,td:first-child{text-align:left;}
+  th{font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:600;}
+  td.hero{color:var(--new); font-weight:650;}
+
+  code{font-family:var(--mono); font-size:13px; background:var(--panel);
+       border:1px solid var(--rule); border-radius:3px; padding:1px 6px;}
+  pre{font-family:var(--mono); font-size:12.5px; line-height:1.65; background:var(--panel);
+      border:1px solid var(--rule); border-left:3px solid var(--new); border-radius:3px;
+      padding:16px 18px; overflow-x:auto; color:var(--ink-2);}
+  pre b{color:var(--new); font-weight:650;}
+
+  .flow{display:flex; align-items:stretch; gap:8px; flex-wrap:wrap; font-family:var(--mono); font-size:12px;}
+  .step{flex:1 1 150px; background:var(--panel); border:1px solid var(--rule);
+        border-radius:3px; padding:13px 14px; display:flex; flex-direction:column; gap:5px;}
+  .step .who{color:var(--new); font-weight:650; letter-spacing:.02em;}
+  .step .does{color:var(--ink-3); line-height:1.5;}
+  .step .live{color:var(--ink-2);}
+
+  .beats{display:flex; flex-direction:column; gap:9px; font-family:var(--mono); font-size:13px;}
+  .beat{display:flex; gap:14px; align-items:baseline; padding:11px 14px;
+        background:var(--panel); border:1px solid var(--rule); border-radius:3px;}
+  .beat .n{color:var(--ink-3); font-size:11px; min-width:18px;}
+  .beat .t{color:var(--ink-2); line-height:1.5;}
+  .beat.veto{border-left:3px solid var(--crit);}
+  .beat.veto .t b{color:var(--crit);}
+  .beat .t b{color:var(--ink); font-weight:650;}
+
+  .caveat{border-left:3px solid var(--old); padding:12px 0 12px 18px;}
+  .caveat p{font-size:15px; max-width:66ch;}
+
+  [data-tip]{cursor:default;}
+  #tip{
+    position:fixed; pointer-events:none; opacity:0; transition:opacity .12s;
+    background:var(--ink); color:var(--ground); font-family:var(--mono);
+    font-size:12px; padding:7px 10px; border-radius:3px; z-index:9; line-height:1.5;
+    font-variant-numeric:tabular-nums; white-space:pre;
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;}}
+  a{color:var(--new);}
+  :focus-visible{outline:2px solid var(--new); outline-offset:2px;}
+</style>
+
+<div id="tip"></div>
+
+<!-- ───────────────────────────── 01 · WHY ───────────────────────────── -->
+<section class="panel">
+  <div class="eyebrow"><b>01</b> The problem</div>
+  <h1>Every satellite is shouting. There aren&rsquo;t enough dishes to listen.</h1>
+  <p class="lede">A satellite can only send its data down when a ground station is
+    pointed at it &mdash; a few minutes per pass. Passes overlap. Dishes are scarce.
+    Someone has to lose.</p>
+
+  <div class="cols">
+    <div class="card">
+      <h3>Today&rsquo;s answer</h3>
+      <p style="font-size:15px">A <strong>fixed priority table</strong>. The highest-ranked
+        satellite wins, every single time.</p>
+      <p class="note">It has no memory. So the satellite at the bottom of the table
+        loses the same argument on every orbit, all day.</p>
+    </div>
+    <div class="card old">
+      <div class="stat"><span class="big">210</span>
+        <span class="unit">contested dish-minutes in 24&nbsp;h</span></div>
+      <p class="note">Measured over <b>real orbits</b>: 12 tracked satellites,
+        6 real ground stations, one full day.</p>
+    </div>
+    <div class="card">
+      <h3>The cost</h3>
+      <p style="font-size:15px">Data that never comes down is data that was never
+        collected. A weather image is worthless a day late.</p>
+      <p class="note">And the fix can&rsquo;t be &ldquo;be fairer&rdquo; if it delays a
+        collision warning by even one orbit.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 02 · WHAT ──────────────────────────── -->
+<section class="panel">
+  <div class="eyebrow"><b>02</b> The idea</div>
+  <h2>A constellation that negotiates &mdash; and remembers who gave way.</h2>
+  <p class="lede">Two satellites want the same dish. Advocate agents argue it out.
+    The system records who conceded, and uses that next time.</p>
+
+  <div class="cols">
+    <div class="card old">
+      <h3>Contention 1 &middot; 09:12 UTC</h3>
+      <p class="note">METOP-B and FENGYUN 3A both want <b>EA3AGB</b>.<br>
+        No history exists.</p>
+      <p style="font-size:15px"><strong>Advocates argue.</strong> The stronger honest
+        claim wins &mdash; and the loser is written into the graph.</p>
+      <p class="note">&rarr; FENGYUN 3A yielded</p>
+    </div>
+    <div class="card new">
+      <h3>Contention 2 &middot; 10:44 UTC</h3>
+      <p class="note">The identical contention, one orbit later.<br>
+        <b>Same inputs.</b></p>
+      <p style="font-size:15px"><strong>Different outcome.</strong> &ldquo;FENGYUN 3A
+        yielded here last pass &mdash; its turn.&rdquo;</p>
+      <p class="note">&rarr; and that difference is the memory</p>
+    </div>
+  </div>
+
+  <div class="caveat">
+    <p><strong>Fairness is the default, not the law.</strong> A mission-safety agent
+      reviews every verdict and can overrule it &mdash; if the losing satellite is
+      carrying a collision warning, it wins regardless of whose turn it was.</p>
+  </div>
+</section>
+
+<!-- ───────────────────────────── 03 · HOW ───────────────────────────── -->
+<section class="panel">
+  <div class="eyebrow"><b>03</b> How it works</div>
+  <h2>Four systems, each doing one job it can&rsquo;t be removed from.</h2>
+
+  <div class="flow">
+    <div class="step"><span class="who">LaserData</span>
+      <span class="live">telemetry stream</span>
+      <span class="does">Positions arrive over a real Apache Iggy log. Passes open and close.</span></div>
+    <div class="step"><span class="who">FalkorDB</span>
+      <span class="live">the memory</span>
+      <span class="does">Who yielded to whom, at which dish. Written on every decision.</span></div>
+    <div class="step"><span class="who">Guild.ai</span>
+      <span class="live">the argument</span>
+      <span class="does">One advocate per satellite, plus a safety officer who can overrule them.</span></div>
+    <div class="step"><span class="who">RocketRide</span>
+      <span class="live">the action</span>
+      <span class="does">Issues the tasking command and reports what mission control announces.</span></div>
+  </div>
+
+  <div class="cols" style="align-items:start">
+    <div>
+      <h3>The query that earns a graph</h3>
+      <pre>MATCH path =
+  (s:Satellite {name:$sat})
+    <b>-[:LINKS_TO*1..5]-&gt;</b>
+  (relay:Satellite)
+    -[:IN_VIEW_OF]-&gt;
+  (g:GroundStation)
+RETURN path ORDER BY length(path)</pre>
+      <p class="note" style="margin-top:12px">A satellite over open ocean sees
+        <b>no</b> dish. It routes home through laser links instead &mdash; and you
+        don&rsquo;t know how many hops until you look. <b>Variable depth.</b>
+        A table needs a recursive join and breaks as the fleet grows.</p>
+    </div>
+    <div>
+      <h3>The query that carries the memory</h3>
+      <pre>MATCH (g:GroundStation {name:$st})
+    &lt;-[:IN_VIEW_OF]-(giver:Satellite)
+    <b>-[y:YIELDED {station:$st}]-&gt;</b>
+  (recv:Satellite)-[:IN_VIEW_OF]-&gt;(g)
+RETURN giver.name, recv.name, count(y)</pre>
+      <p class="note" style="margin-top:12px">Three hops that start and end at the
+        same dish. History only counts <b>between satellites contending right
+        now</b> &mdash; yielding to a satellite currently over the far side of the
+        planet is irrelevant.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────────────── 04 · PROOF ──────────────────────────── -->
+<section class="panel">
+  <div class="eyebrow"><b>04</b> Does it actually help?</div>
+  <h2>The scarcer the dishes, the more the memory matters.</h2>
+  <p>Same sky, same data, same emergencies &mdash; only the scheduling policy changes.
+    <strong>Inequality</strong> is how many more windows the busiest satellite got than
+    the quietest. Lower is fairer.</p>
+
+  <figure>
+    <svg viewBox="0 0 720 330" role="img"
+         aria-label="As ground stations become scarcer, inequality under fixed priority rises to 6.0 while the broker holds at 2.8.">
+      <g stroke="var(--rule)" stroke-width="1">
+        <line x1="70" y1="280" x2="700" y2="280"/>
+        <line x1="70" y1="203" x2="700" y2="203"/>
+        <line x1="70" y1="126" x2="700" y2="126"/>
+        <line x1="70" y1="49"  x2="700" y2="49"/>
+      </g>
+      <g font-family="ui-monospace,Menlo,monospace" font-size="11" fill="var(--ink-3)">
+        <text x="58" y="284" text-anchor="end">0</text>
+        <text x="58" y="207" text-anchor="end">2×</text>
+        <text x="58" y="130" text-anchor="end">4×</text>
+        <text x="58" y="53"  text-anchor="end">6×</text>
+        <text x="70"  y="305">6 dishes</text>
+        <text x="690" y="305" text-anchor="end">1 dish</text>
+        <text x="380" y="322" text-anchor="middle" fill="var(--ink-3)">fewer ground stations  &rarr;  more contention</text>
+      </g>
+
+      <!-- fixed priority -->
+      <polyline fill="none" stroke="var(--old)" stroke-width="2" stroke-linejoin="round"
+        points="70,188 194,192 318,192 442,180 566,157 690,49"/>
+      <!-- broker -->
+      <polyline fill="none" stroke="var(--new)" stroke-width="2" stroke-linejoin="round"
+        points="70,215 194,211 318,218 442,218 566,207 690,172"/>
+
+      <g id="pts"></g>
+
+      <text x="672" y="40" text-anchor="end" font-family="ui-monospace,Menlo,monospace"
+            font-size="13" font-weight="600" fill="var(--old)">6.0× spread</text>
+      <text x="672" y="164" text-anchor="end" font-family="ui-monospace,Menlo,monospace"
+            font-size="13" font-weight="600" fill="var(--new)">2.8×</text>
+    </svg>
+  </figure>
+
+  <div class="legend">
+    <span><i class="swatch" style="background:var(--old)"></i> Fixed priority &mdash; today&rsquo;s answer</span>
+    <span><i class="swatch" style="background:var(--new)"></i> Orbital Contact Broker</span>
+  </div>
+
+  <div class="cols">
+    <div class="card new">
+      <div class="stat"><span class="big">&minus;53%</span>
+        <span class="unit">inequality at peak scarcity</span></div>
+      <p class="note">6.0× &rarr; 2.8× when one dish serves the whole fleet.</p>
+    </div>
+    <div class="card new">
+      <div class="stat"><span class="big">0 min</span>
+        <span class="unit">added delay for emergencies</span></div>
+      <p class="note">Worst wait for a conjunction warning: <b>56 min under both</b>.
+        Fairness costs nothing on safety.</p>
+    </div>
+    <div class="card new">
+      <div class="stat"><span class="big">+2.4%</span>
+        <span class="unit">more data downlinked</span></div>
+      <p class="note">6,592 &rarr; 6,753 GB. Starved buffers stop sitting full.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────────────── 05 · HONEST + WHAT'S NEXT ───────────────────── -->
+<section class="panel">
+  <div class="eyebrow"><b>05</b> What&rsquo;s real, and what&rsquo;s next</div>
+  <h2>Real orbits. Real dishes. Real agents. Simulated policy.</h2>
+
+  <div class="cols" style="align-items:start">
+    <div>
+      <h3>Where the data comes from</h3>
+      <table>
+        <tr><th>Input</th><th>Source</th></tr>
+        <tr><td>Orbits</td><td>CelesTrak TLE</td></tr>
+        <tr><td>Propagator</td><td>sgp4</td></tr>
+        <tr><td>Ground stations</td><td>SatNOGS network</td></tr>
+        <tr><td>Satellites</td><td class="hero">12 real</td></tr>
+        <tr><td>Window</td><td>24 h &middot; 3 Aug 2026</td></tr>
+      </table>
+      <p class="note" style="margin-top:14px">The sky is not invented. What we
+        simulate is <b>the scheduling policy</b> &mdash; which is the thing being
+        proposed, so it is the right thing to simulate.</p>
+    </div>
+
+    <div>
+      <h3>The live demo, four beats</h3>
+      <div class="beats">
+        <div class="beat"><span class="n">01</span><span class="t">Two satellites want Svalbard. No history &mdash; <b>advocates argue</b>, outcome recorded.</span></div>
+        <div class="beat"><span class="n">02</span><span class="t">Identical contention. <b>&ldquo;It yielded last pass &mdash; its turn.&rdquo;</b></span></div>
+        <div class="beat"><span class="n">03</span><span class="t">A satellite sees no dish. Graph finds a <b>2-hop laser relay</b>.</span></div>
+        <div class="beat veto"><span class="n">04</span><span class="t">Fairness says one thing. <b>Safety overrules it.</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="caveat">
+    <p><strong>Where we&rsquo;d push next.</strong> The gain is modest at today&rsquo;s
+      fleet density and grows sharply as dishes get scarce &mdash; which is exactly the
+      direction constellations are heading. The next test is a fleet of 60, not 12,
+      and letting the agents negotiate <em>ahead</em> of the pass instead of during it.</p>
+  </div>
+</section>
+
+<script type="module">
+  // Hover points on the scarcity chart. Built in JS so the coordinates and the
+  // numbers can never drift apart.
+  const dishes = [6,5,4,3,2,1];
+  const priority = [2.4,2.3,2.3,2.6,3.2,6.0];
+  const broker   = [1.7,1.8,1.6,1.6,1.9,2.8];
+  const contend  = [210,184,144,108,68,34];
+  const X = i => 70 + i*124;
+  const Y = v => 280 - (v/6.5)*250;
+
+  const g = document.getElementById('pts');
+  const NS = 'http://www.w3.org/2000/svg';
+  const series = [
+    {vals:priority, color:'var(--old)', name:'Fixed priority'},
+    {vals:broker,   color:'var(--new)', name:'Broker'},
+  ];
+  for (const s of series){
+    s.vals.forEach((v,i)=>{
+      const c = document.createElementNS(NS,'circle');
+      c.setAttribute('cx',X(i)); c.setAttribute('cy',Y(v)); c.setAttribute('r',4.5);
+      c.setAttribute('fill',s.color);
+      c.setAttribute('stroke','var(--ground)'); c.setAttribute('stroke-width','2');
+      c.dataset.tip = `${s.name}\n${dishes[i]} dish${dishes[i]>1?'es':''} · ${contend[i]} contentions\ninequality ${v}×`;
+      g.appendChild(c);
+      const hit = document.createElementNS(NS,'circle');
+      hit.setAttribute('cx',X(i)); hit.setAttribute('cy',Y(v)); hit.setAttribute('r',15);
+      hit.setAttribute('fill','transparent');
+      hit.dataset.tip = c.dataset.tip;
+      g.appendChild(hit);
+    });
+  }
+
+  const tip = document.getElementById('tip');
+  addEventListener('pointermove', e => {
+    const el = e.target.closest?.('[data-tip]');
+    if (!el){ tip.style.opacity = 0; return; }
+    tip.textContent = el.dataset.tip;
+    tip.style.opacity = 1;
+    const r = tip.getBoundingClientRect();
+    tip.style.left = Math.min(e.clientX + 14, innerWidth - r.width - 10) + 'px';
+    tip.style.top  = Math.max(e.clientY - r.height - 12, 8) + 'px';
+  });
+</script>

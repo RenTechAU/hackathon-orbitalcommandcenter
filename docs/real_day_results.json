@@ -1,0 +1,178 @@
+{
+ "generated_utc": "2026-08-03T20:30:29.072296+00:00",
+ "window_start_utc": "2026-08-03T00:00:00+00:00",
+ "satellites": [
+  "DMSP 5D-3 F16 (USA 172)",
+  "DMSP 5D-3 F17 (USA 191)",
+  "FENGYUN 3A",
+  "DMSP 5D-3 F18 (USA 210)",
+  "FENGYUN 3B",
+  "SUOMI NPP",
+  "METOP-B",
+  "FENGYUN 3C",
+  "METEOR-M 2",
+  "SENTINEL-3A",
+  "CYGFM05",
+  "CYGFM04"
+ ],
+ "stations": [
+  {
+   "name": "KH6DAD-UHF EggNOG",
+   "lat": 21.357,
+   "lon": -158.035
+  },
+  {
+   "name": "KN6BKT-433",
+   "lat": 34.11997,
+   "lon": -118.07799
+  },
+  {
+   "name": "LU3ARN",
+   "lat": -34.572421,
+   "lon": -58.47602
+  },
+  {
+   "name": "EA3AGB",
+   "lat": 40.688,
+   "lon": 0.573
+  },
+  {
+   "name": "NUUGS2",
+   "lat": 41.351683,
+   "lon": 69.204427
+  },
+  {
+   "name": "Gemini_UHF",
+   "lat": 22.99757,
+   "lon": 120.21868
+  }
+ ],
+ "sources": {
+  "orbits": "CelesTrak GP/TLE (public, no auth)",
+  "ground_stations": "SatNOGS Network API (open volunteer network)",
+  "propagator": "sgp4"
+ },
+ "emergencies": [
+  {
+   "minute": 320,
+   "duration": 40,
+   "satellite": "FENGYUN 3A"
+  },
+  {
+   "minute": 825,
+   "duration": 40,
+   "satellite": "FENGYUN 3C"
+  },
+  {
+   "minute": 1210,
+   "duration": 40,
+   "satellite": "CYGFM04"
+  }
+ ],
+ "results": {
+  "priority": {
+   "windows": {
+    "DMSP 5D-3 F16 (USA 172)": 163,
+    "DMSP 5D-3 F17 (USA 191)": 110,
+    "FENGYUN 3A": 174,
+    "DMSP 5D-3 F18 (USA 210)": 193,
+    "FENGYUN 3B": 202,
+    "SUOMI NPP": 158,
+    "METOP-B": 158,
+    "FENGYUN 3C": 180,
+    "METEOR-M 2": 83,
+    "SENTINEL-3A": 182,
+    "CYGFM05": 120,
+    "CYGFM04": 116
+   },
+   "delivered_gb": {
+    "DMSP 5D-3 F16 (USA 172)": 499.9,
+    "DMSP 5D-3 F17 (USA 191)": 428.4,
+    "FENGYUN 3A": 637.7,
+    "DMSP 5D-3 F18 (USA 210)": 681.0,
+    "FENGYUN 3B": 721.6,
+    "SUOMI NPP": 502.3,
+    "METOP-B": 504.0,
+    "FENGYUN 3C": 642.6,
+    "METEOR-M 2": 332.0,
+    "SENTINEL-3A": 714.8,
+    "CYGFM05": 463.6,
+    "CYGFM04": 464.0
+   },
+   "max_gap_h": {
+    "DMSP 5D-3 F16 (USA 172)": 2.2,
+    "DMSP 5D-3 F17 (USA 191)": 2.9,
+    "FENGYUN 3A": 2.9,
+    "DMSP 5D-3 F18 (USA 210)": 3.0,
+    "FENGYUN 3B": 2.2,
+    "SUOMI NPP": 2.9,
+    "METOP-B": 3.0,
+    "FENGYUN 3C": 2.2,
+    "METEOR-M 2": 3.0,
+    "SENTINEL-3A": 2.0,
+    "CYGFM05": 2.8,
+    "CYGFM04": 2.8
+   },
+   "total_gb": 6591.9,
+   "starved": 0,
+   "worst_gap_h": 3.0,
+   "busiest_quietest_ratio": 2.4,
+   "contentions": 195,
+   "vetoes": 0,
+   "critical_served": 16,
+   "critical_max_wait_min": 56
+  },
+  "broker": {
+   "windows": {
+    "DMSP 5D-3 F16 (USA 172)": 134,
+    "DMSP 5D-3 F17 (USA 191)": 140,
+    "FENGYUN 3A": 174,
+    "DMSP 5D-3 F18 (USA 210)": 143,
+    "FENGYUN 3B": 202,
+    "SUOMI NPP": 156,
+    "METOP-B": 157,
+    "FENGYUN 3C": 179,
+    "METEOR-M 2": 133,
+    "SENTINEL-3A": 184,
+    "CYGFM05": 123,
+    "CYGFM04": 116
+   },
+   "delivered_gb": {
+    "DMSP 5D-3 F16 (USA 172)": 474.7,
+    "DMSP 5D-3 F17 (USA 191)": 520.0,
+    "FENGYUN 3A": 637.7,
+    "DMSP 5D-3 F18 (USA 210)": 563.5,
+    "FENGYUN 3B": 721.6,
+    "SUOMI NPP": 502.3,
+    "METOP-B": 504.0,
+    "FENGYUN 3C": 642.6,
+    "METEOR-M 2": 532.0,
+    "SENTINEL-3A": 714.8,
+    "CYGFM05": 475.6,
+    "CYGFM04": 464.0
+   },
+   "max_gap_h": {
+    "DMSP 5D-3 F16 (USA 172)": 2.2,
+    "DMSP 5D-3 F17 (USA 191)": 2.9,
+    "FENGYUN 3A": 2.9,
+    "DMSP 5D-3 F18 (USA 210)": 3.0,
+    "FENGYUN 3B": 2.2,
+    "SUOMI NPP": 2.9,
+    "METOP-B": 3.0,
+    "FENGYUN 3C": 2.2,
+    "METEOR-M 2": 2.9,
+    "SENTINEL-3A": 2.0,
+    "CYGFM05": 2.8,
+    "CYGFM04": 2.8
+   },
+   "total_gb": 6752.7,
+   "starved": 0,
+   "worst_gap_h": 3.0,
+   "busiest_quietest_ratio": 1.7,
+   "contentions": 210,
+   "vetoes": 0,
+   "critical_served": 16,
+   "critical_max_wait_min": 56
+  }
+ }
+}

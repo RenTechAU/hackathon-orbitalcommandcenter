@@ -1,0 +1,9033 @@
+{
+ "generated_utc": "2026-08-03T20:30:29.072296+00:00",
+ "window_start_utc": "2026-08-03T00:00:00+00:00",
+ "satellites": [
+  "DMSP 5D-3 F16 (USA 172)",
+  "DMSP 5D-3 F17 (USA 191)",
+  "FENGYUN 3A",
+  "DMSP 5D-3 F18 (USA 210)",
+  "FENGYUN 3B",
+  "SUOMI NPP",
+  "METOP-B",
+  "FENGYUN 3C",
+  "METEOR-M 2",
+  "SENTINEL-3A",
+  "CYGFM05",
+  "CYGFM04"
+ ],
+ "stations": [
+  {
+   "name": "KH6DAD-UHF EggNOG",
+   "lat": 21.357,
+   "lon": -158.035
+  },
+  {
+   "name": "KN6BKT-433",
+   "lat": 34.11997,
+   "lon": -118.07799
+  },
+  {
+   "name": "LU3ARN",
+   "lat": -34.572421,
+   "lon": -58.47602
+  },
+  {
+   "name": "EA3AGB",
+   "lat": 40.688,
+   "lon": 0.573
+  },
+  {
+   "name": "NUUGS2",
+   "lat": 41.351683,
+   "lon": 69.204427
+  },
+  {
+   "name": "Gemini_UHF",
+   "lat": 22.99757,
+   "lon": 120.21868
+  }
+ ],
+ "timeline": {
+  "0": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "2": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "4": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "5": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "6": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "7": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "8": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "9": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "10": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "11": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "12": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "13": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "14": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "15": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "16": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "17": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "18": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "19": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "23": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "24": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "25": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "26": {
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "27": {
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "28": {
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "29": {
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "38": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ]
+  },
+  "39": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "40": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "41": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "42": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "43": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "44": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG",
+    "KN6BKT-433"
+   ]
+  },
+  "45": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "46": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "47": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "48": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "49": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ]
+  },
+  "60": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ]
+  },
+  "61": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ]
+  },
+  "62": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "63": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "64": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "65": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "66": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "67": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "68": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "69": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "70": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "71": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "72": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "73": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "74": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "75": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "76": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "77": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "78": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "79": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "80": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "81": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "82": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "83": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "84": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "85": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "86": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "87": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "88": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "89": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "90": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "91": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "92": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "93": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "94": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "95": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "96": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "97": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "98": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "99": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "100": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "101": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "108": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "109": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "110": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "111": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "112": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "113": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "114": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "115": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "116": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "117": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "118": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "120": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "121": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "122": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "123": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "124": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "125": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "126": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "127": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "128": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "129": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "130": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "131": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "132": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "133": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "134": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "135": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "136": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "137": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "138": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "139": {
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "140": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "141": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "142": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "143": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "144": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "145": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "146": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "147": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "148": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "149": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "150": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "159": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "160": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "161": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "162": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "163": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "164": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "165": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "166": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "167": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "168": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "169": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "170": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "171": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "173": {
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "174": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "175": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "176": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "177": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "178": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "179": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "180": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "181": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "182": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "183": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "184": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "185": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "186": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "187": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ]
+  },
+  "188": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ]
+  },
+  "189": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ]
+  },
+  "191": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "192": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "193": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "194": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "195": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "196": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "197": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "198": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "199": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "200": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "201": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "202": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "203": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "204": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "205": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "206": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "209": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "210": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "211": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "212": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "213": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "214": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "215": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "216": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "217": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "218": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ]
+  },
+  "223": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "224": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "225": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "226": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ]
+  },
+  "237": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "238": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "239": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "240": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "241": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "242": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "243": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "244": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "245": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "246": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "247": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "248": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "249": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "250": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "251": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "252": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "253": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "259": {
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "260": {
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "261": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "262": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "263": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "264": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "265": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "266": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "267": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "268": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "269": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "270": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "271": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "272": {
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "273": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "274": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "275": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "276": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "277": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "278": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "279": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "280": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "281": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "282": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "283": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "284": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "285": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "286": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "287": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "288": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "290": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "291": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "292": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "293": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "294": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "295": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "296": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "297": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "298": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "299": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "300": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "301": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "302": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "303": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "304": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "305": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "306": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "307": {
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "308": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "309": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "310": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "311": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "312": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "313": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "314": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "315": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "316": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "317": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "318": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "319": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "320": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "321": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "327": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "328": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "329": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "330": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "331": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "332": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "333": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "334": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "335": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "336": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "337": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "338": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "339": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "340": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "341": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "342": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "343": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "344": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "345": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "346": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "347": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "348": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "349": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "350": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "351": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "352": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "353": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "358": {
+   "CYGFM04": [
+    "EA3AGB"
+   ]
+  },
+  "362": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "363": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "364": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "365": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "366": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "367": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "368": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "369": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "370": {
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "371": {
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "372": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "373": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "374": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "375": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "376": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "377": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "378": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "379": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "380": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "381": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "382": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "383": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "384": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "385": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "386": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "387": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "388": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "395": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "396": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "397": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "398": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "399": {
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "400": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "401": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "402": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "403": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "404": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "405": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "406": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "407": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "408": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "409": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "410": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "411": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "412": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "413": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "414": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "415": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "416": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "417": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "418": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "419": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "420": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "421": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "422": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "423": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "424": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "425": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "426": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "427": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "428": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "429": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "430": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "431": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "432": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "433": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "434": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "436": {
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "437": {
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "438": {
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "439": {
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "440": {
+   "CYGFM05": [
+    "EA3AGB"
+   ]
+  },
+  "443": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "444": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "445": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "446": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "447": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "448": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "449": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "450": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "451": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "452": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "453": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "454": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "455": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "456": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "462": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "463": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "464": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "465": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "466": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "467": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "468": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "469": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "470": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "471": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "472": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "473": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "474": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "475": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "476": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "477": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "478": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "495": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "496": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "497": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "498": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "499": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "500": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "501": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "502": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "503": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "504": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "505": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "506": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "507": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "508": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "509": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "510": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "511": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "512": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "513": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "515": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ]
+  },
+  "516": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ]
+  },
+  "517": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "518": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "519": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "520": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "521": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "522": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "523": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "524": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "525": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "526": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "527": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "528": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "529": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "530": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "531": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "532": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "533": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "534": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "535": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "536": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "537": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "538": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "539": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "540": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "541": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "542": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "543": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "544": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "545": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "546": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "547": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "548": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "549": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "550": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "551": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "552": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "553": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "554": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "555": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "556": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "557": {
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "558": {
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "559": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "560": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "561": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "577": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "578": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "579": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "580": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "581": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "582": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "583": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "584": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "585": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "586": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "587": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "588": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "589": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "590": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "591": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "592": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "593": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "594": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "596": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "597": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "598": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "599": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "600": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "601": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "602": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "603": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "604": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "605": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "606": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "607": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "608": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "609": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "611": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "612": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "613": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "614": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "615": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "616": {
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "621": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "622": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "623": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "624": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "625": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "626": {
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "629": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "630": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "631": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "632": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "633": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "634": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "635": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "636": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "637": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "638": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "639": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "640": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "641": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "642": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "643": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "644": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "645": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "646": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "647": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "648": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "649": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "650": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "651": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "652": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "653": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "654": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "655": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "656": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "657": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "658": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "659": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "660": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "661": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "662": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "663": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "664": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "666": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "667": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "668": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "669": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "670": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "671": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "672": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "673": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "674": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "677": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "678": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "679": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "680": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "681": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "682": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "683": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "684": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "685": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "686": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "687": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "688": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "689": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "690": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "691": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ]
+  },
+  "692": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "693": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "694": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "695": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "696": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "697": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "698": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "699": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "700": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "701": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "702": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "703": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "704": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "705": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "706": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "707": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "708": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "709": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "710": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "711": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "712": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "713": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "714": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "715": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "716": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "717": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "718": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "719": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "720": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "721": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "722": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "723": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "724": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "725": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "726": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "727": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "728": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "729": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "730": {
+   "FENGYUN 3B": [
+    "LU3ARN"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "733": {
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "734": {
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "735": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "736": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "737": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "738": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "739": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "740": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "741": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "742": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "743": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "744": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "753": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "754": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "755": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "756": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "757": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "758": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "759": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "760": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "761": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "762": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "763": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "764": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "765": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "766": {
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "767": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "768": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "769": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "770": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "771": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "772": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "773": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "774": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "LU3ARN"
+   ]
+  },
+  "775": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "776": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ]
+  },
+  "782": {
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "783": {
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "784": {
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "785": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "786": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "787": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "788": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "789": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "790": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "791": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "792": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "793": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "794": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "795": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "796": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "797": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "798": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ]
+  },
+  "799": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "800": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "801": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "802": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "803": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "804": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "805": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "806": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "807": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "808": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "809": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "810": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "811": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "812": {
+   "FENGYUN 3A": [
+    "EA3AGB"
+   ],
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "813": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ]
+  },
+  "814": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "815": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "816": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "817": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "818": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "819": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "820": {
+   "METOP-B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "KN6BKT-433"
+   ]
+  },
+  "821": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "822": {
+   "SUOMI NPP": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "823": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "824": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "825": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "826": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "827": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "828": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "829": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "830": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "831": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "EA3AGB"
+   ]
+  },
+  "832": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ]
+  },
+  "833": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ]
+  },
+  "854": {
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "855": {
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "856": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "857": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "858": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "859": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "860": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "861": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "862": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ],
+   "SENTINEL-3A": [
+    "LU3ARN"
+   ]
+  },
+  "863": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "864": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "865": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "866": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "867": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "868": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "876": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "877": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "878": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "879": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "880": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "881": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "882": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "883": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "884": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "885": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "886": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "887": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "888": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "889": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "890": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "891": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "892": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "893": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "894": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "895": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "896": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "897": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "898": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "899": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "900": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "901": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "902": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "903": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ]
+  },
+  "904": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "905": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "906": {
+   "SENTINEL-3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "911": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "912": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "913": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "914": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "915": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "916": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "917": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "918": {
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "919": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "920": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "921": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "922": {
+   "METOP-B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "923": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "924": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "925": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "926": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "927": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "928": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "929": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ]
+  },
+  "930": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KN6BKT-433"
+   ]
+  },
+  "931": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG",
+    "KN6BKT-433"
+   ]
+  },
+  "932": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "933": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "934": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KN6BKT-433"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "935": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "936": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "937": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "938": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "951": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "952": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "953": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "954": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "955": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "956": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "957": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "958": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "959": {
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "960": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "961": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "962": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "963": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "964": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ],
+   "METEOR-M 2": [
+    "EA3AGB"
+   ]
+  },
+  "965": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "966": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "967": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "968": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "969": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "EA3AGB"
+   ]
+  },
+  "976": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "977": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "978": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "979": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "980": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "981": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ]
+  },
+  "982": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "983": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "984": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "985": {
+   "FENGYUN 3B": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "986": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "987": {
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "988": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "989": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "990": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "EA3AGB"
+   ]
+  },
+  "991": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "992": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "995": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "996": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "997": {
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "998": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KN6BKT-433"
+   ]
+  },
+  "999": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "1000": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "1001": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ]
+  },
+  "1002": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1003": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1004": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1005": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1006": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1007": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1008": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1009": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1010": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1011": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1012": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1013": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1014": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1015": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1016": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1017": {
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1021": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1022": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1023": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1024": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1025": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1026": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1027": {
+   "METOP-B": [
+    "NUUGS2"
+   ]
+  },
+  "1030": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1031": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1032": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1033": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1034": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1035": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1036": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1037": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1038": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1039": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1040": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1041": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1042": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1043": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1044": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1045": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1046": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "1047": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "1048": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ]
+  },
+  "1049": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1050": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1051": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1052": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1053": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1054": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1055": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1056": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1057": {
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1058": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "METOP-B": [
+    "KN6BKT-433"
+   ]
+  },
+  "1059": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "1060": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "1061": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "1062": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "1063": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ]
+  },
+  "1064": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1065": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1066": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1067": {
+   "SUOMI NPP": [
+    "Gemini_UHF"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1068": {
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1069": {
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1081": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1082": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1085": {
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1086": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1087": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1088": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1089": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1090": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1091": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1092": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1093": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1094": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1095": {
+   "FENGYUN 3A": [
+    "LU3ARN"
+   ]
+  },
+  "1099": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1100": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1101": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1102": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1103": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1104": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1105": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1106": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1107": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1108": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1109": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1110": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1111": {
+   "FENGYUN 3B": [
+    "KN6BKT-433"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ]
+  },
+  "1112": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1113": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "NUUGS2"
+   ]
+  },
+  "1114": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SUOMI NPP": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1115": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1116": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1117": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1118": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1119": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1120": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1121": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1122": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1123": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1124": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1125": {
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1126": {
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "1127": {
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "1128": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1129": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1130": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1131": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1132": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1133": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1134": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1135": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1136": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1137": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1138": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1139": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1140": {
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1141": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1142": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1143": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1144": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1145": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1146": {
+   "FENGYUN 3A": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1147": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1148": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1149": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1154": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1155": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1156": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1157": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1158": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1159": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1160": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1161": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1162": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1163": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1164": {
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1165": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1166": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1167": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1168": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1169": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1170": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1171": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1172": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1173": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1174": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1180": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1181": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1182": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1183": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1184": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1185": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1186": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1187": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1188": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1189": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1190": {
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1191": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1192": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1193": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1194": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1195": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1196": {
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1197": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1198": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1199": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1200": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ],
+   "METEOR-M 2": [
+    "Gemini_UHF"
+   ]
+  },
+  "1201": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1202": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1203": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1204": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1205": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1206": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1207": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "EA3AGB"
+   ]
+  },
+  "1209": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1210": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ]
+  },
+  "1211": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1212": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1213": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1214": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1215": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1216": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1217": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1218": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1219": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1220": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1221": {
+   "FENGYUN 3B": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1222": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1223": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1224": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1225": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ]
+  },
+  "1226": {
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1227": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1228": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "FENGYUN 3C": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1229": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1230": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1231": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1232": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ],
+   "METOP-B": [
+    "EA3AGB"
+   ]
+  },
+  "1233": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1234": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1235": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1236": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1237": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1238": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "1239": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "1240": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "1241": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ]
+  },
+  "1242": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1243": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1244": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1245": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1246": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ],
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1247": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "METEOR-M 2": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1248": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1249": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1250": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1251": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ],
+   "SENTINEL-3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1252": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1253": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "LU3ARN"
+   ]
+  },
+  "1256": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "1257": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1258": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1259": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1260": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METOP-B": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1261": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "1262": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1263": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "1264": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1265": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1266": {
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1267": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1268": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1269": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1270": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1271": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1272": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1273": {
+   "FENGYUN 3C": [
+    "LU3ARN"
+   ]
+  },
+  "1275": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1276": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1277": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1278": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1279": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1282": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1283": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1284": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1285": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1286": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1287": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1288": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1289": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3B": [
+    "EA3AGB"
+   ]
+  },
+  "1290": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1292": {
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "1293": {
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "1294": {
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ]
+  },
+  "1299": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1300": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1301": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1302": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1303": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1304": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1309": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1310": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1311": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1312": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1313": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1314": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1315": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1316": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1317": {
+   "FENGYUN 3A": [
+    "KN6BKT-433"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1318": {
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1319": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "SENTINEL-3A": [
+    "EA3AGB"
+   ]
+  },
+  "1320": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1321": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1322": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1323": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ],
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1324": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1325": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1326": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1327": {
+   "CYGFM04": [
+    "LU3ARN"
+   ]
+  },
+  "1328": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1329": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1330": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1331": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1332": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1333": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1334": {
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1335": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "SUOMI NPP": [
+    "KN6BKT-433"
+   ]
+  },
+  "1336": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1337": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1338": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1339": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1340": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1341": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1342": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1343": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1344": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1345": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1346": {
+   "FENGYUN 3A": [
+    "NUUGS2"
+   ]
+  },
+  "1348": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "1349": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "1350": {
+   "CYGFM05": [
+    "NUUGS2"
+   ]
+  },
+  "1357": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "1358": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ]
+  },
+  "1359": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ]
+  },
+  "1360": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1361": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM05": [
+    "Gemini_UHF"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1362": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1363": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1364": {
+   "SUOMI NPP": [
+    "NUUGS2"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "NUUGS2"
+   ]
+  },
+  "1365": {
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "1366": {
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "1367": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "1368": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "1369": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "KN6BKT-433"
+   ]
+  },
+  "1370": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ]
+  },
+  "1371": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ]
+  },
+  "1372": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1373": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1374": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1375": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "KN6BKT-433"
+   ],
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1376": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1377": {
+   "CYGFM04": [
+    "Gemini_UHF"
+   ]
+  },
+  "1382": {
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1383": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1384": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1385": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1386": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1387": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ]
+  },
+  "1388": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1389": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1390": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1391": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "DMSP 5D-3 F17 (USA 191)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1392": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1393": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "LU3ARN"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1394": {
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1395": {
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1396": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1397": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1398": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ],
+   "FENGYUN 3C": [
+    "KN6BKT-433"
+   ],
+   "METEOR-M 2": [
+    "NUUGS2"
+   ]
+  },
+  "1399": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1400": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1401": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1402": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1403": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1404": {
+   "DMSP 5D-3 F18 (USA 210)": [
+    "NUUGS2"
+   ]
+  },
+  "1406": {
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1407": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1408": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1409": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1410": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1411": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "CYGFM05": [
+    "LU3ARN"
+   ]
+  },
+  "1412": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1413": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1414": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1415": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1416": {
+   "FENGYUN 3A": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1417": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1418": {
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1419": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1420": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1421": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1422": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1423": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1424": {
+   "FENGYUN 3B": [
+    "Gemini_UHF"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1425": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1426": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1427": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ],
+   "FENGYUN 3C": [
+    "NUUGS2"
+   ]
+  },
+  "1428": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1429": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1430": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1431": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1432": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1433": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1434": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1435": {
+   "SUOMI NPP": [
+    "KH6DAD-UHF EggNOG"
+   ]
+  },
+  "1437": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1438": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  },
+  "1439": {
+   "DMSP 5D-3 F16 (USA 172)": [
+    "Gemini_UHF"
+   ]
+  }
+ },
+ "minutes_with_any_pass": 1186,
+ "contended_station_minutes": 224,
+ "sources": {
+  "orbits": "CelesTrak GP/TLE (public, no auth)",
+  "ground_stations": "SatNOGS Network API (open volunteer network)",
+  "propagator": "sgp4"
+ }
+}

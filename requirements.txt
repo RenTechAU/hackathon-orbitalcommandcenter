@@ -6,3 +6,6 @@ falkordb>=1.0.0
 # laserdata
 # rocketride
 # guild-ai
+
+# Orbit propagation for the real-data simulation (public TLEs from CelesTrak)
+sgp4>=2.20
