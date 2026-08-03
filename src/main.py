@@ -14,37 +14,67 @@ import os
 import pathlib
 from collections import defaultdict
 
-from sim.sensors import demo_script
-from memory.graph import HouseholdMemory
+from sim.telemetry import demo_script
+from memory.constellation import ConstellationMemory
 from adapters.vendors import Actuator, Council, LiveFeed
 
 
 def run(events, memory, council, actuator):
-    pending = defaultdict(dict)  # room -> {person: requested_value}
+    pending = defaultdict(dict)  # station -> {satellite: backlog_gb}
 
     for ev in events:
-        if ev.kind == "motion" and ev.person:
-            memory.enters_room(ev.person, ev.room)
-            print(f"[SEE] {ev.person} entered {ev.room}")
+        # --- the constellation describing itself --------------------------
+        if ev.kind == "payload":
+            memory.set_payload(ev.satellite, ev.value["name"], ev.value["urgency"])
 
-        elif ev.kind == "temperature":
-            print(f"[SEE] {ev.room} is {ev.value}F")
+        elif ev.kind == "link":
+            memory.add_link(ev.satellite, ev.value["to"], ev.value["bandwidth_gbps"])
 
-        elif ev.kind == "request" and ev.person:
-            device, value = next(iter(ev.value.items()))
-            memory.set_preference(ev.person, device, value)
-            pending[ev.room][ev.person] = value
-            print(f"[ASK] {ev.person} wants {device} = {value} in {ev.room}")
+        elif ev.kind == "history":
+            # An outcome from an earlier orbit, before today's run.
+            memory.record_yield(ev.satellite, ev.value["yielded_to"], ev.station)
+            print(f"[MEM] seeded: {ev.satellite} yielded to "
+                  f"{ev.value['yielded_to']} at {ev.station} on an earlier orbit")
 
-            occupants = memory.who_is_in(ev.room)
-            reqs = {p: v for p, v in pending[ev.room].items() if p in occupants}
+        # --- live position telemetry --------------------------------------
+        elif ev.kind == "view":
+            memory.sees_station(ev.satellite, ev.station)
+            if ev.station:
+                print(f"[SEE] {ev.satellite} acquired {ev.station}")
+            else:
+                print(f"[SEE] {ev.satellite} lost its ground station")
+
+        # --- a satellite asks for airtime ---------------------------------
+        elif ev.kind == "request":
+            gb = ev.value["backlog_gb"]
+
+            # No station in view. Its only route home is through the laser
+            # mesh -- this is the variable-depth graph query.
+            if ev.station is None:
+                print(f"[ASK] {ev.satellite} has {gb}GB queued but sees no station")
+                path, hops = memory.relay_path(ev.satellite)
+                if path:
+                    print(f"[HOP] relay found in {hops} hops: {' -> '.join(path)}")
+                    actuator.act("relay", path[-1],
+                                 because=f"{ev.satellite} routed via {' -> '.join(path[1:-1])}")
+                else:
+                    print(f"[HOP] no relay path -- {ev.satellite} must wait for a pass")
+                continue
+
+            pending[ev.station][ev.satellite] = gb
+            print(f"[ASK] {ev.satellite} wants {ev.station}, {gb}GB queued")
+
+            # Only satellites that can actually see the station get a say.
+            in_view = memory.who_sees(ev.station)
+            reqs = {s: g for s, g in pending[ev.station].items() if s in in_view}
 
             if len(reqs) > 1:
-                winner, value, why = council.resolve(reqs, memory, ev.room, topic=device)
-                print(f"[HMM] conflict in {ev.room}: {reqs}")
+                print(f"[HMM] contention at {ev.station}: {reqs}")
+                winner, loser, why = council.resolve(reqs, memory, ev.station)
                 print(f"[WHY] {why}")
-                actuator.act(device, value, because=f"{winner} won: {why}")
-                pending[ev.room].clear()
+                actuator.act("downlink", winner,
+                             because=f"{winner} got {ev.station} over {loser}: {why}")
+                pending[ev.station].clear()
 
 
 def load_env(path=".env"):
@@ -104,19 +134,19 @@ def build_actuator():
 if __name__ == "__main__":
     load_env()
 
-    memory = HouseholdMemory()
+    memory = ConstellationMemory()
     memory.reset()  # clean slate so the two-conflict demo lands every run
     feed = build_feed()
     council = Council(use_real=False)
     actuator = build_actuator()
 
     print("=" * 62)
-    print("SMART HOME ORCHESTRATOR -- scripted demo")
+    print("ORBITAL CONTACT BROKER -- scripted demo")
     print("=" * 62)
     try:
         run(feed.events(demo_script()), memory, council, actuator)
     finally:
         actuator.close()
     print("=" * 62)
-    print("Note the second conflict: same inputs, different outcome.")
+    print("Note the two contentions at Svalbard: same inputs, different winner.")
     print("That difference IS the memory. Point at the graph when you say it.")

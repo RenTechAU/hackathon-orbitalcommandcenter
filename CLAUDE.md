@@ -4,24 +4,29 @@ Project context for Claude Code. Read this before making changes.
 
 ## What this is
 
-**Smart Home Orchestrator** — hackathon project for *Memory Meets Motion*
+**Orbital Contact Broker** — hackathon project for *Memory Meets Motion*
 (Frontier Tower SF, Aug 3 2026, 8-hour sprint, judging ~6:30 PM).
 
-An AI household that **negotiates**. When two people in the same room want
-different things, agents argue it out — and the system gets *fairer over time*
-because it remembers who conceded last.
+A satellite constellation that **negotiates for airtime**. Ground stations are
+scarce and satellite passes overlap. When two satellites want the same dish,
+advocate agents argue it out — and the system gets *fairer over time* because
+it remembers who gave up their window last.
+
+(Pivoted from a smart-home version at ~12:00. The negotiation engine is the
+same; `git log main` has the original if you ever need it back.)
 
 ## The one thing that matters
 
-The demo is two identical conflicts with different outcomes:
+The demo is two identical contentions with different outcomes:
 
 ```
-conflict 1  ->  no history, picks arbitrarily, RECORDS who conceded
-conflict 2  ->  "jeremy gave way last time -- their turn"
+contention 1  ->  no history, picks arbitrarily, RECORDS who yielded
+contention 2  ->  "SAT-1 yielded at Svalbard last pass -- its turn"
 ```
 
 That difference is the memory. **Every change must preserve this.** If a
-refactor breaks the two-conflict demo, revert it. Nothing else is as important.
+refactor breaks the two-contention demo, revert it. Nothing else is as
+important.
 
 ## Hard constraints from the judges
 
@@ -30,10 +35,10 @@ verbatim: *"A one-line SDK import that's never called again will not count."*
 
 | Layer | Tool | Role here | Status |
 |---|---|---|---|
-| Real-time | LaserData | Live sensor stream | ✅ real (local Laser Stack) |
-| Memory | FalkorDB | Household graph + concession history | ✅ real (Docker, localhost:6379) |
-| Multi-agent | Guild.ai | Advocate agents + safety veto | ⬜ fallback (deterministic logic) |
-| Motion | RocketRide.ai | Executes device actions | 🟡 code wired, needs API key |
+| Real-time | LaserData | Live orbital telemetry | ✅ real (local Laser Stack) |
+| Memory | FalkorDB | Constellation graph + yield history | ✅ real (Docker, localhost:6379) |
+| Multi-agent | Guild.ai | Advocate agents + mission-safety veto | ⬜ fallback (workspace ready) |
+| Motion | RocketRide.ai | Issues the tasking command | 🟡 wired; server says "already running" |
 
 Update the status column as each is wired. All four must be green before judging.
 
@@ -72,25 +77,32 @@ Three classes — `LiveFeed`, `Actuator`, `Council` — each with a `use_real` f
 ## Graph schema (FalkorDB)
 
 ```cypher
-(:Person {name})
-(:Room   {name})
-(:Device {name, kind})
-(:Person)-[:OCCUPIES {since}]->(:Room)
-(:Device)-[:IN]->(:Room)
-(:Person)-[:PREFERS {value}]->(:Device)
-(:Person)-[:CONCEDED {topic, ts}]->(:Person)   // the memory that compounds
+(:Satellite     {name})
+(:GroundStation {name})
+(:Payload       {name, urgency})
+(:Satellite)-[:IN_VIEW_OF {since}]->(:GroundStation)
+(:Satellite)-[:LINKS_TO   {bandwidth_gbps}]->(:Satellite)  // the relay mesh
+(:Satellite)-[:CARRIES]->(:Payload)
+(:Satellite)-[:YIELDED    {station, ts}]->(:Satellite)     // memory that compounds
 ```
 
-`CONCEDED` is the demo. The fairness query walks it to decide who wins — that
-multi-hop traversal is what makes this a genuine graph problem rather than a
-table with extra steps. Preserve it.
+Two queries earn the graph database, for different reasons. **Preserve both.**
+
+`yield_ledger()` — three hops, starting and ending at the same station node:
+station → who sees it now → who yielded to whom → is the receiver still in
+view. This is the memory that makes run 2 smarter than run 1.
+
+`relay_path()` — `[:LINKS_TO*1..5]`, **variable-depth** traversal. A satellite
+over open ocean sees no station, so it must bounce through the laser mesh, and
+you don't know how many hops until you look. This is the one a SQL table
+genuinely cannot do. Say "variable depth" out loud in the pitch.
 
 ## Layout
 
 ```
 src/main.py             pipeline end to end
-src/sim/sensors.py      fake stream + scripted demo beats
-src/memory/graph.py     FalkorDB schema, Cypher, fairness query
+src/sim/telemetry.py    orbit sim + scripted demo beats
+src/memory/constellation.py  FalkorDB schema, Cypher, fairness + relay queries
 src/adapters/vendors.py the three SDK slots
 src/agents/             Guild.ai agent definitions (empty until wired)
 web/                    dashboard UI (see docs/CLAUDE_DESIGN_BRIEF.md)
@@ -125,8 +137,8 @@ way you would to a smart person who is new to coding.
 | Time | Milestone |
 |---|---|
 | 10:00–11:00 | Skeleton green ✅ + all four mentor tables visited |
-| 11:00–13:00 | FalkorDB real: live data → graph writes → agent reads |
-| 13:00–14:00 | Guild.ai + RocketRide: the actual action |
+| 11:00–13:00 | FalkorDB real ✅ · LaserData real ✅ · pivot to orbital ✅ |
+| 13:00–14:00 | Guild.ai agents + unblock RocketRide |
 | 14:00–15:00 | Demo script locked |
 | 15:00–17:00 | Dashboard UI, graph viz, seeded memory |
 | 17:00–17:30 | **Record demo. Code freeze.** |

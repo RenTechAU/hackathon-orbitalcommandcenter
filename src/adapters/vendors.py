@@ -38,8 +38,8 @@ class LiveFeed:
     stub (.venv/.../laser_sdk/__init__.pyi), not guessed and not from a blog.
     """
 
-    def __init__(self, use_real=False, stream_name="home", topic_name="sensors",
-                 reader_name="orchestrator", **cfg):
+    def __init__(self, use_real=False, stream_name="constellation",
+                 topic_name="telemetry", reader_name="broker", **cfg):
         self.use_real = use_real
         self.stream_name = stream_name
         self.topic_name = topic_name
@@ -105,7 +105,7 @@ class LiveFeed:
         """The actual LaserData session: ensure topology, publish, read back."""
         import laser_sdk as ls
 
-        from sim.sensors import SensorEvent
+        from sim.telemetry import TelemetryEvent
 
         conn = os.environ["LASER_CONNECTION_STRING"]
 
@@ -114,8 +114,8 @@ class LiveFeed:
             await stream.ensure()
 
             # cls= makes this a TYPED topic: records decode straight back into
-            # our SensorEvent dataclass, dict-valued `value` field and all.
-            topic = stream.topic(self.topic_name, cls=SensorEvent)
+            # our TelemetryEvent dataclass, dict-valued `value` field and all.
+            topic = stream.topic(self.topic_name, cls=TelemetryEvent)
             await topic.ensure(1)
 
             reader = topic.records(self.reader_name)
@@ -135,7 +135,7 @@ class LiveFeed:
 
             for ev in outgoing:
                 await topic.publish(ev).send()
-            print(f"[laser] published {len(outgoing)} sensor events")
+            print(f"[laser] published {len(outgoing)} telemetry events")
 
             # Now read back exactly what we just published.
             while (record := await reader.next()) is not None:
@@ -143,38 +143,91 @@ class LiveFeed:
 
 
 # ------------------------------------------------------------- RocketRide.ai
-# The pipeline the house runs every time a decision is made.
+# The pipeline mission control runs every time a downlink is assigned.
 #
-# Shape is RocketRide's own documented three-component form (see their shipped
-# types/pipeline.py): a webhook takes the payload in, ai_chat processes it, and
-# response hands the result back. We feed it the decided action and it returns
-# the announcement the house "makes" out loud.
-ANNOUNCER_PIPELINE = {
-    "project_id": "5f1c0d3e-2b7a-4c19-9e84-6a0f7d2b3c15",
-    "source": "action_in",
-    "components": [
-        {"id": "action_in", "provider": "webhook", "config": {}},
-        {
-            "id": "announce",
-            "provider": "ai_chat",
-            "config": {
-                "model": "gpt-4",
-                "system": (
-                    "You are a smart home announcing a decision it just made "
-                    "between two housemates. One sentence, warm, under 20 words. "
-                    "Name who got their way and why it was fair."
-                ),
+# Four real components, confirmed against the live server's own catalogue
+# (client.get_services() lists 140 of them) and accepted by its validator:
+#
+#     webhook --text--> prompt --questions--> llm_anthropic --answers--> response_answers
+#
+# We feed in the decided action as JSON; `prompt` wraps it in the announcing
+# instructions; Claude writes the sentence; response_answers hands it back.
+#
+# DO NOT trust the example in RocketRide's own docstrings here -- it shows
+# providers called `ai_chat` and `response` with a lane named `output`. None of
+# those three exist on the server. The names below are the real ones.
+PROJECT_ID = "5f1c0d3e-2b7a-4c19-9e84-6a0f7d2b3c15"
+
+ANNOUNCE_INSTRUCTIONS = [
+    "You are satellite mission control announcing a downlink assignment you "
+    "just made between contending satellites. One sentence, calm and "
+    "operational, under 20 words. Name which satellite got the window and why "
+    "it was fair."
+]
+
+
+def announcer_pipeline():
+    """
+    Build the pipeline, in the richest form the available credentials allow.
+
+    WITH an Anthropic key   webhook -> prompt -> llm_anthropic -> response_answers
+                            Claude writes the sentence the house says out loud.
+
+    WITHOUT one             webhook -> response_text
+                            The action still travels through a real RocketRide
+                            pipeline and comes back; there's just no prose.
+
+    Both are real executions on their server -- the second is not a fake. The
+    LLM leg needs an ANTHROPIC_API_KEY because RocketRide passes YOUR key
+    through to Anthropic; their platform key doesn't cover model calls.
+    """
+    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+
+    if not anthropic_key:
+        return {
+            "project_id": PROJECT_ID,
+            "source": "action_in",
+            "components": [
+                {"id": "action_in", "provider": "webhook", "config": {}},
+                {
+                    "id": "said",
+                    "provider": "response_text",
+                    "config": {},
+                    "input": [{"from": "action_in", "lane": "text"}],
+                },
+            ],
+        }
+
+    return {
+        "project_id": PROJECT_ID,
+        "source": "action_in",
+        "components": [
+            {"id": "action_in", "provider": "webhook", "config": {}},
+            {
+                "id": "framing",
+                "provider": "prompt",
+                "config": {"instructions": ANNOUNCE_INSTRUCTIONS},
+                "input": [{"from": "action_in", "lane": "text"}],
             },
-            "input": [{"from": "action_in", "lane": "output"}],
-        },
-        {
-            "id": "said",
-            "provider": "response",
-            "config": {},
-            "input": [{"from": "announce", "lane": "answer"}],
-        },
-    ],
-}
+            {
+                "id": "brain",
+                "provider": "llm_anthropic",
+                # Nested under the profile name -- that's how their schema
+                # wants per-model credentials (schema.dependencies.profile).
+                "config": {
+                    "profile": "claude-sonnet-4-6",
+                    "claude-sonnet-4-6": {"apikey": anthropic_key},
+                },
+                "input": [{"from": "framing", "lane": "questions"}],
+            },
+            {
+                "id": "said",
+                "provider": "response_answers",
+                "config": {},
+                "input": [{"from": "brain", "lane": "answers"}],
+            },
+        ],
+    }
 
 
 class Actuator:
@@ -209,7 +262,7 @@ class Actuator:
     def __init__(self, use_real=False, pipeline=None, **cfg):
         self.use_real = use_real
         self.log = []
-        self.pipeline = pipeline or ANNOUNCER_PIPELINE
+        self.pipeline = pipeline or announcer_pipeline()
 
         self._loop = None      # background event loop (the SDK is async-only)
         self._thread = None
@@ -344,51 +397,77 @@ class Actuator:
 # ------------------------------------------------------------------ Guild.ai
 class Council:
     """
-    Multi-agent layer. One advocate per household member + a safety agent
-    that can veto. The safety veto is a REAL handoff, not a fake one --
-    judges look for that.
+    Multi-agent layer. One advocate agent per contending satellite, plus a
+    mission-safety agent that can VETO them. The veto is a real handoff, not a
+    decorative one -- judges look for agents that genuinely disagree.
+
+    STATUS: ⬜ fallback (deterministic). Guild.ai workspace is ready:
+    rentechau/orbital-contact-broker, set as the CLI default. What remains is
+    writing the agent definitions -- run `guild agent init`, do NOT guess at
+    the file format.
     """
 
-    def __init__(self, use_real=False, **cfg):
+    def __init__(self, use_real=False, seed=7, **cfg):
         self.use_real = use_real
+
+        # Seeded on purpose. When there is no history the choice is genuinely
+        # arbitrary -- but an arbitrary choice that lands differently on each
+        # run makes the demo unrehearsable. A fixed seed means you know what
+        # it will say before you say it. Pass seed=None for true randomness.
+        self._rng = random.Random(seed)
+
         if use_real:
-            # TODO(sponsor table): Guild.ai workspace + agent definitions.
-            # Ask them: "minimum viable two agents that hand off to each other?"
-            raise NotImplementedError("paste Guild.ai client here")
+            # TODO(guild): agent definitions. Scaffold them with
+            #   guild agent init      (in src/agents/advocate/)
+            #   guild agent test      (REPL, to try one)
+            # The workspace already exists and the CLI is authenticated.
+            raise NotImplementedError("wire Guild.ai agents here")
 
-    def resolve(self, requests, memory, room, topic="thermostat"):
+    def resolve(self, requests, memory, station):
         """
-        requests: {"jeremy": 68, "sam": 74}
-        room:     where the argument is happening -- the graph walk starts here
-        Returns (winner, value, reasoning)
+        Decide which satellite gets the downlink window at this station.
 
-        Fallback logic below is intentionally simple but CORRECT -- it already
-        demonstrates memory-driven fairness. Upgrade to real Guild agents once
-        the rest works; if you run out of time, this still tells the story.
+        requests: {"SAT-1": 40, "SAT-2": 35}   satellite -> backlog in GB
+        station:  where the contention is -- the graph walk starts here
+        Returns (winner, loser, reasoning)
+
+        The logic is deliberately simple but CORRECT: it already demonstrates
+        memory-driven fairness, which is the entire pitch. Upgrade to real
+        Guild agents once everything else works. If time runs out, this still
+        tells the story.
         """
-        people = list(requests)
-        if len(people) == 1:
-            p = people[0]
-            return p, requests[p], f"{p} is alone in the room"
+        sats = list(requests)
+        if len(sats) == 1:
+            return sats[0], None, f"{sats[0]} is the only satellite in view"
 
-        a, b = people[0], people[1]
-        balance = memory.concession_balance(room, a, b, topic)
+        a, b = sats[0], sats[1]
+
+        # --- the advocate agents ------------------------------------------
+        # Each argues for its own satellite. The tie-break between them is the
+        # fairness ledger, read straight out of the graph.
+        balance = memory.yield_balance(station, a, b)
 
         if balance > 0:
-            winner, why = a, f"{a} has given way {balance} more time(s) before -- their turn"
+            winner = a
+            why = f"{a} yielded {balance} more time(s) at {station} -- its turn"
         elif balance < 0:
-            winner, why = b, f"{b} has given way {-balance} more time(s) before -- their turn"
+            winner = b
+            why = f"{b} yielded {-balance} more time(s) at {station} -- its turn"
         else:
-            winner = random.choice([a, b])
+            winner = self._rng.choice([a, b])
             why = "no history yet -- picking arbitrarily and remembering the outcome"
 
         loser = b if winner == a else a
-        value = requests[winner]
 
-        # SAFETY AGENT VETO -- the human-in-the-loop / second-agent moment
-        if topic == "thermostat" and not (60 <= value <= 80):
-            value = max(60, min(80, value))
-            why += f" (safety agent clamped to {value})"
+        # --- MISSION-SAFETY AGENT VETO ------------------------------------
+        # The second agent, and it can OVERRULE the fairness verdict. Some
+        # payloads cannot wait for their turn: a conjunction warning is a
+        # collision alert, and a satellite that misses that window may not be
+        # there next orbit. Fairness is the default, not the law.
+        if memory.urgency_of(loser) == "critical" and memory.urgency_of(winner) != "critical":
+            winner, loser = loser, winner
+            why = (f"SAFETY VETO: fairness said {loser}, but {winner} carries a "
+                   f"critical payload -- overruled")
 
-        memory.record_concession(loser, winner, topic)
-        return winner, value, why
+        memory.record_yield(loser, winner, station)
+        return winner, loser, why
