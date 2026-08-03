@@ -9,3 +9,10 @@ __pycache__/
 #   git clone https://github.com/laserdata/laser-stack
 laser-stack/
 .rocketride/
+
+# Guild.ai agents are each their own git repo with a remote on app.guild.ai
+# (`guild agent save` pushes there). Embedding them in this repo would add
+# them as broken submodules. Backup copies of the prompts live in
+# docs/guild-agents/ so nothing is lost if a laptop dies.
+src/agents/advocate/
+src/agents/mission-safety/
