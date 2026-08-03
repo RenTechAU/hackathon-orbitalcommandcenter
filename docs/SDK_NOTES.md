@@ -307,3 +307,64 @@ for a model, one of those is where to look -- but the receipt path we already
 have is enough to make RocketRide load-bearing.
 
 Profile updated 4-6 -> `claude-sonnet-5` (newer, and on their supported list).
+
+
+---
+
+## Guild.ai — how it actually works (verified 2026-08-03)
+
+**It is a CLI, not a Python SDK.** That is why searching for Python docs kept
+failing. Installed via Homebrew at `/opt/homebrew/bin/guild`, v0.17.0.
+
+Workspace: `rentechau/orbital-contact-broker`, set as CLI default.
+Agents: `rentechau~advocate`, `rentechau~mission-safety` (both PUBLISHED).
+
+### Creating an agent
+
+```bash
+guild --non-interactive agent init \
+  --name advocate --agent-type GUILD_NATIVE --category other \
+  --directory src/agents/advocate
+```
+
+`GUILD_NATIVE` = prompt-based (what we want). Others are `GUILD_TYPESCRIPT`
+and `GOOSE`. `--template` is NOT accepted with GUILD_NATIVE. `--category` is
+required in non-interactive mode; list them with `guild agent categories`.
+
+Scaffolds `PROMPT.md` (the agent's brief) + `guild.yaml` (tools it may use)
++ `guild.json` (id and name). No code for a native agent.
+
+### Publishing — two gotchas that cost time
+
+1. **A `package.json` is required.** `agent save --bump` fails without one, and
+   `agent publish` then fails with "Version number is required for publishing".
+   GUILD_NATIVE does not scaffold one. Add a minimal
+   `{"name": "...", "version": "0.1.0", "private": true}` and it works.
+2. **Each agent dir is its OWN git repo** with a remote on app.guild.ai. The
+   outer project repo will try to embed them as broken submodules. Gitignore
+   them; prompt backups live in `docs/guild-agents/`.
+
+```bash
+guild --non-interactive agent save --wait --publish
+```
+
+### Calling an agent from a script
+
+Agents must be attached to the workspace first, or you get the misleading
+error **"The workspace doesn't exist"** even though it does:
+
+```bash
+guild --non-interactive workspace agent list      # confirm they're attached
+guild --non-interactive workspace chat --agent rentechau~advocate \
+      --once '<json payload>'
+```
+
+`--once` = one-shot, non-interactive. Output is progress chatter plus the
+agent's reply; `Council._ask()` scans backwards for the last line that parses
+as a JSON object rather than assuming a position.
+
+**Budget ~8 seconds per call.** The two advocates are run in parallel threads
+to halve it. A full four-beat demo with live agents takes ~35s, ~50s with
+LaserData and RocketRide live too.
+
+Panic switch: `GUILD_LIVE=0` forces deterministic logic.

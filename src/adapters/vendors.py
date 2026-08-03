@@ -451,27 +451,48 @@ class Council:
     mission-safety agent that can VETO them. The veto is a real handoff, not a
     decorative one -- judges look for agents that genuinely disagree.
 
-    STATUS: ⬜ fallback (deterministic). Guild.ai workspace is ready:
-    rentechau/orbital-contact-broker, set as the CLI default. What remains is
-    writing the agent definitions -- run `guild agent init`, do NOT guess at
-    the file format.
+    STATUS: ✅ REAL -- two published agents in the workspace
+    rentechau/orbital-contact-broker:
+
+        rentechau~advocate        argues ONE satellite's case, run once per
+                                  satellite so two instances argue against
+                                  each other
+        rentechau~mission-safety  reviews the verdict and may OVERRULE it
+
+    Guild.ai has no Python SDK -- it is a CLI. So we shell out to it, which is
+    their documented interface, not a workaround:
+
+        guild --non-interactive --mode json workspace chat \\
+              --agent <name> --once '<json>'
+
+    Where the agents are genuinely load-bearing, rather than decorative:
+
+      * The advocates decide the NO-HISTORY case. That used to be a coin toss
+        (random.choice). Now two agents argue and the stronger honest claim
+        wins. Verified they disagree in useful ways: a critical payload scores
+        ~0.9, a routine one much lower.
+
+      * The safety agent can REVERSE the fairness verdict, and verified live
+        that it does not always veto -- two routine payloads got
+        {"veto": false} and the fairness decision stood. An agent that always
+        says yes is not an agent.
+
+    The GRAPH still owns the memory. Guild decides ties and safety; FalkorDB
+    decides whose turn it is. Neither replaces the other.
     """
 
-    def __init__(self, use_real=False, seed=7, **cfg):
+    ADVOCATE = "rentechau~advocate"
+    SAFETY = "rentechau~mission-safety"
+
+    def __init__(self, use_real=False, seed=7, timeout=45, **cfg):
         self.use_real = use_real
+        self.timeout = timeout
 
-        # Seeded on purpose. When there is no history the choice is genuinely
-        # arbitrary -- but an arbitrary choice that lands differently on each
-        # run makes the demo unrehearsable. A fixed seed means you know what
-        # it will say before you say it. Pass seed=None for true randomness.
+        # Seeded on purpose. When there is no history AND the agents cannot be
+        # reached, the choice is genuinely arbitrary -- but an arbitrary choice
+        # that lands differently each run makes the demo unrehearsable. A fixed
+        # seed means you know what it will say. Pass seed=None for true chance.
         self._rng = random.Random(seed)
-
-        if use_real:
-            # TODO(guild): agent definitions. Scaffold them with
-            #   guild agent init      (in src/agents/advocate/)
-            #   guild agent test      (REPL, to try one)
-            # The workspace already exists and the CLI is authenticated.
-            raise NotImplementedError("wire Guild.ai agents here")
 
     def resolve(self, requests, memory, station):
         """
@@ -481,10 +502,16 @@ class Council:
         station:  where the contention is -- the graph walk starts here
         Returns (winner, loser, reasoning)
 
-        The logic is deliberately simple but CORRECT: it already demonstrates
-        memory-driven fairness, which is the entire pitch. Upgrade to real
-        Guild agents once everything else works. If time runs out, this still
-        tells the story.
+        Three stages, and each layer can override the one before it:
+
+          1. THE GRAPH decides whose turn it is, from the yield history.
+          2. THE ADVOCATES break the tie when there is no history. Two agents
+             argue; the stronger honest claim wins.
+          3. THE SAFETY AGENT reviews the verdict and may reverse it.
+
+        Everything degrades safely. If Guild is unreachable the deterministic
+        logic takes over and says so out loud, because a silent downgrade in
+        front of judges is worse than a slow answer.
         """
         sats = list(requests)
         if len(sats) == 1:
@@ -492,9 +519,9 @@ class Council:
 
         a, b = sats[0], sats[1]
 
-        # --- the advocate agents ------------------------------------------
-        # Each argues for its own satellite. The tie-break between them is the
-        # fairness ledger, read straight out of the graph.
+        # --- 1. THE MEMORY: whose turn is it? -----------------------------
+        # Read straight out of the graph. This is the part that makes run 2
+        # smarter than run 1, and no agent gets to overrule it lightly.
         balance = memory.yield_balance(station, a, b)
 
         if balance > 0:
@@ -504,20 +531,134 @@ class Council:
             winner = b
             why = f"{b} yielded {-balance} more time(s) at {station} -- its turn"
         else:
-            winner = self._rng.choice([a, b])
-            why = "no history yet -- picking arbitrarily and remembering the outcome"
+            # --- 2. NO HISTORY: let the advocates argue -------------------
+            winner, why = self._advocates_decide(a, b, requests, memory, station)
 
         loser = b if winner == a else a
 
-        # --- MISSION-SAFETY AGENT VETO ------------------------------------
-        # The second agent, and it can OVERRULE the fairness verdict. Some
-        # payloads cannot wait for their turn: a conjunction warning is a
-        # collision alert, and a satellite that misses that window may not be
+        # --- 3. MISSION-SAFETY REVIEW -------------------------------------
+        # A real handoff: this agent sees the verdict and can reverse it. Some
+        # payloads cannot wait for their turn -- a conjunction warning is a
+        # collision alert, and a satellite that misses the window may not be
         # there next orbit. Fairness is the default, not the law.
-        if memory.urgency_of(loser) == "critical" and memory.urgency_of(winner) != "critical":
-            winner, loser = loser, winner
-            why = (f"SAFETY VETO: fairness said {loser}, but {winner} carries a "
-                   f"critical payload -- overruled")
+        winner, loser, why = self._safety_review(winner, loser, memory, station, why)
 
         memory.record_yield(loser, winner, station)
         return winner, loser, why
+
+    # ---------- the two agents ----------
+
+    def _advocates_decide(self, a, b, requests, memory, station):
+        """Run one advocate per satellite and let the stronger claim win."""
+        if not self.use_real:
+            return (self._rng.choice([a, b]),
+                    "no history yet -- picking arbitrarily and remembering the outcome")
+
+        cases = self._run_advocates(a, b, requests, memory, station)
+        if not cases:
+            return (self._rng.choice([a, b]),
+                    "no history yet -- Guild unreachable, picked arbitrarily")
+
+        for sat, claim in cases.items():
+            print(f"  [ARG] {sat} ({claim['claim_strength']:.2f}): {claim['argument']}")
+
+        winner = max(cases, key=lambda s: cases[s]["claim_strength"])
+        return winner, f"no history -- advocates argued, {winner} made the stronger case"
+
+    def _run_advocates(self, a, b, requests, memory, station):
+        """
+        Call both advocates AT THE SAME TIME.
+
+        Each call takes several seconds, and a demo cannot afford to wait for
+        them one after the other. Threads are enough here -- we are waiting on
+        a subprocess, not doing any work ourselves.
+        """
+        import concurrent.futures as cf
+
+        def brief(me, them):
+            return {
+                "satellite": me,
+                "station": station,
+                "backlog_gb": requests[me],
+                "payload": memory.payload_of(me),
+                "urgency": memory.urgency_of(me),
+                "times_yielded_here": memory.yield_ledger(station).get((me, them), 0),
+                "opponent": {"satellite": them,
+                             "backlog_gb": requests[them],
+                             "urgency": memory.urgency_of(them)},
+            }
+
+        out = {}
+        with cf.ThreadPoolExecutor(max_workers=2) as pool:
+            jobs = {pool.submit(self._ask, self.ADVOCATE, brief(x, y)): x
+                    for x, y in ((a, b), (b, a))}
+            for job in cf.as_completed(jobs):
+                sat = jobs[job]
+                reply = job.result()
+                if reply and "claim_strength" in reply:
+                    reply.setdefault("argument", "")
+                    out[sat] = reply
+
+        return out if len(out) == 2 else {}
+
+    def _safety_review(self, winner, loser, memory, station, why):
+        """Let the safety agent see the verdict, and reverse it if it must."""
+        verdict = None
+        if self.use_real:
+            verdict = self._ask(self.SAFETY, {
+                "station": station,
+                "proposed_winner": {"satellite": winner,
+                                    "payload": memory.payload_of(winner),
+                                    "urgency": memory.urgency_of(winner)},
+                "proposed_loser": {"satellite": loser,
+                                   "payload": memory.payload_of(loser),
+                                   "urgency": memory.urgency_of(loser)},
+                "reason": why,
+            })
+
+        if verdict is None:
+            # No agent available -- apply the same rule deterministically, so
+            # the beat still lands if Guild is down at 6 PM.
+            if (memory.urgency_of(loser) == "critical"
+                    and memory.urgency_of(winner) != "critical"):
+                return loser, winner, (f"SAFETY VETO: fairness said {winner}, but "
+                                       f"{loser} carries a critical payload -- overruled")
+            return winner, loser, why
+
+        if verdict.get("veto") and verdict.get("winner") == loser:
+            return loser, winner, f"SAFETY VETO: {verdict.get('reason', '').strip()}"
+
+        # Not a veto -- the agent reviewed it and let fairness stand.
+        return winner, loser, why
+
+    def _ask(self, agent, payload):
+        """
+        Send one JSON payload to a Guild agent and return the JSON it replies
+        with, or None if anything at all goes wrong.
+
+        Guild has no Python SDK -- it is a CLI, which is why this shells out.
+        The reply is wrapped in progress chatter, so we scan the output for the
+        last line that parses as a JSON object rather than assuming a position.
+        """
+        import json
+        import subprocess
+
+        cmd = ["guild", "--non-interactive", "workspace", "chat",
+               "--agent", agent, "--once", json.dumps(payload)]
+        try:
+            proc = subprocess.run(cmd, capture_output=True, text=True,
+                                  timeout=self.timeout)
+        except Exception as exc:
+            print(f"  [guild] {agent} unreachable ({exc}) -- using fallback logic")
+            return None
+
+        for line in reversed(proc.stdout.splitlines()):
+            line = line.strip()
+            if line.startswith("{") and line.endswith("}"):
+                try:
+                    return json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+
+        print(f"  [guild] {agent} gave no JSON -- using fallback logic")
+        return None

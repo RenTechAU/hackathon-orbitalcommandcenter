@@ -157,6 +157,16 @@ class ConstellationMemory:
         """, {"g": station})
         return [r[0] for r in rows]
 
+    def payload_of(self, satellite):
+        """What this satellite is carrying. The advocates quote it by name."""
+        if not self.enabled:
+            return self._payloads.get(satellite, ("unknown", "routine"))[0]
+        rows = self.q("""
+            MATCH (:Satellite {name:$s})-[:CARRIES]->(p:Payload)
+            RETURN p.name
+        """, {"s": satellite})
+        return rows[0][0] if rows else "unknown"
+
     def urgency_of(self, satellite):
         """What the safety agent reads before it decides whether to veto."""
         if not self.enabled:

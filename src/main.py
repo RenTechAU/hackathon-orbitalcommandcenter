@@ -131,13 +131,44 @@ def build_actuator():
         return Actuator(use_real=False)
 
 
+def build_council():
+    """
+    Real Guild.ai agents when the CLI is there and logged in, deterministic
+    logic when it isn't -- and it says which, out loud, every run.
+
+    Force the fallback with GUILD_LIVE=0. Do that if the agents are slow or
+    flaky during the demo: each call takes several seconds, and a fast correct
+    answer beats a slow broken one at 6 PM.
+    """
+    import shutil
+    import subprocess
+
+    if os.getenv("GUILD_LIVE") == "0":
+        print("[council] GUILD_LIVE=0 -- forced fallback (deterministic logic)")
+        return Council(use_real=False)
+    if not shutil.which("guild"):
+        print("[council] guild CLI not installed -- falling back")
+        return Council(use_real=False)
+    try:
+        # Fail fast, before the judges are watching.
+        done = subprocess.run(["guild", "--non-interactive", "auth", "status"],
+                              capture_output=True, text=True, timeout=20)
+        if done.returncode != 0:
+            raise RuntimeError("not authenticated -- run: guild auth login")
+        print("[council] Guild.ai: REAL (advocate + mission-safety agents)")
+        return Council(use_real=True)
+    except Exception as exc:
+        print(f"[council] Guild unavailable ({exc}) -- falling back")
+        return Council(use_real=False)
+
+
 if __name__ == "__main__":
     load_env()
 
     memory = ConstellationMemory()
     memory.reset()  # clean slate so the two-conflict demo lands every run
     feed = build_feed()
-    council = Council(use_real=False)
+    council = build_council()
     actuator = build_actuator()
 
     print("=" * 62)

@@ -37,7 +37,7 @@ verbatim: *"A one-line SDK import that's never called again will not count."*
 |---|---|---|---|
 | Real-time | LaserData | Live orbital telemetry | ✅ real (local Laser Stack) |
 | Memory | FalkorDB | Constellation graph + yield history | ✅ real (Docker, localhost:6379) |
-| Multi-agent | Guild.ai | Advocate agents + mission-safety veto | ⬜ fallback (workspace ready) |
+| Multi-agent | Guild.ai | Advocate agents + mission-safety veto | ✅ real (2 published agents) |
 | Motion | RocketRide.ai | Issues the tasking command | ✅ real (live pipeline, receipt per action) |
 
 Update the status column as each is wired. All four must be green before judging.
