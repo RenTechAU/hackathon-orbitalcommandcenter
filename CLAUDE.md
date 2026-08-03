@@ -1,0 +1,126 @@
+# CLAUDE.md
+
+Project context for Claude Code. Read this before making changes.
+
+## What this is
+
+**Smart Home Orchestrator** — hackathon project for *Memory Meets Motion*
+(Frontier Tower SF, Aug 3 2026, 8-hour sprint, judging ~6:30 PM).
+
+An AI household that **negotiates**. When two people in the same room want
+different things, agents argue it out — and the system gets *fairer over time*
+because it remembers who conceded last.
+
+## The one thing that matters
+
+The demo is two identical conflicts with different outcomes:
+
+```
+conflict 1  ->  no history, picks arbitrarily, RECORDS who conceded
+conflict 2  ->  "jeremy gave way last time -- their turn"
+```
+
+That difference is the memory. **Every change must preserve this.** If a
+refactor breaks the two-conflict demo, revert it. Nothing else is as important.
+
+## Hard constraints from the judges
+
+All four sponsor tools must be **load-bearing**. The problem statement says
+verbatim: *"A one-line SDK import that's never called again will not count."*
+
+| Layer | Tool | Role here | Status |
+|---|---|---|---|
+| Real-time | LaserData | Live sensor stream | ⬜ fallback (`sim/sensors.py`) |
+| Memory | FalkorDB | Household graph + concession history | ✅ real (Docker, localhost:6379) |
+| Multi-agent | Guild.ai | Advocate agents + safety veto | ⬜ fallback (deterministic logic) |
+| Motion | RocketRide.ai | Executes device actions | ⬜ fallback (prints) |
+
+Update the status column as each is wired. All four must be green before judging.
+
+## Critical rule: do not invent SDK syntax
+
+LaserData, RocketRide.ai and Guild.ai are new tools **not in your training
+data**. Do NOT guess at their client init, method names, or auth flow. Plausible
+-looking-but-fake API calls have already been identified as the single biggest
+time sink for this project.
+
+If a real code sample is not in `docs/SDK_NOTES.md`, stop and tell Jeremy to get
+it from the sponsor's table. Adding a `TODO(sponsor table)` marker is the
+correct action — writing a guess is not.
+
+FalkorDB is different: it's an established Redis-based graph DB with real Cypher.
+You may write Cypher freely.
+
+## Architecture
+
+```
+LaserData  ->  FalkorDB  ->  Guild.ai  ->  RocketRide.ai
+ (now)         (ever)        (decide)      (do)
+```
+
+Everything vendor-specific lives behind an adapter in `src/adapters/vendors.py`.
+Three classes — `LiveFeed`, `Actuator`, `Council` — each with a `use_real` flag.
+**Swap one adapter at a time. Never change more than one at once.**
+
+## Graph schema (FalkorDB)
+
+```cypher
+(:Person {name})
+(:Room   {name})
+(:Device {name, kind})
+(:Person)-[:OCCUPIES {since}]->(:Room)
+(:Device)-[:IN]->(:Room)
+(:Person)-[:PREFERS {value}]->(:Device)
+(:Person)-[:CONCEDED {topic, ts}]->(:Person)   // the memory that compounds
+```
+
+`CONCEDED` is the demo. The fairness query walks it to decide who wins — that
+multi-hop traversal is what makes this a genuine graph problem rather than a
+table with extra steps. Preserve it.
+
+## Layout
+
+```
+src/main.py             pipeline end to end
+src/sim/sensors.py      fake stream + scripted demo beats
+src/memory/graph.py     FalkorDB schema, Cypher, fairness query
+src/adapters/vendors.py the three SDK slots
+src/agents/             Guild.ai agent definitions (empty until wired)
+web/                    dashboard UI (see docs/CLAUDE_DESIGN_BRIEF.md)
+docs/                   setup, architecture, demo script, SDK notes
+```
+
+## Working agreements
+
+- **Always keep `python3 src/main.py` runnable with zero SDKs installed.** The
+  fallback path is the safety net. If it breaks, the demo is at risk all day.
+- Run it after every change. It takes one second.
+- Small commits, push often. Laptops die at hackathons.
+- Prefer editing the fallback logic over deleting it — it's the reference
+  behaviour and the backup demo if a vendor SDK fails at 5 PM.
+- No auth, no user accounts, no persistence layer beyond FalkorDB. Not scored.
+- **Code freeze 5:00 PM.** After that: demo recording, README, pitch only.
+
+## Context on the developer
+
+Jeremy is early in his coding journey and working primarily through AI tools.
+Bias toward: explaining *why* before *what*, small reviewable diffs, and running
+the code to prove a change worked rather than asserting it. Don't produce large
+refactors he can't review. If something fails, say so plainly rather than
+patching around it.
+
+**Use simple plain English.** Avoid jargon; when a technical term is
+unavoidable, define it in one short phrase. Short sentences. Explain things the
+way you would to a smart person who is new to coding.
+
+## Timeline
+
+| Time | Milestone |
+|---|---|
+| 10:00–11:00 | Skeleton green ✅ + all four mentor tables visited |
+| 11:00–13:00 | FalkorDB real: live data → graph writes → agent reads |
+| 13:00–14:00 | Guild.ai + RocketRide: the actual action |
+| 14:00–15:00 | Demo script locked |
+| 15:00–17:00 | Dashboard UI, graph viz, seeded memory |
+| 17:00–17:30 | **Record demo. Code freeze.** |
+| 17:30–18:30 | Dry-run pitch twice, README, submit |

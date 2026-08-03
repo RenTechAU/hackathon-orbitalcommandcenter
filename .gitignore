@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+
+# Third-party clone of LaserData's local stack -- has its own git history and
+# its own .env with credentials. Re-clone it, don't vendor it:
+#   git clone https://github.com/laserdata/laser-stack
+laser-stack/

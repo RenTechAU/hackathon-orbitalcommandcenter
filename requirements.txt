@@ -1,0 +1,8 @@
+# Memory layer -- established SDK, safe to install now
+falkordb>=1.0.0
+
+# Vendor SDKs -- uncomment as you confirm the real package names at the
+# sponsor tables. Do NOT guess these; a wrong pip install wastes ten minutes.
+# laserdata
+# rocketride
+# guild-ai
