@@ -215,8 +215,8 @@ def announcer_pipeline():
                 # Nested under the profile name -- that's how their schema
                 # wants per-model credentials (schema.dependencies.profile).
                 "config": {
-                    "profile": "claude-sonnet-4-6",
-                    "claude-sonnet-4-6": {"apikey": anthropic_key},
+                    "profile": "claude-sonnet-5",
+                    "claude-sonnet-5": {"apikey": anthropic_key},
                 },
                 "input": [{"from": "framing", "lane": "questions"}],
             },

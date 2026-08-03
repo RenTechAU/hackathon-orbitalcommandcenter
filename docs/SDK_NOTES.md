@@ -285,3 +285,25 @@ Connecting an integration/extension in the RocketRide console does NOT satisfy
 this. Their server wants YOUR key inside the pipeline config; their platform
 key does not cover model calls. Put `ANTHROPIC_API_KEY=<key>` in `.env` and
 `announcer_pipeline()` picks the richer form automatically.
+
+### SETTLED: there is no way to avoid supplying your own model key
+
+Checked against the server's own service catalogue (`await client.get_services()`
+-> `{'services': {...140 providers...}, 'version': int}`).
+
+`llm_anthropic` offers 20 profiles. **All 20 list `apikey` as required:**
+
+    claude-sonnet-5, claude-opus-latest, claude-sonnet-4-6, claude-haiku-4-5,
+    claude-opus-4-8, claude-fable-5, ... (and `custom`, which additionally
+    requires `model` and `modelTotalTokens`)
+
+So connecting an integration in the RocketRide console does NOT feed credentials
+to a pipeline. Stop trying -- it is their design, not a misconfiguration.
+Put `ANTHROPIC_API_KEY=<key>` in `.env`.
+
+98 of the 140 providers need no apikey at all (`chat`, `agent_rocketride`,
+`answer_documents`, the db_* nodes...). If you ever want prose without paying
+for a model, one of those is where to look -- but the receipt path we already
+have is enough to make RocketRide load-bearing.
+
+Profile updated 4-6 -> `claude-sonnet-5` (newer, and on their supported list).
