@@ -27,6 +27,21 @@ else
   echo "    already running"
 fi
 
+echo "==> making sure LaserData (laser-stack) is running..."
+if ! docker ps --filter name=laser-stack-iggy --format '{{.Names}}' | grep -q iggy; then
+  if [ -x laser-stack/scripts/up ]; then
+    (cd laser-stack && ./scripts/up) || echo "    WARNING: laser-stack failed to start -- demo will use the fallback"
+  else
+    echo "    laser-stack/ missing. Re-clone it:"
+    echo "      git clone https://github.com/laserdata/laser-stack"
+    echo "    Continuing on the fallback."
+  fi
+else
+  echo "    already running"
+fi
+
 echo "==> running the demo..."
 echo
+# If LaserData plays up mid-event, force the fallback instead:
+#     LASER_LIVE=0 ./run_demo.sh
 .venv/bin/python src/main.py

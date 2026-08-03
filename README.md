@@ -55,8 +55,8 @@ docs/                   guides
 ## Status
 
 - [x] Walking skeleton green
-- [ ] FalkorDB wired
-- [ ] LaserData wired
+- [x] FalkorDB wired (real graph, multi-hop fairness query)
+- [x] LaserData wired (local Laser Stack, real Iggy log)
 - [ ] RocketRide wired
 - [ ] Guild.ai wired
 - [ ] Dashboard

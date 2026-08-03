@@ -45,7 +45,7 @@ Mentor said would impress:
 
 ## LaserData — real-time layer
 
-**Status:** 🟡 code ready — ONLY the connection string is missing
+**Status:** ✅ WIRED (real Iggy log, load-bearing) — 2026-08-03
 **Free tier:** https://laserdata.cloud/?source=sf-memory-motion-hackthon-2026
 **Local:** https://github.com/laserdata/laser-stack
 **Quickstart:** https://docs.laserdata.com/laser-sdk/quickstart
@@ -78,9 +78,41 @@ async def main():
 asyncio.run(main())
 ```
 
-STILL TO CONFIRM AT TABLE (2 things, so we map their data to our SensorEvent):
-  1. Real stream/topic name for the sensor feed? (their example uses "shop"/"orders")
-  2. What fields does each record carry? (so we build SensorEvent(kind, room, value, person))
+~~STILL TO CONFIRM AT TABLE (2 things)~~ — **BOTH QUESTIONS WERE MOOT.**
+
+We are both sides of this feed: the house's sensors publish, the orchestrator
+subscribes. So we choose the stream/topic names ("home"/"sensors") and we know
+the record fields because we write them. Nothing to ask.
+
+The API came from the SDK's OWN shipped type stub — the most authoritative
+source available, and not a guess:
+```
+.venv/lib/python3.14/site-packages/laser_sdk/__init__.pyi   # 3,433 lines
+```
+
+VERIFIED WORKING against the local stack:
+```python
+async with await ls.Laser.connect(os.environ["LASER_CONNECTION_STRING"]) as laser:
+    stream = laser.stream("home")
+    await stream.ensure()                            # NOTE: no args
+    topic = stream.topic("sensors", cls=SensorEvent) # cls= => typed decode
+    await topic.ensure(1)                            # partitions is positional
+    await topic.publish(ev).send()                   # ev = a SensorEvent
+    reader = topic.records("orchestrator")
+    while (rec := await reader.next()) is not None:
+        rec.value                                    # a real SensorEvent back
+```
+
+Two gotchas that cost real time — worth knowing:
+  1. `.next()` returns None when **caught up**, NOT when the stream ends. A
+     `while ... is not None` loop exits the moment it drains, it does not block.
+  2. Consumer offsets **persist in the log between runs**. A fresh reader would
+     replay every previous run's events into the demo. `_pump()` drains to the
+     live edge first, then publishes. Do not remove that drain.
+  3. `cls=SensorEvent` round-trips the dict-valued `value` field
+     (`{"thermostat": 68}`), `None` person, floats and bools. All tested.
+
+Panic switch: `LASER_LIVE=0 python src/main.py` forces the fallback.
 
 Mentor said teams get wrong:
 

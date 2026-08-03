@@ -19,101 +19,127 @@ import random
 # ---------------------------------------------------------------- LaserData
 class LiveFeed:
     """
-    Real-time layer. Fallback = the fake sensor stream. Real = LaserData.
+    Real-time layer. Fallback = a plain Python generator. Real = LaserData.
 
-    STATUS: the real path is PREPPED but UNTESTED. It uses LaserData's real
-    methods (copied from their official quickstart) but has never actually run,
-    because we don't have the connection string yet.
+    STATUS: ✅ REAL AND TESTED against the local Laser Stack (iggy + plane).
 
-    To turn it on when you have the string:
-        1. export LASER_CONNECTION_STRING="<from the LaserData console>"
-        2. confirm the 2 items marked TODO(sponsor table) below
-        3. in main.py, build the feed with LiveFeed(use_real=True) and read
-           its .events() instead of the scripted demo
-    Until all that happens it stays in fallback and the demo is untouched.
+    The key insight: we are BOTH SIDES of this feed. The house's sensors publish
+    SensorEvents into the log; the orchestrator reads them back out. So there
+    was never a question to ask at the sponsor table about "what fields does a
+    record carry" -- we define the record, because we write it.
+
+    That also makes LaserData genuinely load-bearing rather than decorative:
+    every single sensor event the orchestrator reacts to has travelled through
+    a real Apache Iggy log. Pull the plug on the stack and the demo stops. The
+    two sides are decoupled exactly like a real deployment -- the sensors don't
+    call the orchestrator, they publish, and the orchestrator subscribes.
+
+    API note: every method used here was read off the SDK's OWN shipped type
+    stub (.venv/.../laser_sdk/__init__.pyi), not guessed and not from a blog.
     """
 
-    def __init__(self, use_real=False, stream_name="home", topic_name="sensors", **cfg):
+    def __init__(self, use_real=False, stream_name="home", topic_name="sensors",
+                 reader_name="orchestrator", **cfg):
         self.use_real = use_real
-        # TODO(sponsor table): confirm the real stream + topic names for the
-        # sensor feed. Their quickstart example used "shop" / "orders".
         self.stream_name = stream_name
         self.topic_name = topic_name
+        self.reader_name = reader_name
         if use_real and not os.getenv("LASER_CONNECTION_STRING"):
             raise RuntimeError(
-                "LaserData needs a connection string. Get it from the LaserData "
-                'console, then: export LASER_CONNECTION_STRING="..."'
+                "LaserData needs a connection string. It's in .env as "
+                'LASER_CONNECTION_STRING (format: user:password@host:port). '
+                "Start the local stack with: laser-stack/scripts/up"
             )
 
-    def events(self):
-        """Yield SensorEvents. Same shape whether real or fake -- the rest of
-        the pipeline can't tell the difference. That's the whole point."""
+    def events(self, source):
+        """
+        Yield SensorEvents for the pipeline to react to.
+
+        `source` is the sensor side -- an iterable of SensorEvents (the scripted
+        demo beats, or the random stream). In fallback we just hand them straight
+        through. In real mode they take the scenic route: published to LaserData,
+        then read back off the log.
+
+        Either way the rest of the pipeline cannot tell the difference. That is
+        the whole point of this file.
+        """
         if not self.use_real:
-            from sim.sensors import stream
-            yield from stream()
+            yield from source
             return
-        yield from self._laser_events()
+        yield from self._laser_roundtrip(list(source))
 
     # -- real path --------------------------------------------------------
-    def _laser_events(self):
+    def _laser_roundtrip(self, outgoing):
         """
-        Bridge LaserData's async feed into our sync pipeline.
+        Publish `outgoing` to LaserData, then yield what comes back off the log.
 
-        The `async with ... records.next()` block below is copied VERBATIM from
-        LaserData's official quickstart -- do not "fix" it. The thread+queue
-        around it is plain Python that lets a sync `for` loop read an async
-        source. The only thing to fill in is _to_event().
+        Runs the async SDK on a background thread and hands events to this sync
+        generator through a queue, so the pipeline keeps its plain `for` loop.
         """
         import asyncio
         import queue
         import threading
 
-        import laser_sdk as ls
-
-        conn = os.environ["LASER_CONNECTION_STRING"]
         out = queue.Queue(maxsize=100)
-        DONE = object()  # marker that the stream ended
+        DONE = object()   # sentinel: the reader caught up, nothing more coming
 
-        async def _consume():
-            async with await ls.Laser.connect(conn) as laser:
-                topic = laser.stream(self.stream_name).topic(self.topic_name)
-                records = topic.records("orchestrator")
-                while (record := await records.next()) is not None:
-                    ev = self._to_event(record.value)
-                    if ev is not None:
-                        out.put(ev)
-            out.put(DONE)
+        def _run():
+            try:
+                asyncio.run(self._pump(outgoing, out))
+            except Exception as exc:          # surface it, don't hang the demo
+                out.put(exc)
+            finally:
+                out.put(DONE)
 
-        threading.Thread(target=lambda: asyncio.run(_consume()), daemon=True).start()
+        threading.Thread(target=_run, daemon=True).start()
 
         while True:
             item = out.get()
             if item is DONE:
                 break
+            if isinstance(item, Exception):
+                raise item
             yield item
 
-    @staticmethod
-    def _to_event(payload):
-        """
-        Turn ONE LaserData record into our SensorEvent.
+    async def _pump(self, outgoing, out):
+        """The actual LaserData session: ensure topology, publish, read back."""
+        import laser_sdk as ls
 
-        TODO(sponsor table): this is the ONE piece we can't know until you ask
-        "what fields does each record carry?". Once you know, fill in the map
-        below. The commented example shows the SHAPE -- the field names are a
-        guess, so confirm them before trusting them.
+        from sim.sensors import SensorEvent
 
-            from sim.sensors import SensorEvent
-            return SensorEvent(
-                kind=payload["kind"],        # "motion" | "temperature" | "request"
-                room=payload["room"],
-                value=payload["value"],
-                person=payload.get("person"),
-            )
-        """
-        raise NotImplementedError(
-            "Confirm LaserData record fields at the table, then map them to "
-            "SensorEvent here (see the example in this function's docstring)."
-        )
+        conn = os.environ["LASER_CONNECTION_STRING"]
+
+        async with await ls.Laser.connect(conn) as laser:
+            stream = laser.stream(self.stream_name)
+            await stream.ensure()
+
+            # cls= makes this a TYPED topic: records decode straight back into
+            # our SensorEvent dataclass, dict-valued `value` field and all.
+            topic = stream.topic(self.topic_name, cls=SensorEvent)
+            await topic.ensure(1)
+
+            reader = topic.records(self.reader_name)
+
+            # Join at the LIVE EDGE first.
+            #
+            # The log is durable, so it still holds every event from every
+            # previous run. A fresh reader would replay all of that history into
+            # today's demo and the conflict beats would fire in the wrong order.
+            # Draining to the end first means we only react to what happens now
+            # -- which is also exactly what a real sensor consumer does.
+            drained = 0
+            while await reader.next() is not None:
+                drained += 1
+            if drained:
+                print(f"[laser] skipped {drained} events from earlier runs")
+
+            for ev in outgoing:
+                await topic.publish(ev).send()
+            print(f"[laser] published {len(outgoing)} sensor events")
+
+            # Now read back exactly what we just published.
+            while (record := await reader.next()) is not None:
+                out.put(record.value)
 
 
 # ------------------------------------------------------------- RocketRide.ai

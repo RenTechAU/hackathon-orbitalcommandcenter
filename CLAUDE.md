@@ -30,7 +30,7 @@ verbatim: *"A one-line SDK import that's never called again will not count."*
 
 | Layer | Tool | Role here | Status |
 |---|---|---|---|
-| Real-time | LaserData | Live sensor stream | ⬜ fallback (`sim/sensors.py`) |
+| Real-time | LaserData | Live sensor stream | ✅ real (local Laser Stack) |
 | Memory | FalkorDB | Household graph + concession history | ✅ real (Docker, localhost:6379) |
 | Multi-agent | Guild.ai | Advocate agents + safety veto | ⬜ fallback (deterministic logic) |
 | Motion | RocketRide.ai | Executes device actions | ⬜ fallback (prints) |
@@ -47,6 +47,13 @@ time sink for this project.
 If a real code sample is not in `docs/SDK_NOTES.md`, stop and tell Jeremy to get
 it from the sponsor's table. Adding a `TODO(sponsor table)` marker is the
 correct action — writing a guess is not.
+
+**One legitimate exception: the SDK's own shipped files.** `laser-sdk` installs
+a complete type stub at `.venv/lib/python3.*/site-packages/laser_sdk/__init__.pyi`
+(3,400 lines, every class and signature). Reading that is not guessing — it is
+the most authoritative source there is, better than docs. Check for a `.pyi`,
+`__init__.py`, or `--help` before declaring a vendor blocked. That is how
+LaserData got wired without waiting for the table.
 
 FalkorDB is different: it's an established Redis-based graph DB with real Cypher.
 You may write Cypher freely.

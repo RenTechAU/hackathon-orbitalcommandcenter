@@ -10,11 +10,13 @@ It works with ZERO sponsor SDKs installed. That is deliberate. Get this green
 first, then replace one adapter at a time. Never be in a state where nothing runs.
 """
 
+import os
+import pathlib
 from collections import defaultdict
 
 from sim.sensors import demo_script
 from memory.graph import HouseholdMemory
-from adapters.vendors import Actuator, Council
+from adapters.vendors import Actuator, Council, LiveFeed
 
 
 def run(events, memory, council, actuator):
@@ -45,16 +47,52 @@ def run(events, memory, council, actuator):
                 pending[ev.room].clear()
 
 
+def load_env(path=".env"):
+    """Read .env into os.environ. Hand-rolled so we add no dependency."""
+    p = pathlib.Path(__file__).resolve().parent.parent / path
+    if not p.exists():
+        return
+    for line in p.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            k, v = line.split("=", 1)
+            os.environ.setdefault(k.strip(), v.strip())
+
+
+def build_feed():
+    """
+    Use the real LaserData stream when it's available, the plain generator when
+    it isn't -- and SAY WHICH, out loud, every run.
+
+    Force the fallback with LASER_LIVE=0. Do that if the stack misbehaves during
+    the demo: a working fallback beats a broken integration at 6 PM.
+    """
+    if os.getenv("LASER_LIVE") == "0":
+        print("[feed] LASER_LIVE=0 -- forced fallback (no LaserData)")
+        return LiveFeed(use_real=False)
+    try:
+        import laser_sdk  # noqa: F401
+        feed = LiveFeed(use_real=True)
+        print("[feed] LaserData: REAL (events go through the Iggy log)")
+        return feed
+    except Exception as exc:
+        print(f"[feed] LaserData unavailable ({exc}) -- falling back")
+        return LiveFeed(use_real=False)
+
+
 if __name__ == "__main__":
+    load_env()
+
     memory = HouseholdMemory()
     memory.reset()  # clean slate so the two-conflict demo lands every run
+    feed = build_feed()
     council = Council(use_real=False)
     actuator = Actuator(use_real=False)
 
     print("=" * 62)
     print("SMART HOME ORCHESTRATOR -- scripted demo")
     print("=" * 62)
-    run(demo_script(), memory, council, actuator)
+    run(feed.events(demo_script()), memory, council, actuator)
     print("=" * 62)
     print("Note the second conflict: same inputs, different outcome.")
     print("That difference IS the memory. Point at the graph when you say it.")
