@@ -259,3 +259,29 @@ made RocketRide LOOK unwired even though it ran — do not go back to that.
 
 **To get the spoken announcement:** add `ANTHROPIC_API_KEY=<key>` to `.env`.
 Nothing else changes; `announcer_pipeline()` picks the richer form on its own.
+
+### Gotcha: use_existing=True IGNORES your pipeline config
+
+Tested live 2026-08-03. `use(use_existing=True)` reattaches to whatever is
+already running and silently discards the config you passed -- you get the OLD
+pipeline back, same token. If you start with it, then later add an
+ANTHROPIC_API_KEY expecting spoken announcements, you keep reattaching to the
+echo-only pipeline and never see prose.
+
+So `_connect()` now tries `use_existing=False` FIRST and only reattaches if the
+server refuses, printing a warning that the live pipeline may be stale.
+
+To force a clean slate: reattach to get the token, `terminate(token)`, then
+`use(use_existing=False)`.
+
+### The Anthropic key is NOT optional for the LLM leg
+
+Tested live: sending the `llm_anthropic` component WITHOUT an apikey in its
+config is rejected outright --
+
+    RuntimeError: Invalid Anthropic API key format, please check your API key.
+
+Connecting an integration/extension in the RocketRide console does NOT satisfy
+this. Their server wants YOUR key inside the pipeline config; their platform
+key does not cover model calls. Put `ANTHROPIC_API_KEY=<key>` in `.env` and
+`announcer_pipeline()` picks the richer form automatically.

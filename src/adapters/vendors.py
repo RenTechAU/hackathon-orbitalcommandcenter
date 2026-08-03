@@ -351,17 +351,33 @@ class Actuator:
         self._client = RocketRideClient(uri=uri, auth=key)
         await self._client.connect(key)
 
-        # use_existing=True: reattach to a pipeline that is already up rather
-        # than failing with "Pipeline is already running." A previous run --
-        # or a second terminal -- leaves one alive on their server, and
-        # without this the demo dies on a stale pipeline from an hour ago.
+        # Start OUR pipeline definition first, and only fall back to
+        # reattaching if the server refuses.
         #
-        # ttl=600: let an idle pipeline expire after 10 minutes, so today's
-        # runs stop piling up on their side. ttl=0 would mean "never expire",
-        # which is what caused the problem in the first place.
-        started = await self._client.use(
-            pipeline=self.pipeline, use_existing=True, ttl=600
-        )
+        # Order matters, and getting it backwards costs you silently.
+        # use_existing=True reattaches to whatever is already running and
+        # IGNORES the config you just passed. So if you start with it, then
+        # later add an ANTHROPIC_API_KEY expecting spoken announcements, you
+        # would keep silently reattaching to the old echo-only pipeline and
+        # never see prose. Trying fresh first means a changed definition
+        # actually takes effect.
+        #
+        # ttl=600: idle pipelines expire after 10 minutes instead of piling up
+        # on their side. No expiry is what caused the original jam.
+        try:
+            started = await self._client.use(
+                pipeline=self.pipeline, use_existing=False, ttl=600
+            )
+        except Exception as exc:
+            # Almost always "Pipeline is already running." -- another terminal,
+            # or a previous run that has not timed out yet. Reattaching keeps
+            # the demo alive, but say so, because the live pipeline may not
+            # match the config in this file.
+            print(f"[rocketride] fresh start refused ({exc}) -- reattaching to "
+                  f"the running pipeline, which may be a STALE definition")
+            started = await self._client.use(
+                pipeline=self.pipeline, use_existing=True, ttl=600
+            )
         return started["token"]
 
     @staticmethod

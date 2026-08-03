@@ -8,3 +8,4 @@ __pycache__/
 # its own .env with credentials. Re-clone it, don't vendor it:
 #   git clone https://github.com/laserdata/laser-stack
 laser-stack/
+.rocketride/
