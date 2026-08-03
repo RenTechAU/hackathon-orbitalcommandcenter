@@ -1,0 +1,726 @@
+{
+ "updated": "2026-08-03T23:59:12+00:00",
+ "live": true,
+ "decisions": [
+  {
+   "ts": "2026-08-03T23:59:12+00:00",
+   "dish": "UVSD-SatNOGS",
+   "winner": "COMMERCIAL",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: COMMERCIAL carries a critical conjunction warning that must be downlinked immediately to prevent a potential collision.",
+   "veto": true,
+   "backlogs": {
+    "COMMERCIAL": 71,
+    "SCIENCE": 15
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0023",
+    "SCIENCE": "TERRA"
+   },
+   "seconds": 7.7,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:59:03+00:00",
+   "dish": "KH6DAD-UHF EggNOG",
+   "winner": "COMMERCIAL",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction warning on COMMERCIAL must be prioritized over routine data to prevent collision.",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 16,
+    "COMMERCIAL": 83
+   },
+   "sats": {
+    "SCIENCE": "TERRA",
+    "COMMERCIAL": "ONEWEB-0023"
+   },
+   "seconds": 8.2,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:58:52+00:00",
+   "dish": "LU3ARN",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: fairness said SCIENCE, but CUBESAT/EDU carries a critical payload -- overruled",
+   "veto": true,
+   "backlogs": {
+    "CUBESAT/EDU": 14,
+    "SCIENCE": 64
+   },
+   "sats": {
+    "CUBESAT/EDU": "BEESAT-1",
+    "SCIENCE": "XMM-NEWTON"
+   },
+   "seconds": 9.5,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:58:41+00:00",
+   "dish": "sat-rx",
+   "winner": "CUBESAT/EDU",
+   "loser": "COMMERCIAL",
+   "why": "no history -- advocates argued, CUBESAT/EDU made the stronger case",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 77,
+    "CUBESAT/EDU": 59
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0006",
+    "CUBESAT/EDU": "CUTE-1 (CO-55)"
+   },
+   "seconds": 17.8,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:58:21+00:00",
+   "dish": "Gemini_UHF",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: The losing satellite has a critical conjunction warning to prevent a potential collision, which outranks routine transient event data.",
+   "veto": true,
+   "backlogs": {
+    "CUBESAT/EDU": 66,
+    "SCIENCE": 51
+   },
+   "sats": {
+    "CUBESAT/EDU": "ITUPSAT1",
+    "SCIENCE": "TERRA"
+   },
+   "seconds": 7.5,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:58:12+00:00",
+   "dish": "sat-rx",
+   "winner": "EARTH OBS",
+   "loser": "COMMERCIAL",
+   "why": "no history -- advocates argued, EARTH OBS made the stronger case",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 20,
+    "EARTH OBS": 16
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0008",
+    "EARTH OBS": "DMSP 5D-3 F17 (USA 191)"
+   },
+   "seconds": 16.8,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:57:53+00:00",
+   "dish": "VK2BYF-VHF",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction-warning collision alert cannot wait for another orbit as the satellite may be lost.",
+   "veto": true,
+   "backlogs": {
+    "CUBESAT/EDU": 42,
+    "SCIENCE": 44
+   },
+   "sats": {
+    "CUBESAT/EDU": "NEE-01 PEGASO",
+    "SCIENCE": "MOST"
+   },
+   "seconds": 7.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:57:43+00:00",
+   "dish": "LU3ARN",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: EARTH OBS carries a critical conjunction warning that cannot wait for another orbit due to collision risk.",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 30,
+    "SCIENCE": 68
+   },
+   "sats": {
+    "EARTH OBS": "DMSP 5D-3 F18 (USA 210)",
+    "SCIENCE": "TIMED"
+   },
+   "seconds": 7.1,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:57:34+00:00",
+   "dish": "Not Quite ESL",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction warning on EARTH OBS must be prioritised to prevent immediate satellite collision.",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 65,
+    "SCIENCE": 90
+   },
+   "sats": {
+    "EARTH OBS": "DMSP 5D-3 F18 (USA 210)",
+    "SCIENCE": "TIMED"
+   },
+   "seconds": 7.5,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:57:25+00:00",
+   "dish": "NUUGS2",
+   "winner": "EARTH OBS",
+   "loser": "COMMERCIAL",
+   "why": "EARTH OBS yielded 1 more time(s) at NUUGS2 -- its turn",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 15,
+    "EARTH OBS": 20
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0020",
+    "EARTH OBS": "EWS-G3 (GOES 14)"
+   },
+   "seconds": 7.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:57:15+00:00",
+   "dish": "sat-rx",
+   "winner": "EARTH OBS",
+   "loser": "CUBESAT/EDU",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 81,
+    "EARTH OBS": 81
+   },
+   "sats": {
+    "CUBESAT/EDU": "STRAND-1",
+    "EARTH OBS": "SUOMI NPP"
+   },
+   "seconds": 16.8,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:56:56+00:00",
+   "dish": "UVSD-SatNOGS",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Losing satellite has a critical conjunction warning that cannot wait, outranking the routine winner on safety grounds.",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 30,
+    "EARTH OBS": 5
+   },
+   "sats": {
+    "SCIENCE": "SCISAT 1",
+    "EARTH OBS": "METEOSAT-10 (MSG-3)"
+   },
+   "seconds": 7.0,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:56:47+00:00",
+   "dish": "NUUGS2",
+   "winner": "COMMERCIAL",
+   "loser": "EARTH OBS",
+   "why": "no history -- advocates argued, COMMERCIAL made the stronger case",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 89,
+    "EARTH OBS": 21
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0025",
+    "EARTH OBS": "INSAT-3D"
+   },
+   "seconds": 15.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:56:30+00:00",
+   "dish": "Not Quite ESL",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction warning must be prioritized over routine science data to prevent potential orbital collision.",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 39,
+    "SCIENCE": 40
+   },
+   "sats": {
+    "EARTH OBS": "FENGYUN 3A",
+    "SCIENCE": "TERRA"
+   },
+   "seconds": 8.8,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:56:19+00:00",
+   "dish": "LU3ARN",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: The critical conjunction warning for CUBESAT/EDU represents an immediate collision risk that must be prioritized over routine science data.",
+   "veto": true,
+   "backlogs": {
+    "CUBESAT/EDU": 75,
+    "SCIENCE": 71
+   },
+   "sats": {
+    "CUBESAT/EDU": "STRAND-1",
+    "SCIENCE": "SORCE"
+   },
+   "seconds": 7.1,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:56:10+00:00",
+   "dish": "HS0ZQS_900_Patch",
+   "winner": "CUBESAT/EDU",
+   "loser": "COMMERCIAL",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 48,
+    "COMMERCIAL": 7
+   },
+   "sats": {
+    "CUBESAT/EDU": "BEESAT-1",
+    "COMMERCIAL": "ONEWEB-0025"
+   },
+   "seconds": 15.9,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:55:52+00:00",
+   "dish": "NUUGS2",
+   "winner": "CUBESAT/EDU",
+   "loser": "COMMERCIAL",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 26,
+    "COMMERCIAL": 46
+   },
+   "sats": {
+    "CUBESAT/EDU": "BEESAT-1",
+    "COMMERCIAL": "ONEWEB-0023"
+   },
+   "seconds": 15.5,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:55:34+00:00",
+   "dish": "LU3ARN",
+   "winner": "COMMERCIAL",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: COMMERCIAL carries a critical conjunction warning requiring immediate downlink to prevent collision, overriding routine science data.",
+   "veto": true,
+   "backlogs": {
+    "COMMERCIAL": 87,
+    "SCIENCE": 61
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0021",
+    "SCIENCE": "TIMED"
+   },
+   "seconds": 7.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:55:24+00:00",
+   "dish": "EA3AGB",
+   "winner": "EARTH OBS",
+   "loser": "CUBESAT/EDU",
+   "why": "EARTH OBS yielded 1 more time(s) at EA3AGB -- its turn",
+   "veto": false,
+   "backlogs": {
+    "EARTH OBS": 62,
+    "CUBESAT/EDU": 14
+   },
+   "sats": {
+    "EARTH OBS": "METEOSAT-9 (MSG-2)",
+    "CUBESAT/EDU": "POPACS 2"
+   },
+   "seconds": 8.2,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:55:14+00:00",
+   "dish": "KH6DAD-UHF EggNOG",
+   "winner": "EARTH OBS",
+   "loser": "CUBESAT/EDU",
+   "why": "EARTH OBS yielded 1 more time(s) at KH6DAD-UHF EggNOG -- its turn",
+   "veto": false,
+   "backlogs": {
+    "EARTH OBS": 8,
+    "CUBESAT/EDU": 24
+   },
+   "sats": {
+    "EARTH OBS": "FENGYUN 3C",
+    "CUBESAT/EDU": "BRITE-AUSTRIA"
+   },
+   "seconds": 7.7,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:55:05+00:00",
+   "dish": "LU3ARN",
+   "winner": "EARTH OBS",
+   "loser": "COMMERCIAL",
+   "why": "EARTH OBS yielded 1 more time(s) at LU3ARN -- its turn",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 53,
+    "EARTH OBS": 65
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0007",
+    "EARTH OBS": "INSAT-3D"
+   },
+   "seconds": 7.8,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:54:55+00:00",
+   "dish": "UVSD-SatNOGS",
+   "winner": "COMMERCIAL",
+   "loser": "EARTH OBS",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 84,
+    "EARTH OBS": 33
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0026",
+    "EARTH OBS": "METOP-B"
+   },
+   "seconds": 16.9,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:54:36+00:00",
+   "dish": "KN6BKT-433",
+   "winner": "COMMERCIAL",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction warning requires immediate downlink to prevent collision, outranking the routine transient event payload.",
+   "veto": true,
+   "backlogs": {
+    "COMMERCIAL": 13,
+    "SCIENCE": 76
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0023",
+    "SCIENCE": "TERRA"
+   },
+   "seconds": 8.2,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:54:26+00:00",
+   "dish": "UVSD-SatNOGS",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: The losing satellite has a critical conjunction warning that requires immediate downlink to prevent a collision.",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 27,
+    "CUBESAT/EDU": 42
+   },
+   "sats": {
+    "SCIENCE": "POLAR",
+    "CUBESAT/EDU": "BRITE-AUSTRIA"
+   },
+   "seconds": 7.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:54:16+00:00",
+   "dish": "EA3AGB",
+   "winner": "COMMERCIAL",
+   "loser": "CUBESAT/EDU",
+   "why": "no history -- advocates argued, COMMERCIAL made the stronger case",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 73,
+    "COMMERCIAL": 43
+   },
+   "sats": {
+    "CUBESAT/EDU": "STRAND-1",
+    "COMMERCIAL": "ONEWEB-0017"
+   },
+   "seconds": 15.3,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:53:59+00:00",
+   "dish": "KN6BKT-433",
+   "winner": "CUBESAT/EDU",
+   "loser": "EARTH OBS",
+   "why": "no history -- advocates argued, CUBESAT/EDU made the stronger case",
+   "veto": false,
+   "backlogs": {
+    "EARTH OBS": 31,
+    "CUBESAT/EDU": 89
+   },
+   "sats": {
+    "EARTH OBS": "METEOSAT-10 (MSG-3)",
+    "CUBESAT/EDU": "CANX-2"
+   },
+   "seconds": 16.4,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:53:40+00:00",
+   "dish": "UVSD-SatNOGS",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: The losing satellite has a critical conjunction-warning collision alert that must be downlinked immediately to ensure orbital safety.",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 62,
+    "SCIENCE": 67
+   },
+   "sats": {
+    "EARTH OBS": "DMSP 5D-3 F17 (USA 191)",
+    "SCIENCE": "XMM-NEWTON"
+   },
+   "seconds": 8.0,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:53:30+00:00",
+   "dish": "NUUGS2",
+   "winner": "COMMERCIAL",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: The proposed loser carries a critical conjunction warning of a potential collision, which must take precedence over a routine payload.",
+   "veto": true,
+   "backlogs": {
+    "COMMERCIAL": 87,
+    "SCIENCE": 64
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0013",
+    "SCIENCE": "SWAS"
+   },
+   "seconds": 7.7,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:53:21+00:00",
+   "dish": "LU3ARN",
+   "winner": "COMMERCIAL",
+   "loser": "EARTH OBS",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 29,
+    "EARTH OBS": 67
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0011",
+    "EARTH OBS": "INSAT-3D"
+   },
+   "seconds": 16.3,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:53:02+00:00",
+   "dish": "VK2BYF-VHF",
+   "winner": "CUBESAT/EDU",
+   "loser": "COMMERCIAL",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 82,
+    "COMMERCIAL": 66
+   },
+   "sats": {
+    "CUBESAT/EDU": "CUTE-1 (CO-55)",
+    "COMMERCIAL": "ONEWEB-0025"
+   },
+   "seconds": 16.4,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:52:44+00:00",
+   "dish": "KN6BKT-433",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: Critical conjunction warning on CUBESAT/EDU cannot wait due to collision risk, overriding routine science.",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 14,
+    "CUBESAT/EDU": 82
+   },
+   "sats": {
+    "SCIENCE": "SWAS",
+    "CUBESAT/EDU": "ITUPSAT1"
+   },
+   "seconds": 7.7,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:52:34+00:00",
+   "dish": "sat-rx",
+   "winner": "EARTH OBS",
+   "loser": "CUBESAT/EDU",
+   "why": "EARTH OBS yielded 1 more time(s) at sat-rx -- its turn",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 61,
+    "EARTH OBS": 63
+   },
+   "sats": {
+    "CUBESAT/EDU": "NEE-01 PEGASO",
+    "EARTH OBS": "DMSP 5D-3 F16 (USA 172)"
+   },
+   "seconds": 7.2,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:52:25+00:00",
+   "dish": "VK2BYF-VHF",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: EARTH OBS carries a critical conjunction-warning collision alert that cannot wait for another orbit.",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 64,
+    "SCIENCE": 82
+   },
+   "sats": {
+    "EARTH OBS": "DMSP 5D-3 F17 (USA 191)",
+    "SCIENCE": "MOST"
+   },
+   "seconds": 7.2,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:52:16+00:00",
+   "dish": "Gemini_UHF",
+   "winner": "CUBESAT/EDU",
+   "loser": "EARTH OBS",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "EARTH OBS": 71,
+    "CUBESAT/EDU": 11
+   },
+   "sats": {
+    "EARTH OBS": "FENGYUN 3A",
+    "CUBESAT/EDU": "POPACS 2"
+   },
+   "seconds": 16.1,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:58+00:00",
+   "dish": "HS0ZQS_900_Patch",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: fairness said SCIENCE, but CUBESAT/EDU carries a critical payload -- overruled",
+   "veto": true,
+   "backlogs": {
+    "CUBESAT/EDU": 87,
+    "SCIENCE": 61
+   },
+   "sats": {
+    "CUBESAT/EDU": "CUBESAT XI-IV (CO-57)",
+    "SCIENCE": "TERRA"
+   },
+   "seconds": 7.1,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:49+00:00",
+   "dish": "EA3AGB",
+   "winner": "CUBESAT/EDU",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: fairness said SCIENCE, but CUBESAT/EDU carries a critical payload -- overruled",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 73,
+    "CUBESAT/EDU": 17
+   },
+   "sats": {
+    "SCIENCE": "HST",
+    "CUBESAT/EDU": "NEE-01 PEGASO"
+   },
+   "seconds": 8.0,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:39+00:00",
+   "dish": "NUUGS2",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: EARTH OBS has a critical conjunction warning that must be downloaded immediately to avoid potential collision.",
+   "veto": true,
+   "backlogs": {
+    "SCIENCE": 50,
+    "EARTH OBS": 8
+   },
+   "sats": {
+    "SCIENCE": "HST",
+    "EARTH OBS": "DMSP 5D-3 F16 (USA 172)"
+   },
+   "seconds": 7.7,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:29+00:00",
+   "dish": "HS0ZQS_900_Patch",
+   "winner": "COMMERCIAL",
+   "loser": "EARTH OBS",
+   "why": "no history yet -- Guild unreachable, picked arbitrarily",
+   "veto": false,
+   "backlogs": {
+    "COMMERCIAL": 34,
+    "EARTH OBS": 44
+   },
+   "sats": {
+    "COMMERCIAL": "ONEWEB-0006",
+    "EARTH OBS": "INSAT-3D"
+   },
+   "seconds": 16.6,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:10+00:00",
+   "dish": "Gemini_UHF",
+   "winner": "CUBESAT/EDU",
+   "loser": "EARTH OBS",
+   "why": "CUBESAT/EDU yielded 1 more time(s) at Gemini_UHF -- its turn",
+   "veto": false,
+   "backlogs": {
+    "CUBESAT/EDU": 9,
+    "EARTH OBS": 41
+   },
+   "sats": {
+    "CUBESAT/EDU": "ITUPSAT1",
+    "EARTH OBS": "DMSP 5D-3 F16 (USA 172)"
+   },
+   "seconds": 7.1,
+   "source": "guild.ai"
+  },
+  {
+   "ts": "2026-08-03T23:51:01+00:00",
+   "dish": "EA3AGB",
+   "winner": "EARTH OBS",
+   "loser": "SCIENCE",
+   "why": "SAFETY VETO: fairness said SCIENCE, but EARTH OBS carries a critical payload -- overruled",
+   "veto": true,
+   "backlogs": {
+    "EARTH OBS": 65,
+    "SCIENCE": 25
+   },
+   "sats": {
+    "EARTH OBS": "DMSP 5D-3 F17 (USA 191)",
+    "SCIENCE": "POLAR"
+   },
+   "seconds": 8.5,
+   "source": "guild.ai"
+  }
+ ]
+}
