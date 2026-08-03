@@ -80,6 +80,27 @@ def build_feed():
         return LiveFeed(use_real=False)
 
 
+def build_actuator():
+    """
+    Same deal as build_feed: real RocketRide when we can, prints when we can't,
+    and it says which out loud so you're never guessing during the demo.
+
+    Force the fallback with ROCKETRIDE_LIVE=0.
+    """
+    if os.getenv("ROCKETRIDE_LIVE") == "0":
+        print("[act] ROCKETRIDE_LIVE=0 -- forced fallback (prints only)")
+        return Actuator(use_real=False)
+    try:
+        import rocketride  # noqa: F401
+        actuator = Actuator(use_real=True)
+        actuator.start()  # fail fast, before the judges are watching
+        print("[act] RocketRide: REAL (actions run through a live pipeline)")
+        return actuator
+    except Exception as exc:
+        print(f"[act] RocketRide unavailable ({exc}) -- falling back")
+        return Actuator(use_real=False)
+
+
 if __name__ == "__main__":
     load_env()
 
@@ -87,12 +108,15 @@ if __name__ == "__main__":
     memory.reset()  # clean slate so the two-conflict demo lands every run
     feed = build_feed()
     council = Council(use_real=False)
-    actuator = Actuator(use_real=False)
+    actuator = build_actuator()
 
     print("=" * 62)
     print("SMART HOME ORCHESTRATOR -- scripted demo")
     print("=" * 62)
-    run(feed.events(demo_script()), memory, council, actuator)
+    try:
+        run(feed.events(demo_script()), memory, council, actuator)
+    finally:
+        actuator.close()
     print("=" * 62)
     print("Note the second conflict: same inputs, different outcome.")
     print("That difference IS the memory. Point at the graph when you say it.")

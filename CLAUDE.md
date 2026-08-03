@@ -33,7 +33,7 @@ verbatim: *"A one-line SDK import that's never called again will not count."*
 | Real-time | LaserData | Live sensor stream | ✅ real (local Laser Stack) |
 | Memory | FalkorDB | Household graph + concession history | ✅ real (Docker, localhost:6379) |
 | Multi-agent | Guild.ai | Advocate agents + safety veto | ⬜ fallback (deterministic logic) |
-| Motion | RocketRide.ai | Executes device actions | ⬜ fallback (prints) |
+| Motion | RocketRide.ai | Executes device actions | 🟡 code wired, needs API key |
 
 Update the status column as each is wired. All four must be green before judging.
 

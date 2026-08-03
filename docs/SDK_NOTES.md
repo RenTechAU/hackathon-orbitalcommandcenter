@@ -122,21 +122,65 @@ Mentor said would impress:
 
 ## RocketRide.ai — motion / orchestration layer
 
-**Status:** ⬜ not wired — need to confirm this is the right product first
-**API key:**
-**CANDIDATE (unverified) found via web search 2026-08-03 — CONFIRM AT TABLE:**
-  - homepage: https://rocketride.org/   (note: .org, but our notes say RocketRide.ai)
-  - docs:     https://docs.rocketride.org/
-  - github:   https://github.com/rocketride-org
-  - has Python + TypeScript + MCP SDKs; "AI pipeline engine"
-  ⚠️ Could be a DIFFERENT product with a similar name. First question at table:
-     "Is your docs site docs.rocketride.org?" If yes, I'll go read it and wire it in.
+**Status:** 🟡 CODE WIRED, UNTESTED — blocked on one thing: an API key
+**API key:**  <-- GET THIS. Put it in .env as ROCKETRIDE_APIKEY=<key>
+**Install:** `pip install rocketride` (v1.3.0, installed into `.venv`)
 
-Ask: *"how do I register a tool and trigger one execution?"*
-
-```python
-# paste working client init + tool call here
+**Identity CONFIRMED** — it's the right vendor, from the package's own metadata:
 ```
+Name: rocketride                    Version: 1.3.0
+Summary: RocketRide Pipeline Python Client SDK
+Author-email: "RocketRide, Inc." <dev@rocketride.ai>
+Copyright (c) 2026 Aparavi Software AG
+Docs: https://docs.rocketride.ai
+```
+The `.ai` address settles the earlier `.org` vs `.ai` worry. Same company.
+
+The API below came from the SDK's OWN shipped source (it ships full source +
+a `py.typed` marker, ~4,000 lines across `client.py`, `mixins/execution.py`,
+`mixins/data.py`). Not guessed, not from a blog:
+```python
+from rocketride import RocketRideClient
+
+client = RocketRideClient(uri='', auth=api_key)   # uri='' => their cloud
+await client.connect(api_key)                     # -> ConnectResult
+started = await client.use(pipeline={...})        # or filepath='x.pipe'
+token   = started['token']
+result  = await client.send(token, payload_str)   # -> PIPELINE_RESULT
+await client.disconnect()
+```
+
+Env vars the client reads on its own: `ROCKETRIDE_APIKEY`, `ROCKETRIDE_URI`
+(defaults to `https://api.rocketride.ai`; local server is `localhost:5565`).
+
+Pipeline config shape, from their `types/pipeline.py`:
+```python
+{
+  'project_id': '<guid>',
+  'source': 'webhook_1',
+  'components': [
+    {'id': 'webhook_1', 'provider': 'webhook', 'config': {}},
+    {'id': 'ai_chat_1', 'provider': 'ai_chat', 'config': {'model': 'gpt-4'},
+     'input': [{'from': 'webhook_1', 'lane': 'output'}]},
+    {'id': 'response_1', 'provider': 'response', 'config': {},
+     'input': [{'from': 'ai_chat_1', 'lane': 'answer'}]},
+  ],
+}
+```
+
+⚠️ **What is NOT yet proven:** with no API key I could not run a single live
+call. The client init, `use()` and `send()` signatures are certain (read off
+their source). What's unverified is whether our `ANNOUNCER_PIPELINE` config is
+accepted by their server, and the exact key the announcement text comes back
+under — `_read_answer()` checks several and shrugs if none match. Expect ~15
+minutes of fixing once a key exists.
+
+Panic switch: `ROCKETRIDE_LIVE=0 python src/main.py` forces the fallback.
+Also: if RocketRide throws mid-demo, `act()` catches it, prints the action
+anyway and keeps going. The demo cannot die from a vendor outage.
+
+Ask at the table: *"cheapest pipeline that just echoes a payload back?"* — if
+`ai_chat` needs model credits we don't have, swap to `webhook -> response`.
 
 Mentor said teams get wrong:
 
@@ -146,14 +190,28 @@ Mentor said would impress:
 
 ## Guild.ai — multi-agent layer
 
-**Status:** ⬜ not wired — homepage found, but NO real code yet
+**Status:** ⬜ BLOCKED — still no real package. This is the last blocker.
 **Workspace:**
 **API key:**
-**CANDIDATE (unverified) found via web search 2026-08-03 — CONFIRM AT TABLE:**
   - homepage: https://www.guild.ai/  ("The Control Plane for AI Agents")
-  ⚠️ Search could NOT find their Python SDK docs (kept returning OpenAI's tools
-     instead). So I have a homepage but no working snippet. At the table ask:
-     "Where's your Python quickstart / a two-agent handoff example?" then paste it here.
+
+❌ **`pip install guildai` is the WRONG package — do not install it.**
+Checked its wheel metadata directly, 2026-08-03:
+```
+Name: guildai            Version: 0.9.0
+Summary: Experiment tracking, ML developer tools
+Home-page: https://guild.ai
+Requires-Dist: tensorboard, scikit-learn, numpy, protobuf (<5)
+```
+It IS their domain, so it's their project — but it's an old ML experiment
+tracker (TensorBoard wrapper), not the agent control plane. Almost certainly
+pre-pivot. Their own AI chat suggested it anyway; it was wrong.
+
+**Still to ask:**
+  1. "`guildai` on PyPI is 0.9.0, ML experiment tracking, depends on
+     TensorBoard. Is that pre-pivot? What's the CURRENT agent package?"
+  2. "Is there a Python SDK at all, or is it TypeScript / HTTP API only?"
+  3. "Smallest runnable two-agent handoff example?"
 
 Ask: *"minimum viable two agents that hand off to each other?"*
 
