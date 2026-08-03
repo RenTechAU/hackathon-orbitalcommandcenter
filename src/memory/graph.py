@@ -62,12 +62,24 @@ class HouseholdMemory:
         return self.g.query(cypher, params or {}).result_set
 
     def enters_room(self, person, room):
+        """
+        Move `person` into `room`. A person is in exactly ONE room at a time.
+
+        The DELETE matters: entering a room means leaving the last one. Without
+        it, MERGE just bolts on another OCCUPIES edge and people slowly come to
+        occupy the whole house, so who_is_in() returns everyone everywhere and
+        every room looks like it has a conflict in it.
+        """
         if not self.enabled:
-            self._rooms[person] = room
+            self._rooms[person] = room   # a dict already replaces; nothing to do
             return
         self.q("""
             MERGE (p:Person {name:$p})
             MERGE (r:Room {name:$r})
+            WITH p, r
+            OPTIONAL MATCH (p)-[old:OCCUPIES]->(:Room)
+            DELETE old
+            WITH p, r
             MERGE (p)-[o:OCCUPIES]->(r)
             SET o.since = $ts
         """, {"p": person, "r": room, "ts": time.time()})
@@ -102,27 +114,54 @@ class HouseholdMemory:
         """, {"r": room})
         return [row[0] for row in rows]
 
-    def concession_balance(self, a, b, topic):
+    def concession_ledger(self, room, topic):
         """
-        Net fairness score. Positive => `a` has given way more often than `b`,
-        so `a` should win this round. This is the multi-hop query that makes
-        the system fairer over time -- say that out loud in the pitch.
+        Who has given way to whom, among the people *currently in this room*.
+
+        Returns {(giver, receiver): count}.
+
+        THIS IS THE MULTI-HOP QUERY. Read the Cypher below as a walk:
+
+            start at the Room
+              -> hop 1: who occupies it
+              -> hop 2: which of them conceded to whom, on this topic
+              -> hop 3: is the receiver *also* still in this room
+
+        Three relationship hops, and the walk starts and ends at the same Room
+        node. That last constraint is the point: we only care about history
+        between people who are in the argument *right now*. Jeremy conceding to
+        Sam last week is irrelevant if Sam is out. A join table can express this,
+        but only by re-joining occupancy twice and self-joining the history --
+        the graph says it in one line, and it stays one line when the household
+        grows to five people.
+
+        Say the walk out loud in the pitch. "Room, occupants, history between
+        them" is the sentence that earns the graph database.
         """
         if not self.enabled:
-            a_gave = sum(1 for l, w, t in self._concessions if l == a and w == b and t == topic)
-            b_gave = sum(1 for l, w, t in self._concessions if l == b and w == a and t == topic)
-            return a_gave - b_gave
+            here = {p for p, r in self._rooms.items() if r == room}
+            led = {}
+            for giver, receiver, t in self._concessions:
+                if t == topic and giver in here and receiver in here:
+                    led[(giver, receiver)] = led.get((giver, receiver), 0) + 1
+            return led
         rows = self.q("""
-            MATCH (x:Person {name:$a})-[c:CONCEDED {topic:$t}]->(y:Person {name:$b})
-            RETURN count(c)
-        """, {"a": a, "b": b, "t": topic})
-        a_gave = rows[0][0] if rows else 0
-        rows = self.q("""
-            MATCH (y:Person {name:$b})-[c:CONCEDED {topic:$t}]->(x:Person {name:$a})
-            RETURN count(c)
-        """, {"a": a, "b": b, "t": topic})
-        b_gave = rows[0][0] if rows else 0
-        return a_gave - b_gave
+            MATCH (r:Room {name:$room})<-[:OCCUPIES]-(giver:Person)
+                  -[c:CONCEDED {topic:$t}]->
+                  (receiver:Person)-[:OCCUPIES]->(r)
+            RETURN giver.name, receiver.name, count(c)
+        """, {"room": room, "t": topic})
+        return {(g, rcv): n for g, rcv, n in rows}
+
+    def concession_balance(self, room, a, b, topic):
+        """
+        Net fairness score for this room. Positive => `a` has given way more
+        often than `b`, so `a` should win this round.
+
+        Thin wrapper over concession_ledger -- the graph does the work.
+        """
+        led = self.concession_ledger(room, topic)
+        return led.get((a, b), 0) - led.get((b, a), 0)
 
     def context_for(self, room):
         """Everything an agent needs to reason about this room, in one hop-set."""

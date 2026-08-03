@@ -38,7 +38,7 @@ def run(events, memory, council, actuator):
             reqs = {p: v for p, v in pending[ev.room].items() if p in occupants}
 
             if len(reqs) > 1:
-                winner, value, why = council.resolve(reqs, memory, topic=device)
+                winner, value, why = council.resolve(reqs, memory, ev.room, topic=device)
                 print(f"[HMM] conflict in {ev.room}: {reqs}")
                 print(f"[WHY] {why}")
                 actuator.act(device, value, because=f"{winner} won: {why}")

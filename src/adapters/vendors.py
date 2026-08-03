@@ -152,9 +152,10 @@ class Council:
             # Ask them: "minimum viable two agents that hand off to each other?"
             raise NotImplementedError("paste Guild.ai client here")
 
-    def resolve(self, requests, memory, topic="thermostat"):
+    def resolve(self, requests, memory, room, topic="thermostat"):
         """
         requests: {"jeremy": 68, "sam": 74}
+        room:     where the argument is happening -- the graph walk starts here
         Returns (winner, value, reasoning)
 
         Fallback logic below is intentionally simple but CORRECT -- it already
@@ -167,7 +168,7 @@ class Council:
             return p, requests[p], f"{p} is alone in the room"
 
         a, b = people[0], people[1]
-        balance = memory.concession_balance(a, b, topic)
+        balance = memory.concession_balance(room, a, b, topic)
 
         if balance > 0:
             winner, why = a, f"{a} has given way {balance} more time(s) before -- their turn"
