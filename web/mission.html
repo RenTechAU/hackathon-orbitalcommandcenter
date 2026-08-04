@@ -205,7 +205,7 @@
         <div class="legend">
           <span><i style="background:var(--c1)"></i>LEO satellites in orbit</span>
           <span><i style="background:var(--c2)"></i>ground stations registered</span>
-          <span style="margin-left:auto">ratio 2019 <b>0.5:1</b> → 2026 <b>3.4:1</b></span>
+          <span style="margin-left:auto">ratio 2019 <b>0.5:1</b> → 2026 <b>3.4:1</b> · heading for <b>~100k</b> sats</span>
         </div>
       </section>
 
@@ -313,6 +313,8 @@ gc += `<text x="598" y="${(gy(maxS)-7).toFixed(1)}" text-anchor="end" font-famil
    font-size="11" font-weight="650" fill="var(--c1)">14,978 satellites</text>`;
 gc += `<text x="598" y="${(gy(G[G.length-1].cum_dishes)+16).toFixed(1)}" text-anchor="end"
    font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="650" fill="var(--c2)">4,402 dishes</text>`;
+gc += `<text x="598" y="12" text-anchor="end" font-family="ui-monospace,Menlo,monospace"
+   font-size="10" font-weight="650" fill="var(--ink-3)">projected ≈100,000 before 2050 · ESA</text>`;
 document.getElementById('growth').innerHTML = gc;
 
 /* ─────────── who is competing ─────────── */
