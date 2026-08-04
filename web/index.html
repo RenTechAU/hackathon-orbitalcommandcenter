@@ -3,14 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Orbital Contact Broker — Mission Control</title>
+<title>Orbital Contact Broker — Traffic Control</title>
 <style>body{margin:0;padding:0}img{max-width:100%}</style>
 </head>
 <body>
 
 <style>
+  /* TailAdmin design tokens (tailadmin-free-tailwind-dashboard-template) */
   :root{
-    --bg:#0c111d; --surface:#151b2b; --raised:#1a2231; --rule:#1d2939;
+    --bg:#0c111d; --surface:#151b2b; --rule:#1d2939;
     --ink:rgba(255,255,255,.9); --ink-2:#98a2b3; --ink-3:#667085;
     --c1:#7592ff; --c2:#fd853a; --c3:#32d583; --c4:#7a5af8;
     --crit:#f97066; --ok:#12b76a;
@@ -19,615 +20,572 @@
     --sans:Outfit,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   }
   :root[data-theme="light"]{
-    --bg:#f9fafb; --surface:#ffffff; --raised:#f2f4f7; --rule:#e4e7ec;
+    --bg:#f9fafb; --surface:#ffffff; --rule:#e4e7ec;
     --ink:#101828; --ink-2:#475467; --ink-3:#667085;
     --c1:#465fff; --c2:#fb6514; --c3:#039855; --c4:#7a5af8;
     --crit:#d92d20; --ok:#039855;
   }
-  @media (prefers-color-scheme:light){
-    :root:not([data-theme="dark"]){
-      --bg:#f9fafb; --surface:#ffffff; --raised:#f2f4f7; --rule:#e4e7ec;
-      --ink:#101828; --ink-2:#475467; --ink-3:#667085;
-      --c1:#465fff; --c2:#fb6514; --c3:#039855; --c4:#7a5af8;
-      --crit:#d92d20; --ok:#039855;
-    }
-  }
+  @media (prefers-color-scheme:light){ :root:not([data-theme="dark"]){
+    --bg:#f9fafb; --surface:#ffffff; --rule:#e4e7ec;
+    --ink:#101828; --ink-2:#475467; --ink-3:#667085;
+    --c1:#465fff; --c2:#fb6514; --c3:#039855; --c4:#7a5af8;
+    --crit:#d92d20; --ok:#039855; } }
 
   body{background:var(--bg); color:var(--ink); font-family:var(--sans); font-size:14px;}
-  .wrap{max-width:1500px; margin:0 auto; padding:16px clamp(12px,2vw,26px) 40px;
-        display:flex; flex-direction:column; gap:14px;}
+  .wrap{max-width:1320px; margin:0 auto; padding:20px clamp(14px,3vw,30px) 56px;
+        display:flex; flex-direction:column; gap:20px;}
 
-  /* ---- header ---- */
-  header{display:flex; align-items:center; gap:18px; flex-wrap:wrap;
-         padding-bottom:14px; border-bottom:1px solid var(--rule);}
-  .brand{display:flex; flex-direction:column; gap:3px;}
-  .brand h1{font-size:20px; font-weight:700; letter-spacing:-.01em;}
-  .brand small{font-size:12.5px; color:var(--ink-3);}
-  .clock{margin-left:auto; font-family:var(--mono); font-variant-numeric:tabular-nums;
-         font-size:19px; font-weight:600; letter-spacing:.02em;}
-  .clock small{display:block; font-size:10px; color:var(--ink-3); letter-spacing:.14em; font-weight:500;}
-  .pills{display:flex; gap:7px; flex-wrap:wrap;}
-  .pill{font-size:11.5px; font-weight:500; border-radius:99px; padding:4px 12px;
-        background:color-mix(in srgb, var(--ink-3) 12%, transparent);
-        color:var(--ink-2); display:flex; align-items:center; gap:6px;}
-  .dot{width:6px; height:6px; border-radius:99px; background:var(--ok);}
-  .dot.warn{background:var(--c2);}
+  header{display:flex; align-items:baseline; gap:16px; flex-wrap:wrap;}
+  header h1{font-size:20px; font-weight:700; letter-spacing:-.015em;}
+  header .sub{font-size:13px; color:var(--ink-3);}
+  header .clock{margin-left:auto; font-family:var(--mono); font-size:14px;
+                color:var(--ink-2); font-variant-numeric:tabular-nums;}
 
-  /* ---- stat strip ---- */
-  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(178px,1fr)); gap:12px;}
-  .tile{background:var(--surface); border:1px solid var(--rule); border-radius:16px;
-        padding:14px 16px; display:flex; flex-direction:column; gap:5px;
-        box-shadow:var(--shadow-sm);}
-  .tile .k{font-size:13px; color:var(--ink-3);}
-  .tile .v{font-size:27px; font-weight:700; letter-spacing:-.02em;
-           font-variant-numeric:tabular-nums; line-height:1;}
-  .tile .s{font-size:11.5px; color:var(--ink-3); line-height:1.4;}
-  .tile.alert .v{color:var(--crit);}
+  /* ── the globe is the page ── */
+  .stage{position:relative; background:var(--surface); border:1px solid var(--rule);
+         border-radius:16px; overflow:hidden; box-shadow:var(--shadow-sm);}
+  canvas{display:block; width:100%; height:auto;}
+  .overlay{position:absolute; inset:0; pointer-events:none;}
+  .ov-tl{position:absolute; top:16px; left:18px; display:flex; flex-direction:column; gap:5px;}
+  .ov-tr{position:absolute; top:16px; right:18px; text-align:right;
+         display:flex; flex-direction:column; gap:5px;}
+  .ov-bl{position:absolute; bottom:16px; left:18px; right:18px;}
+  .k{font-size:13px; color:var(--ink-3);}
+  .v{font-size:28px; font-weight:700; letter-spacing:-.02em;
+     font-variant-numeric:tabular-nums; line-height:1;}
+  .v.alert{color:var(--crit);}
 
-  /* ---- layout ---- */
-  .grid{display:grid; grid-template-columns:minmax(0,1.55fr) minmax(300px,.85fr); gap:14px;}
-  @media (max-width:1000px){ .grid{grid-template-columns:1fr;} }
-  .panel{background:var(--surface); border:1px solid var(--rule); border-radius:16px;
-         display:flex; flex-direction:column; overflow:hidden; box-shadow:var(--shadow-sm);}
-  .phead{display:flex; align-items:center; gap:10px; padding:11px 15px;
-         border-bottom:1px solid var(--rule);}
-  .phead h2{font-size:14px; font-weight:600; letter-spacing:0;}
-  .phead .meta{margin-left:auto; font-size:11px; color:var(--ink-3);}
-  .pbody{padding:14px 15px;}
+  /* the one decision, front and centre */
+  .now{background:color-mix(in srgb, var(--surface) 88%, transparent);
+       border:1px solid var(--rule); border-radius:12px; padding:12px 15px;
+       display:flex; flex-direction:column; gap:9px; max-width:640px;
+       backdrop-filter:blur(6px);}
+  .now .top{display:flex; align-items:baseline; gap:10px; font-family:var(--mono); font-size:10.5px;}
+  .now .dish{color:var(--ink); font-weight:650; letter-spacing:.03em;}
+  .now .badge{margin-left:auto; font-family:var(--sans); font-size:11px; font-weight:500;
+              letter-spacing:.02em; padding:3px 10px; border-radius:99px;
+              background:color-mix(in srgb, var(--ink-3) 15%, transparent); color:var(--ink-2);}
+  .now .badge.veto{color:var(--crit); background:color-mix(in srgb, var(--crit) 15%, transparent);}
+  .now .badge.mem{color:var(--c3); background:color-mix(in srgb, var(--c3) 15%, transparent);}
+  .row{display:flex; align-items:center; gap:10px; font-size:12.5px;}
+  .row .nm{min-width:104px; font-weight:600; color:var(--ac);}
+  .row .sat{flex:1; color:var(--ink-2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+  .row .out{font-size:11px; font-weight:500; color:var(--ink-3);}
+  .row.win .out{color:var(--ok);}
+  .row.lost{opacity:.5;}
+  .row.crit .nm{color:var(--crit);}
+  .why{font-size:12px; line-height:1.5; color:var(--ink-2);
+       border-left:2px solid var(--rule); padding-left:11px;}
+  .why b{color:var(--ink);}
+  .why.veto{border-left-color:var(--crit);} .why.veto b{color:var(--crit);}
 
-  /* ---- map ---- */
-  #map{display:block; width:100%; height:auto; background:var(--raised);}
-  .maplegend{display:flex; gap:16px; padding:9px 15px; border-top:1px solid var(--rule);
-             font-size:12px; color:var(--ink-2); flex-wrap:wrap;}
-  .maplegend i{width:8px; height:8px; border-radius:99px; display:inline-block; margin-right:6px;}
+  .legend{display:flex; gap:16px; padding:11px 16px; border-top:1px solid var(--rule);
+          font-size:12px; color:var(--ink-2); flex-wrap:wrap;}
+  .legend i{width:8px; height:8px; border-radius:99px; display:inline-block; margin-right:7px;}
 
-  /* ---- agents ---- */
-  .agents{display:flex; flex-direction:column; gap:9px; padding:13px 15px;}
-  .agent{border:1px solid var(--rule); border-radius:6px; padding:10px 12px;
-         display:flex; flex-direction:column; gap:7px; background:var(--raised);
-         border-left:3px solid var(--ac);}
-  .agent .top{display:flex; align-items:baseline; gap:9px;}
-  .agent .nm{font-family:var(--mono); font-size:11.5px; font-weight:650; color:var(--ac);
-             letter-spacing:.04em;}
-  .agent .ct{margin-left:auto; font-family:var(--mono); font-size:10.5px; color:var(--ink-3);
-             font-variant-numeric:tabular-nums;}
-  .agent .val{font-size:11.5px; color:var(--ink-2); line-height:1.45;}
-  .bar{height:4px; border-radius:99px; background:var(--rule); overflow:hidden;}
-  .bar span{display:block; height:100%; background:var(--ac); border-radius:99px;
-            transition:width .55s cubic-bezier(.2,.7,.3,1);}
-  .agent.safety{border-left-color:var(--crit);}
-  .agent.safety .nm{color:var(--crit);}
+  /* ── framework ── */
+  .fw{background:var(--surface); border:1px solid var(--rule); border-radius:16px;
+      overflow:hidden; box-shadow:var(--shadow-sm);}
+  .fwhead{padding:16px 20px 4px; display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;}
+  .fwhead .eye{font-size:11px; font-weight:500; letter-spacing:.08em;
+               text-transform:uppercase; color:var(--ink-3);}
+  .fwhead h2{font-size:18px; font-weight:600; letter-spacing:-.01em;}
+  .fwhead .src{margin-left:auto; font-size:11px; color:var(--ink-3);}
+  .steps{display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+         background:var(--rule); border-top:1px solid var(--rule); margin-top:14px;}
+  @media (max-width:900px){ .steps{grid-template-columns:repeat(2,1fr);} }
+  @media (max-width:580px){ .steps{grid-template-columns:1fr;} }
 
-  /* ---- decision feed ---- */
-  .feed{display:flex; flex-direction:column; gap:0; max-height:560px; overflow-y:auto;}
-  .dec{padding:12px 15px; border-bottom:1px solid var(--rule); display:flex;
-       flex-direction:column; gap:8px; animation:slide .4s ease;}
-  @keyframes slide{from{opacity:0; transform:translateY(-6px);} to{opacity:1; transform:none;}}
-  .dec .hdr{display:flex; align-items:baseline; gap:9px; font-family:var(--mono); font-size:10.5px;}
-  .dec .t{color:var(--ink-3); font-variant-numeric:tabular-nums;}
-  .dec .st{color:var(--ink); font-weight:650;}
-  .dec .tag{margin-left:auto; padding:3px 9px; border-radius:99px; font-size:10px;
-            font-family:var(--sans); font-weight:500; letter-spacing:.04em;
-            background:color-mix(in srgb, var(--ink-3) 12%, transparent); color:var(--ink-2);}
-  .dec .tag.veto{color:var(--crit); background:color-mix(in srgb, var(--crit) 14%, transparent);}
-  .dec .tag.memory{color:var(--c3); background:color-mix(in srgb, var(--c3) 14%, transparent);}
-  .arg{display:flex; align-items:center; gap:9px; font-size:11.5px; padding-left:2px;}
-  .arg .who{font-family:var(--mono); font-size:10px; font-weight:650; min-width:96px; color:var(--ac);}
-  .arg .sat{font-family:var(--mono); font-size:10.5px; color:var(--ink-2); min-width:0; flex:1;
-            overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .arg .sc{font-family:var(--mono); font-size:10.5px; color:var(--ink-3);
-           font-variant-numeric:tabular-nums;}
-  .arg.lost{opacity:.45;}
-  .verdict{font-size:12px; line-height:1.5; color:var(--ink-2);
-           border-left:2px solid var(--rule); padding:5px 0 5px 11px;}
-  .verdict b{color:var(--ink);}
-  .verdict.veto{border-left-color:var(--crit);}
-  .verdict.veto b{color:var(--crit);}
+  /* ── agent crew ── */
+  .crew{display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+        background:var(--rule); border-top:1px solid var(--rule); margin-top:14px;}
+  @media (max-width:900px){ .crew{grid-template-columns:1fr;} }
+  .who{background:var(--surface); padding:18px 20px; display:flex;
+       flex-direction:column; gap:9px; border-top:3px solid var(--ac);}
+  .who .role{display:flex; align-items:baseline; gap:9px;}
+  .who .role b{font-size:12.5px; font-weight:600; letter-spacing:.05em; color:var(--ac);}
+  .who .role span{margin-left:auto; font-size:11px; color:var(--ink-3);}
+  .who .does{font-size:13px; line-height:1.55; color:var(--ink-2);}
+  .who .does b{color:var(--ink); font-weight:600;}
+  .who .line{font-size:11.5px; color:var(--ink-3); line-height:1.5;}
+  .step{background:var(--surface); padding:16px 20px; display:flex; flex-direction:column; gap:8px;}
+  .step .n{font-size:11px; font-weight:500; color:var(--ink-3); letter-spacing:.06em;}
+  .step h3{font-size:14px; font-weight:600; letter-spacing:-.01em;}
+  .step .them{font-size:12px; line-height:1.5; color:var(--ink-3);}
+  .step .us{font-size:12.5px; line-height:1.55; color:var(--ink-2);
+            border-left:2px solid var(--ac); padding-left:11px;}
+  .step .us b{color:var(--ink); font-weight:650;}
 
-  /* ---- growth chart ---- */
-  .chartwrap{padding:14px 15px; overflow-x:auto;}
-  svg.chart{display:block; width:100%; height:auto; min-width:440px;}
-  .legend{display:flex; gap:18px; font-size:12px;
-          color:var(--ink-2); padding:0 15px 13px; flex-wrap:wrap;}
-  .legend i{width:14px; height:3px; border-radius:2px; display:inline-block; margin-right:7px;}
+  /* ── asset topology chain ── */
+  .chain{padding:20px; display:flex; flex-direction:column; gap:18px;
+         border-top:1px solid var(--rule); margin-top:14px;}
+  .chainrow{display:flex; align-items:center; gap:9px; flex-wrap:wrap; font-size:12px;}
+  .node{background:color-mix(in srgb, var(--ac) 12%, transparent); color:var(--ac);
+        border-radius:99px; padding:6px 14px; white-space:nowrap; font-weight:500;}
+  .node.fill{background:var(--ac); color:#fff; font-weight:600;}
+  .node.leaf{background:color-mix(in srgb, var(--ink-3) 12%, transparent); color:var(--ink-3);}
+  .arrow{color:var(--ink-3); font-size:12px;}
+  .leaves{display:flex; flex-direction:column; gap:5px;}
+  .chainnote{display:grid; grid-template-columns:repeat(auto-fit,minmax(290px,1fr)); gap:16px;}
+  .chainnote p{font-size:12.5px; line-height:1.6; color:var(--ink-3);}
+  .chainnote b{color:var(--ink-2);}
 
-  table{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:11.5px;
-        font-variant-numeric:tabular-nums;}
-  th,td{padding:7px 15px; text-align:right; border-bottom:1px solid var(--rule);}
-  th:first-child,td:first-child{text-align:left;}
-  th{font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-3); font-weight:600;}
-  td .sw{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:8px;}
-
-  /* Honest labelling of where the feed comes from. Never let a replay be
-     mistaken for live agent output. */
-  .tagmode{font-size:10px; font-weight:500; letter-spacing:.06em;
-           padding:3px 10px; border-radius:99px;
-           background:color-mix(in srgb, var(--ink-3) 12%, transparent); color:var(--ink-2);}
-  .tagmode.live{color:var(--ok); background:color-mix(in srgb, var(--ok) 14%, transparent);}
-  .dec .src{font-family:var(--mono); font-size:9.5px; color:var(--ink-3);
-            letter-spacing:.06em;}
+  /* ── relational vs graph ── */
+  .split{display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:1px;
+         background:var(--rule); border-top:1px solid var(--rule); margin-top:14px;}
+  .side{background:var(--surface); padding:20px; display:flex; flex-direction:column; gap:11px;}
+  .side .q{font-size:15px; font-weight:650; color:var(--ink);}
+  .tables{display:flex; align-items:center; gap:6px; flex-wrap:wrap; font-size:12px;}
+  .tables span{background:color-mix(in srgb,var(--crit) 12%,transparent);
+               color:var(--crit); font-weight:500; border-radius:99px; padding:4px 11px;}
+  .tables i{color:var(--ink-3); font-style:normal;}
+  .count{font-family:var(--mono); font-size:12px; font-weight:650; color:var(--crit);}
+  .count.ok{color:var(--ok);}
+  .cons{list-style:none; display:flex; flex-direction:column; gap:6px;}
+  .cons li{font-size:12.5px; color:var(--ink-3); line-height:1.5; padding-left:14px; position:relative;}
+  .cons li::before{content:"—"; position:absolute; left:0; color:var(--ink-3);}
+  .path{display:flex; align-items:center; gap:7px; flex-wrap:wrap; font-size:12px;}
+  .path .p{background:color-mix(in srgb,var(--c1) 12%,transparent);
+           color:var(--c1); font-weight:500; border-radius:99px; padding:5px 13px;}
+  .pathnote{font-size:12.5px; line-height:1.6; color:var(--ink-3);}
+  .pathnote b{color:var(--ink-2);}
+  .side pre{font-family:var(--mono); font-size:11px; line-height:1.6;
+            background:var(--bg); border:1px solid var(--rule); border-radius:12px;
+            padding:12px 14px; overflow-x:auto; color:var(--ink-3);}
+  .side pre b{color:var(--c1); font-weight:650;}
 
   .foot{font-size:12px; color:var(--ink-3); line-height:1.7;}
   .foot b{color:var(--ink-2);}
-  @media (prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important;}}
+  @media (prefers-reduced-motion:reduce){*{animation:none!important;}}
   :focus-visible{outline:2px solid var(--c1); outline-offset:2px;}
 </style>
 
 <div class="wrap">
-
   <header>
-    <div class="brand">
-      <h1>Orbital Contact Broker</h1>
-      <small>Ground segment · contention control</small>
-    </div>
-    <div class="pills">
-      <span class="pill"><i class="dot"></i>LaserData</span>
-      <span class="pill"><i class="dot"></i>FalkorDB</span>
-      <span class="pill"><i class="dot"></i>Guild.ai</span>
-      <span class="pill"><i class="dot"></i>RocketRide</span>
-    </div>
-    <div class="clock"><span id="utc">--:--:--</span><small>UTC</small></div>
+    <h1>Orbital Contact Broker</h1>
+    <span class="sub">Space traffic control</span>
+    <span class="clock" id="clock">--:--:--</span>
   </header>
 
-  <div class="stats" id="stats"></div>
-
-  <div class="grid">
-    <div style="display:flex; flex-direction:column; gap:14px; min-width:0;">
-
-      <section class="panel">
-        <div class="phead"><h2>Network contact view</h2>
-          <span class="tagmode" id="skymode">LIVE VIEW</span>
-          <span class="meta" id="skymeta">three dishes · coordinator triaging across the network</span></div>
-        <svg id="sky" viewBox="0 0 960 400" role="img"
-             aria-label="Side view of one ground station. Satellites arc overhead; the dish is linked to whichever one currently holds the contact window. Agents negotiate below."></svg>
-        <div class="maplegend" id="skylegend"></div>
-      </section>
-
-      <section class="panel">
-        <div class="phead"><h2>Ground station network</h2>
-          <span class="meta" id="mapmeta"></span></div>
-        <svg id="map" viewBox="0 0 960 470" role="img"
-             aria-label="World map of SatNOGS ground stations. Most registered dishes are offline."></svg>
-        <div class="maplegend">
-          <span><i style="background:var(--ok)"></i>online &amp; usable</span>
-          <span><i style="background:var(--ink-3); opacity:.55"></i>registered but offline</span>
-          <span style="margin-left:auto">each dot is a real station · SatNOGS</span>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="phead"><h2>Satellites launched vs dishes built</h2>
-          <span class="meta">LEO active · SatNOGS registrations</span></div>
-        <div class="chartwrap">
-          <svg class="chart" id="growth" viewBox="0 0 620 250" role="img"
-               aria-label="Cumulative LEO satellites rose from 488 in 2019 to 14,978 in 2026 while ground stations rose from 1,060 to 4,402."></svg>
-        </div>
-        <div class="legend">
-          <span><i style="background:var(--c1)"></i>LEO satellites in orbit</span>
-          <span><i style="background:var(--c2)"></i>ground stations registered</span>
-          <span style="margin-left:auto">ratio 2019 <b>0.5:1</b> → 2026 <b>3.4:1</b></span>
-        </div>
-      </section>
-
-      <section class="panel">
-        <div class="phead"><h2>Who is competing</h2><span class="meta">LEO population by category</span></div>
-        <table id="tax"></table>
-      </section>
+  <div class="stage">
+    <canvas id="globe" width="1280" height="720"></canvas>
+    <div class="overlay">
+      <div class="ov-tl">
+        <span class="k">Satellites in low orbit</span>
+        <span class="v" id="nsat">—</span>
+        <span class="k" style="margin-top:8px">Dishes online worldwide</span>
+        <span class="v alert" id="ndish">—</span>
+      </div>
+      <div class="ov-tr">
+        <span class="k">Contested right now</span>
+        <span class="v" id="ncont">—</span>
+        <span class="k" style="margin-top:8px">Handovers this session</span>
+        <span class="v" id="nhand">—</span>
+      </div>
+      <div class="ov-bl"><div class="now" id="now"></div></div>
     </div>
-
-    <div style="display:flex; flex-direction:column; gap:14px; min-width:0;">
-
-      <section class="panel">
-        <div class="phead"><h2>Advocate agents</h2><span class="meta">Guild.ai</span></div>
-        <div class="agents" id="agents"></div>
-      </section>
-
-      <section class="panel">
-        <div class="phead"><h2>Decision feed</h2>
-          <span class="tagmode" id="mode">REPLAY</span>
-          <span class="meta" id="deccount">0 resolved</span></div>
-        <div class="feed" id="feed"></div>
-      </section>
-    </div>
+    <div class="legend" id="legend"></div>
   </div>
+
+  <section class="fw">
+    <div class="fwhead">
+      <span class="eye">The crew</span>
+      <h2>Three agents, three different jobs</h2>
+      <span class="src">agents: Guild.ai · published &amp; live</span>
+    </div>
+    <div class="crew">
+      <div class="who" style="--ac:var(--c1)">
+        <div class="role"><b>DOWNLINK ADVOCATE</b><span>×4 · one per satellite</span></div>
+        <p class="does">Argues its satellite&rsquo;s case for the dish — backlog size,
+          payload urgency, and how often it has <b>yielded here before</b>. It makes the
+          strongest honest claim and nothing more; it is not the judge.</p>
+        <p class="line">sees: its own satellite + the opponent&rsquo;s claim</p>
+      </div>
+      <div class="who" style="--ac:var(--crit)">
+        <div class="role"><b>MISSION-SAFETY OFFICER</b><span>×1 · the veto</span></div>
+        <p class="does">Reviews <b>every verdict</b> before it executes, with authority
+          to overrule it. Fairness is the default; safety is the exception — a collision
+          warning wins no matter whose turn it is.</p>
+        <p class="line">sees: one decision at a time, after the argument</p>
+      </div>
+      <div class="who" style="--ac:var(--c3)">
+        <div class="role"><b>NETWORK COORDINATOR</b><span>×1 · the triage</span></div>
+        <p class="does">When a satellite loses its window it doesn&rsquo;t just wait.
+          The coordinator <b>triages it across the whole network</b> — finds it another
+          dish, or decides its own next pass is genuinely better.</p>
+        <p class="line">sees: every station at once — the only agent that does</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="fw">
+    <div class="fwhead">
+      <span class="eye">The method</span>
+      <h2>Run the constellation like a mission control room</h2>
+      <span class="src">framework: Factory · Memory Meets Motion</span>
+    </div>
+    <div class="steps" id="steps"></div>
+  </section>
+
+  <!-- ── FalkorDB framework 1: assets as a graph ── -->
+  <section class="fw">
+    <div class="fwhead">
+      <span class="eye">The topology</span>
+      <h2>Network &amp; asset relationships as a graph</h2>
+      <span class="src">framework: FalkorDB · adapted to the ground segment</span>
+    </div>
+    <div class="chain">
+      <div class="chainrow" id="chain"></div>
+      <div class="chainnote">
+        <p><b>Their case:</b> a Fortune 500 network provider runs a multigraph cluster of
+          <b>60,000+ graphs</b> — one per customer network topology — for live asset monitoring.</p>
+        <p><b>Ours:</b> one subgraph per <b>ground station</b>, holding the satellites that
+          can currently see it and the concessions between them. <span id="chainstat"></span>
+          The topology changes every few minutes as satellites rise and set, so the graph is
+          written continuously rather than loaded once.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FalkorDB framework 2: the hidden graph problem ── -->
+  <section class="fw">
+    <div class="fwhead">
+      <span class="eye">The hidden graph problem</span>
+      <h2>Our data is relational. Our question is graph-shaped.</h2>
+      <span class="src">framework: FalkorDB · adapted</span>
+    </div>
+    <div class="split">
+      <div class="side rel">
+        <span class="k">In relational tables</span>
+        <p class="q">“Whose turn is it at this dish?”</p>
+        <div class="tables">
+          <span>satellites</span><i>⨝</i><span>passes</span><i>⨝</i><span>stations</span>
+          <i>⨝</i><span>concessions</span><i>⨝</i><span>payloads</span>
+        </div>
+        <p class="count">5 tables · 4 joins for one decision</p>
+        <ul class="cons">
+          <li>Join-heavy SQL, re-run on every contested pass</li>
+          <li>More hops, more joins — the relay case needs a recursive CTE</li>
+          <li>Harder to evolve as the fleet grows</li>
+        </ul>
+      </div>
+      <div class="side gph">
+        <span class="k">The question is a path</span>
+        <div class="path" id="pathviz"></div>
+        <p class="count ok">1 query · 1 traversal</p>
+        <p class="pathnote">Start at the dish, walk to who can see it, walk the
+          <b>YIELDED</b> edges between them, and check the receiver is still in view.
+          The relationships <b>are</b> the question — the answer was already in the shape
+          of the data.</p>
+        <pre>MATCH (g:GroundStation {name:$st})
+  &lt;-[:IN_VIEW_OF]-(giver:Satellite)
+  <b>-[y:YIELDED {station:$st}]-&gt;</b>
+  (recv:Satellite)-[:IN_VIEW_OF]-&gt;(g)
+RETURN giver.name, recv.name, count(y)</pre>
+      </div>
+    </div>
+  </section>
 
   <p class="foot" id="foot"></p>
 </div>
 
 <script type="module">
-const D = {"stations":[[38.4,21.8,1],[53.0,-2.2,1],[50.8,6.2,1],[52.8,6.4,1],[52.8,6.4,1],[29.9,-96.5,1],[52.0,9.9,1],[50.8,-2.0,1],[42.3,-71.4,1],[52.1,12.5,1],[48.6,1.8,1],[-31.8,115.8,1],[59.2,18.2,1],[35.0,139.1,1],[39.7,-75.2,1],[42.3,-71.4,1],[43.2,-79.8,1],[39.1,-0.5,1],[48.3,11.7,1],[52.2,4.4,1],[42.5,-71.2,1],[38.2,21.7,1],[37.2,22.9,1],[51.7,5.0,1],[42.8,-71.5,1],[45.7,21.2,1],[56.3,10.3,1],[43.6,1.5,1],[-34.9,150.6,1],[29.1,48.1,1],[35.0,-80.8,1],[-41.0,175.7,1],[50.8,2.9,1],[38.1,-121.4,1],[30.2,-92.1,1],[51.6,-1.3,1],[52.3,-1.3,1],[46.3,14.4,1],[48.9,8.7,1],[59.5,17.9,1],[52.6,-0.5,1],[52.2,4.4,1],[45.6,12.2,1],[59.3,17.8,1],[37.9,-122.3,1],[51.4,-0.8,1],[43.6,1.5,1],[51.2,22.5,1],[45.5,-73.6,1],[46.1,4.0,1],[42.5,-71.2,1],[51.2,4.5,1],[39.0,-1.8,1],[49.0,18.3,1],[46.1,14.3,1],[-34.9,138.6,1],[42.4,-71.1,1],[52.0,4.2,1],[52.0,4.2,1],[52.0,4.2,1],[33.3,-86.9,1],[45.7,-73.6,1],[52.5,13.5,1],[38.6,-90.0,1],[33.7,-116.4,1],[48.0,20.8,1],[51.6,4.9,1],[39.9,32.9,1],[18.0,-92.9,1],[51.4,7.2,1],[51.4,7.2,1],[30.1,-99.2,1],[38.9,-3.2,1],[51.7,5.0,1],[48.1,7.9,1],[49.2,9.4,1],[53.9,27.2,1],[-6.3,106.8,1],[49.8,16.1,1],[45.2,19.8,1],[40.7,0.6,1],[52.5,13.3,1],[-38.3,-57.9,1],[63.9,20.2,1],[46.6,6.6,1],[54.9,-112.3,1],[-27.5,153.1,1],[-27.5,153.1,1],[29.6,-95.1,1],[54.9,-112.3,1],[53.9,27.1,1],[48.3,11.7,1],[34.7,-86.8,1],[36.1,140.2,1],[-27.3,151.5,1],[51.1,-0.2,1],[40.0,-105.2,1],[48.3,17.4,1],[37.1,-121.6,1],[51.7,5.0,1],[-34.7,-58.3,1],[49.7,9.0,1],[49.7,9.0,1],[53.9,27.0,1],[52.3,19.2,1],[53.3,-6.2,1],[48.4,10.3,1],[50.0,8.2,1],[35.1,-90.0,1],[47.9,19.9,1],[47.3,16.6,1],[30.1,-99.2,1],[45.5,-73.6,1],[21.1,105.9,1],[50.8,6.1,1],[41.7,-111.8,1],[19.3,-99.1,1],[46.5,14.8,1],[38.7,-77.8,1],[48.5,1.4,1],[45.9,-66.8,1],[47.0,15.3,1],[48.9,12.4,1],[-35.3,138.5,1],[23.0,120.2,1],[59.5,17.9,1],[47.1,15.4,1],[49.2,18.1,1],[45.3,8.8,1],[47.2,7.6,1],[42.3,-83.7,1],[19.4,-154.9,1],[39.6,32.7,1],[50.4,30.4,1],[33.4,-111.9,1],[13.1,77.5,1],[24.9,121.3,1],[51.4,-0.5,1],[33.8,-79.2,1],[36.4,-76.8,1],[19.4,-154.9,1],[53.6,-2.6,1],[39.8,32.8,1],[13.8,100.9,1],[38.4,140.8,1],[42.0,-71.1,1],[33.4,-111.9,1],[50.5,5.7,1],[41.4,-87.0,1],[52.7,-6.9,1],[41.0,39.3,1],[48.5,-123.3,1],[60.1,24.7,1],[48.2,16.3,1],[45.3,-93.7,1],[-27.5,153.1,1],[1.3,103.8,1],[1.3,103.8,1],[47.5,19.5,1],[30.6,-96.3,1],[52.2,5.2,1],[52.0,4.2,1],[51.5,12.0,1],[56.9,24.7,1],[52.5,-2.6,1],[49.8,10.0,1],[49.8,10.0,1],[34.1,-117.9,1],[41.8,-72.5,1],[35.1,-120.6,1],[52.2,5.2,1],[47.5,19.0,1],[52.2,5.2,1],[43.5,-5.7,1],[41.4,2.1,1],[52.2,5.2,1],[33.8,-79.0,1],[51.9,-8.7,1],[39.6,-3.2,1],[38.8,-77.1,1],[40.6,23.0,1],[-25.8,28.2,1],[32.2,-111.0,1],[-26.5,28.3,1],[53.2,13.3,1],[24.9,121.2,1],[60.0,10.8,1],[49.2,16.6,1],[49.5,11.1,1],[49.9,8.6,1],[-32.0,116.0,1],[69.0,33.1,1],[50.1,14.5,1],[-70.7,-8.3,1],[49.0,12.1,1],[40.3,-77.0,1],[-5.4,105.3,1],[50.7,2.8,1],[54.5,18.5,1],[-33.7,151.3,1],[-35.0,-57.9,1],[56.9,24.7,1],[50.6,29.9,1],[-34.9,-57.9,1],[51.6,-0.4,1],[50.6,29.9,1],[50.4,30.5,1],[56.9,24.7,1],[-31.9,115.8,1],[43.6,3.8,1],[59.6,150.8,1],[41.7,-111.8,1],[49.6,9.1,1],[49.6,9.1,1],[-33.9,138.6,1],[50.4,11.2,1],[28.5,-81.2,1],[42.5,23.4,1],[51.4,-0.5,1],[1.3,103.8,1],[50.5,5.7,1],[48.4,19.1,1],[-6.6,106.8,1],[59.2,18.2,1],[-34.9,-58.1,1],[43.6,1.5,1],[41.4,69.2,1],[41.4,69.2,1],[48.2,9.4,1],[40.0,32.8,1],[50.0,-5.2,1],[53.8,-1.6,1],[51.0,21.1,1],[44.2,4.1,1],[-8.7,115.2,1],[45.3,-93.7,1],[39.0,-83.9,1],[1.4,124.8,1],[-34.9,138.6,1],[-34.9,138.6,1],[45.7,12.2,1],[42.7,23.4,1],[33.9,130.8,1],[48.5,1.4,1],[40.1,-105.2,1],[33.9,130.8,1],[-8.7,115.2,1],[39.5,-104.6,1],[43.0,24.9,1],[49.2,16.6,1],[44.3,-76.4,1],[41.5,2.1,1],[47.5,9.7,1],[34.1,-118.1,1],[40.4,-3.8,1],[29.3,48.1,1],[50.8,4.7,1],[1.3,103.7,1],[37.3,-122.0,1],[45.8,-111.2,1],[53.4,-6.2,1],[34.5,-77.5,1],[21.4,-158.0,1],[22.8,108.3,1],[38.8,-77.1,1],[36.7,-4.5,1],[44.3,-76.4,1],[51.3,6.8,1],[45.4,8.8,1],[49.0,17.4,1],[49.2,-121.8,1],[53.5,-2.2,1],[-34.9,-57.9,1],[13.9,100.5,1],[44.2,28.6,1],[42.1,-72.3,1],[42.1,-72.3,1],[-5.4,105.3,1],[49.2,-121.8,1],[25.3,55.4,1],[51.9,-0.5,1],[39.6,-104.7,1],[49.2,-121.8,1],[35.6,139.4,1],[42.0,12.1,1],[36.0,139.6,1],[25.0,121.5,1],[38.0,23.7,1],[29.5,-98.8,1],[51.0,-114.1,1],[41.2,-104.5,1],[30.6,-81.6,1],[-20.9,55.3,1],[51.1,17.0,1],[38.1,15.5,1],[52.5,13.5,1],[40.6,140.5,1],[-33.6,151.1,1],[49.2,-121.8,1],[-5.4,105.2,1],[13.8,100.5,1],[38.6,23.6,1],[49.3,-123.0,1],[-34.6,-58.5,1],[33.9,130.8,1],[49.8,18.2,1],[37.4,126.9,1],[49.0,16.4,1],[49.8,18.2,1],[57.3,18.5,1],[49.8,18.2,1],[41.9,25.5,1],[43.1,-8.5,1],[33.5,-111.9,1],[-35.4,149.1,1],[50.9,4.7,1],[41.7,-111.8,1],[49.9,36.4,1],[49.2,18.1,1],[37.7,-122.4,1],[46.2,11.8,1],[38.0,23.7,0],[38.0,23.7,0],[42.7,-71.5,0],[-34.7,138.7,0],[45.5,-122.7,0],[46.8,15.0,0],[29.9,-96.5,0],[2.8,-60.7,0],[51.2,-0.6,0],[38.0,23.9,0],[48.0,17.4,0],[48.6,18.3,0],[44.7,7.8,0],[53.5,10.2,0],[57.0,10.0,0],[38.4,-81.7,0],[48.7,2.1,0],[37.7,-25.6,0],[41.8,-87.7,0],[42.4,-83.4,0],[48.0,11.7,0],[48.3,11.7,0],[52.8,6.4,0],[49.4,7.8,0],[-0.2,-78.5,0],[37.8,-79.0,0],[41.7,-8.8,0],[52.5,7.5,0],[48.8,2.0,0],[40.0,-85.9,0],[52.1,12.7,0],[35.8,-106.2,0],[60.0,10.8,0],[64.1,19.0,0],[43.4,24.6,0],[48.0,7.4,0],[-16.4,145.4,0],[46.6,6.6,0],[52.0,19.7,0],[21.0,105.8,0],[46.3,14.4,0],[-34.8,138.6,0],[19.3,-99.1,0],[-34.8,138.6,0],[51.7,5.0,0],[43.0,-88.3,0],[-34.7,148.8,0],[48.7,9.8,0],[-34.7,148.8,0],[42.1,1.9,0],[42.0,0.7,0],[48.5,-123.4,0],[44.2,5.1,0],[-38.3,142.4,0],[63.9,20.2,0],[40.7,-3.9,0],[50.1,14.5,0],[46.6,6.6,0],[48.5,-123.4,0],[43.6,1.4,0],[64.8,-147.5,0],[51.5,3.8,0],[55.9,-4.4,0],[42.0,-4.5,0],[53.7,-2.4,0],[52.8,6.4,0],[47.9,19.9,0],[27.9,-80.7,0],[51.2,-0.6,0],[52.0,4.2,0],[43.5,-5.7,0],[40.0,-105.2,0],[33.3,-111.9,0],[45.5,-122.7,0],[35.8,-84.6,0],[52.1,0.6,0],[1.3,103.9,0],[19.2,-103.7,0],[49.7,6.1,0],[35.1,-120.6,0],[40.0,32.6,0],[52.0,6.0,0],[33.3,-111.9,0],[78.2,15.6,0],[39.6,-80.0,0],[48.2,16.4,0],[45.9,-66.6,0],[50.6,7.2,0],[55.4,37.5,0],[32.3,-110.8,0],[40.0,-105.2,0],[52.0,4.2,0],[52.2,5.2,0],[45.1,14.7,0],[2.8,-60.7,0],[45.9,-66.8,0],[41.9,-71.6,0],[41.0,-5.7,0],[52.0,4.2,0],[48.2,17.1,0],[44.9,25.6,0],[49.7,7.3,0],[49.6,6.2,0],[61.2,27.7,0],[40.2,44.5,0],[43.5,-1.4,0],[50.9,-1.3,0],[53.8,19.7,0],[32.3,-111.9,0],[32.3,-111.9,0],[34.6,-112.5,0],[39.2,-96.6,0],[49.1,17.0,0],[-70.7,-8.3,0],[42.6,-5.6,0],[48.9,16.4,0],[33.6,-88.6,0],[-32.0,115.9,0],[47.4,19.1,0],[-1.0,-80.7,0],[49.5,11.1,0],[49.5,11.1,0],[-33.9,138.6,0],[49.2,10.7,0],[-6.2,106.8,0],[42.6,23.4,0],[34.0,-81.0,0],[52.5,13.3,0],[33.3,-111.9,0],[29.0,-81.0,0],[60.2,24.9,0],[39.0,-76.7,0],[28.6,-81.2,0],[12.5,-70.0,0],[52.5,4.9,0],[39.0,-76.7,0],[45.7,8.5,0],[34.3,134.2,0],[33.4,-111.9,0],[48.8,2.0,0],[-16.6,-49.3,0],[36.4,127.4,0],[44.3,-76.4,0],[47.4,-122.1,0],[22.4,114.1,0],[33.4,-111.9,0],[48.6,8.0,0],[51.6,18.9,0],[-38.7,143.8,0],[38.6,-120.6,0],[52.5,13.5,0],[-34.3,-58.3,0],[60.0,30.3,0],[13.8,100.5,0],[29.1,-82.2,0],[53.1,17.9,0],[33.9,-7.0,0],[38.0,23.7,0],[39.2,-86.3,0],[47.1,15.5,0],[38.0,23.8,0],[35.5,24.0,0],[38.0,23.8,0],[38.0,23.7,0],[55.6,12.6,0],[53.4,-3.0,0],[-34.7,138.7,0],[-43.0,147.3,0],[37.0,22.1,0],[43.3,-88.0,0],[-32.1,115.9,0],[-32.1,115.9,0],[38.8,-121.3,0],[37.2,-80.5,0],[37.2,-80.5,0],[54.6,-5.7,0],[38.0,23.7,0],[54.5,-3.6,0],[63.4,10.4,0],[46.8,7.4,0],[41.8,-87.6,0],[45.3,5.6,0],[28.5,-16.3,0],[27.6,85.5,0],[53.1,8.9,0],[47.8,9.6,0],[40.4,-4.0,0],[55.6,12.6,0],[30.6,-90.5,0],[51.9,12.7,0],[42.3,-71.2,0],[42.3,-71.2,0],[-46.4,168.6,0],[37.9,23.5,0],[49.2,-122.9,0],[49.0,1.9,0],[53.4,14.5,0],[-26.7,27.8,0],[44.8,4.8,0],[40.3,-84.2,0],[-27.9,153.3,0],[42.2,-85.6,0],[43.6,3.9,0],[47.1,9.9,0],[19.0,72.9,0],[55.8,12.4,0],[54.7,25.4,0],[51.0,13.8,0],[41.7,-73.9,0],[36.1,-115.2,0],[50.8,6.1,0],[51.5,8.0,0],[38.0,23.7,0],[38.0,23.7,0],[39.7,-83.9,0],[44.6,26.1,0],[40.4,-3.9,0],[51.5,-0.2,0],[57.0,10.0,0],[36.8,-87.5,0],[45.1,-83.5,0],[41.7,-4.7,0],[-34.4,138.4,0],[-34.4,138.4,0],[-33.6,151.3,0],[24.8,46.7,0],[-34.8,138.5,0],[48.6,2.2,0],[51.5,5.6,0],[14.7,121.0,0],[47.8,9.4,0],[40.0,-75.3,0],[39.7,-83.9,0],[29.6,106.5,0],[39.6,3.2,0],[49.8,15.9,0],[52.1,5.2,0],[1.5,103.8,0],[47.5,-121.8,0],[50.3,19.6,0],[42.4,-71.1,0],[17.9,-88.0,0],[-32.1,115.9,0],[42.8,1.6,0],[39.8,-84.0,0],[10.4,-84.5,0],[30.7,104.1,0],[35.9,14.5,0],[43.6,3.8,0],[50.0,15.8,0],[47.7,9.4,0],[57.7,-3.3,0],[37.8,-122.2,0],[48.9,2.2,0],[-6.2,107.0,0],[63.9,20.2,0],[47.2,0.2,0],[40.1,21.4,0],[42.4,-71.1,0],[45.9,6.2,0],[11.6,104.9,0],[52.9,-1.5,0],[48.4,10.9,0],[38.4,-81.7,0],[47.3,5.1,0],[23.7,90.4,0],[24.8,46.7,0],[47.6,-122.2,0],[37.9,139.1,0],[53.3,-4.0,0],[34.0,-84.6,0],[51.8,10.6,0],[42.4,23.2,0],[37.9,-122.5,0],[-37.2,174.8,0],[38.1,106.3,0],[42.7,23.3,0],[53.0,-1.8,0],[50.8,7.6,0],[50.7,-1.8,0],[37.7,-122.4,0],[43.1,-89.3,0],[40.1,-76.3,0],[50.8,12.9,0],[27.7,85.4,0],[38.6,-78.1,0],[41.8,71.4,0],[41.8,-71.4,0],[45.5,-122.7,0],[40.6,-3.7,0],[55.7,37.3,0],[38.0,23.7,0],[51.1,17.0,0],[37.3,22.6,0],[58.4,11.9,0],[12.3,98.8,0],[56.2,13.3,0],[52.5,13.4,0],[53.3,-1.1,0],[38.0,23.8,0],[38.0,23.7,0],[38.6,-78.1,0],[13.1,77.6,0],[56.0,12.6,0],[59.8,17.7,0],[9.9,-84.1,0],[55.6,13.1,0],[-7.0,110.4,0],[38.0,21.3,0],[59.8,17.7,0],[55.6,36.9,0],[42.2,-85.6,0],[36.0,-115.1,0],[38.0,21.3,0],[62.0,29.8,0],[53.2,-4.0,0],[52.5,13.4,0],[40.1,21.4,0],[40.1,21.4,0],[39.8,-75.1,0],[39.3,3.0,0],[40.4,-79.9,0],[50.8,12.9,0],[46.5,6.6,0],[42.7,23.4,0],[52.0,6.6,0],[39.1,23.7,0],[-34.7,138.7,0],[54.6,18.3,0],[52.5,13.4,0],[50.7,3.9,0],[-26.7,27.8,0],[37.3,-122.0,0],[38.4,-0.4,0],[52.0,6.6,0],[54.4,-6.2,0],[52.0,6.6,0],[52.0,6.6,0],[52.0,6.6,0],[36.8,34.6,0],[42.8,-71.0,0],[49.3,-122.9,0],[60.2,24.9,0],[39.6,2.6,0],[36.8,34.6,0],[29.4,98.5,0],[50.9,-1.4,0],[54.5,18.5,0],[38.3,-0.7,0],[38.6,-78.1,0],[54.0,-2.8,0],[39.9,32.8,0],[60.9,14.5,0],[38.0,-1.2,0],[39.7,-83.9,0],[38.4,-93.4,0],[-34.9,-56.2,0],[37.3,22.5,0],[56.8,60.6,0],[34.2,-118.4,0],[33.9,35.7,0],[47.9,-99.5,0],[47.0,3.1,0],[48.2,-78.0,0],[43.8,-1.4,0],[38.0,23.8,0],[38.0,23.8,0],[55.8,37.9,0],[51.1,5.2,0],[51.4,5.5,0],[49.8,13.3,0],[52.8,-0.0,0],[33.0,-117.2,0],[41.5,-87.0,0],[-34.9,-56.2,0],[40.0,-75.3,0],[40.0,-75.3,0],[43.5,-84.1,0],[49.4,-123.7,0],[39.3,-84.3,0],[52.0,6.6,0],[35.1,-80.1,0],[49.3,-123.0,0],[-35.0,138.6,0],[39.2,-86.3,0],[60.2,24.9,0],[52.7,5.7,0],[11.1,106.7,0],[-34.9,138.5,0],[52.0,-0.7,0],[48.0,7.8,0],[35.8,-78.6,0],[45.7,12.3,0],[-34.9,138.6,0],[41.8,-71.4,0],[-31.4,-64.2,0],[28.4,-80.7,0],[36.1,-87.1,0],[4.7,-74.1,0],[48.9,9.2,0],[-0.9,119.9,0],[35.0,33.9,0],[49.3,8.7,0],[56.1,9.7,0],[51.4,5.6,0],[54.5,-3.6,0],[52.7,5.7,0],[-34.9,138.5,0],[51.6,7.6,0],[-34.8,138.4,0],[-35.0,138.6,0],[50.5,4.9,0],[41.3,-72.9,0],[41.9,-87.6,0],[59.6,16.6,0],[-25.8,28.3,0],[-25.8,28.3,0],[40.5,-3.5,0],[40.0,-75.3,0],[52.4,13.2,0],[33.2,-87.5,0],[48.3,17.5,0],[52.2,21.3,0],[28.5,-16.5,0],[32.9,-96.5,0],[30.2,71.4,0],[30.3,-81.5,0],[42.6,-73.6,0],[-33.3,-70.5,0],[7.1,79.9,0],[53.5,14.6,0],[40.5,-3.9,0],[-34.3,138.0,0],[59.6,17.8,0],[39.9,32.8,0],[53.3,15.1,0],[52.2,21.0,0],[42.5,-88.2,0],[10.8,76.6,0],[-17.4,-66.2,0],[-34.9,138.6,0],[53.3,14.9,0],[48.8,8.8,0],[41.2,16.4,0],[43.4,-1.4,0],[37.7,-97.1,0],[-41.5,-73.0,0],[37.6,126.9,0],[41.6,-93.8,0],[43.8,-1.4,0],[-5.8,-35.2,0],[-27.6,-48.6,0],[-34.9,-56.2,0],[49.4,-123.3,0],[51.8,10.3,0],[47.5,19.1,0],[42.8,1.6,0],[55.5,8.4,0],[16.7,74.2,0],[-17.4,-63.3,0],[41.4,2.2,0],[10.7,-61.5,0],[40.4,-79.9,0],[46.7,18.0,0],[39.1,-86.5,0],[49.6,15.6,0],[33.7,-112.0,0],[40.6,-74.2,0],[45.8,5.3,0],[53.8,9.6,0],[30.2,71.4,0],[50.4,4.8,0],[53.0,-2.2,0],[49.0,17.5,0],[-35.1,138.6,0],[25.0,55.2,0],[52.5,16.9,0],[50.4,4.8,0],[48.8,2.6,0],[50.4,4.8,0],[55.8,12.3,0],[47.8,1.9,0],[43.1,-85.6,0],[40.6,22.9,0],[52.4,13.4,0],[43.8,-79.6,0],[42.2,-8.7,0],[19.0,73.1,0],[18.3,-67.2,0],[40.4,-3.6,0],[48.7,2.1,0],[46.9,7.4,0],[44.0,8.2,0],[53.2,-4.1,0],[52.2,4.5,0],[-27.7,-48.6,0],[35.3,25.2,0],[-27.6,-48.6,0],[39.8,-85.5,0],[52.4,16.7,0],[39.7,-76.7,0],[50.7,4.5,0],[55.7,37.5,0],[53.6,10.0,0],[45.4,13.5,0],[38.0,-1.2,0],[51.5,-0.2,0],[44.4,26.1,0],[42.0,-79.9,0],[39.1,-86.5,0],[33.6,73.1,0],[33.9,130.8,0],[55.0,-1.5,0],[36.6,36.2,0],[38.0,23.8,0],[50.9,3.1,0],[45.5,-122.6,0],[-34.9,138.7,0],[35.0,137.0,0],[-37.7,145.1,0],[48.9,2.4,0],[33.7,-83.9,0],[30.3,-81.5,0],[33.6,-117.8,0],[45.0,-124.0,0],[47.6,-122.2,0],[49.4,8.7,0],[48.6,2.2,0],[49.4,17.2,0],[-43.1,147.2,0],[51.7,36.1,0],[-34.8,-58.4,0],[51.7,36.1,0],[19.2,72.8,0],[43.1,-85.2,0],[-27.9,153.3,0],[48.0,7.4,0],[45.5,-122.6,0],[39.9,32.7,0],[51.9,4.5,0],[27.7,85.4,0],[27.7,85.3,0],[37.8,-25.7,0],[4.9,-52.5,0],[49.2,7.9,0],[32.0,36.0,0],[43.9,18.4,0],[45.0,15.0,0],[0.0,0.0,0],[9.9,-83.9,0],[39.1,-86.5,0],[40.6,-74.3,0],[45.0,-93.4,0],[90.0,90.0,0],[43.4,40.0,0],[38.6,-90.2,0],[47.1,28.9,0],[35.1,-78.9,0],[53.2,-4.0,0],[57.0,10.0,0],[28.2,84.0,0],[33.2,-87.5,0],[-71.7,-2.8,0],[-34.1,18.8,0],[47.2,7.1,0],[50.3,-115.9,0],[-34.9,138.6,0],[51.8,10.8,0],[41.2,-8.1,0],[40.1,-105.3,0],[-34.7,-58.6,0],[-34.7,-58.6,0],[40.3,-105.3,0],[46.5,6.7,0],[29.6,-98.4,0],[41.5,-8.3,0],[-26.0,28.1,0],[-34.6,-58.5,0],[33.4,-87.6,0],[60.3,25.1,0],[-42.7,147.3,0],[52.4,-1.9,0],[47.6,-122.2,0],[33.4,-111.7,0],[60.4,5.4,0],[45.6,-73.2,0],[-33.7,151.1,0],[53.2,-4.3,0],[47.1,6.9,0],[49.1,2.3,0],[52.3,-0.1,0],[50.9,-3.9,0],[28.4,-16.5,0],[13.7,100.8,0],[33.9,130.8,0],[42.9,-83.6,0],[38.7,-9.1,0],[50.3,18.7,0],[-41.1,-71.3,0],[33.0,-118.6,0],[41.7,-111.8,0],[45.1,8.4,0],[63.4,10.4,0],[33.0,-96.8,0],[43.6,-71.5,0],[-34.5,-58.5,0],[43.1,-70.9,0],[45.0,41.2,0],[26.2,50.5,0],[45.2,5.8,0],[43.6,1.4,0],[47.5,42.2,0],[42.8,20.5,0],[35.1,-106.6,0],[24.4,54.6,0],[56.8,9.7,0],[39.0,-77.4,0],[49.2,10.7,0],[57.0,10.0,0],[41.5,-87.0,0],[41.7,-71.5,0],[18.5,-66.9,0],[-38.0,-57.6,0],[28.5,-81.4,0],[48.7,2.4,0],[18.2,120.6,0],[30.1,-95.2,0],[44.9,-93.3,0],[39.8,-75.9,0],[33.2,-96.8,0],[51.2,3.0,0],[55.6,-2.8,0],[53.7,-1.6,0],[13.3,74.8,0],[42.0,-88.1,0],[38.9,-84.3,0],[43.3,-1.5,0],[45.4,-73.6,0],[51.1,-114.1,0],[45.6,8.9,0],[43.3,5.6,0],[52.2,5.9,0],[51.4,-1.7,0],[52.0,-0.4,0],[47.0,-124.2,0],[52.5,-2.1,0],[36.7,119.8,0],[40.4,-86.9,0],[45.5,-122.9,0],[40.1,-75.5,0],[29.5,-95.2,0],[42.3,-82.7,0],[32.3,-90.1,0],[46.6,15.7,0],[45.8,7.6,0],[50.5,-3.8,0],[42.0,-93.7,0],[30.3,-81.4,0],[42.8,-87.8,0],[30.0,-98.1,0],[-41.1,175.1,0],[51.9,-2.1,0],[-34.6,-58.5,0],[55.9,-3.5,0],[41.8,-70.5,0],[15.1,120.6,0],[20.9,-156.5,0],[32.7,-16.8,0],[50.8,4.4,0],[52.5,1.7,0],[37.8,12.5,0],[43.6,116.3,0],[47.4,18.8,0],[39.0,-9.4,0],[60.6,24.9,0],[52.2,-2.2,0],[51.2,-0.6,0],[53.6,10.0,0],[51.3,4.8,0],[-23.9,151.2,0],[-23.9,151.2,0],[51.4,-0.3,0],[13.1,77.6,0],[39.0,-77.4,0],[52.3,20.9,0],[-33.9,18.9,0],[33.5,-117.1,0],[35.1,-92.5,0],[42.4,-71.1,0],[52.4,-110.5,0],[51.2,0.1,0],[45.4,5.7,0],[33.6,-83.2,0],[39.8,-84.9,0],[40.6,-4.0,0],[45.4,9.4,0],[49.4,-123.4,0],[50.9,0.3,0],[53.4,-2.8,0],[39.5,21.8,0],[51.1,-114.1,0],[28.1,-16.7,0],[51.6,-0.2,0],[-37.8,176.3,0],[37.9,-122.1,0],[35.7,51.5,0],[-34.9,150.6,0],[48.6,9.3,0],[49.5,0.1,0],[45.2,9.4,0],[41.9,12.5,0],[51.8,-2.7,0],[45.3,19.8,0],[-27.5,-48.4,0],[39.8,-105.0,0],[52.2,0.1,0],[53.4,-3.0,0],[43.2,-70.6,0],[37.3,-122.0,0],[34.0,-84.6,0],[48.2,11.6,0],[51.6,-4.0,0],[-22.2,-54.8,0],[83.5,2.9,0],[46.0,3.5,0],[51.5,7.4,0],[34.9,-82.3,0],[42.7,-71.3,0],[39.3,-9.3,0],[36.8,-76.2,0],[-34.9,150.6,0],[-37.8,175.3,0],[50.0,36.0,0],[51.2,4.7,0],[45.5,11.4,0],[27.7,85.4,0],[34.0,-84.2,0],[33.6,-117.8,0],[44.2,5.0,0],[45.2,5.7,0],[-35.4,149.2,0],[1.5,110.3,0],[39.2,-86.3,0],[33.4,-111.8,0],[-39.8,-73.2,0],[-39.8,-73.2,0],[48.9,8.7,0],[48.0,37.4,0],[46.8,-100.7,0],[40.4,-80.2,0],[51.5,-0.1,0],[39.8,-84.1,0],[30.2,-87.9,0],[40.0,-82.4,0],[33.5,-111.5,0],[-38.0,145.1,0],[45.0,-93.4,0],[42.7,23.3,0],[51.5,3.6,0],[52.2,0.7,0],[36.1,140.1,0],[42.7,23.4,0],[40.4,-79.9,0],[41.5,2.2,0],[39.0,-5.8,0],[37.4,-122.2,0],[-43.3,172.7,0],[36.5,-6.2,0],[37.4,-77.5,0],[40.7,-75.6,0],[33.0,-111.8,0],[48.2,-77.9,0],[47.8,13.8,0],[46.0,14.3,0],[7.1,-73.1,0],[23.7,90.4,0],[39.9,-74.9,0],[31.9,35.0,0],[23.7,90.4,0],[45.0,35.4,0],[48.1,13.9,0],[48.8,2.2,0],[51.2,14.2,0],[40.4,-4.0,0],[47.4,12.8,0],[51.7,36.1,0],[63.1,21.6,0],[55.4,-2.5,0],[43.7,7.4,0],[51.2,14.2,0],[51.8,18.1,0],[14.6,-90.7,0],[39.1,-77.8,0],[26.0,-98.0,0],[41.5,-87.0,0],[40.6,23.0,0],[51.5,-1.0,0],[46.5,6.6,0],[52.2,4.4,0],[52.7,5.2,0],[41.4,-87.0,0],[45.0,-75.0,0],[52.5,13.3,0],[30.5,-97.6,0],[34.3,-84.8,0],[-27.5,153.1,0],[-27.6,153.1,0],[-2.5,-44.3,0],[58.2,8.1,0],[52.4,13.1,0],[43.5,-3.8,0],[29.9,-96.5,0],[55.4,-2.5,0],[38.6,-122.8,0],[53.4,-2.9,0],[47.7,-122.1,0],[28.3,-81.4,0],[30.5,-97.6,0],[51.5,5.4,0],[19.0,73.1,0],[52.4,12.8,0],[45.3,25.7,0],[45.8,12.9,0],[31.9,-116.6,0],[49.3,-123.2,0],[55.7,37.3,0],[58.4,25.6,0],[54.4,-0.5,0],[50.2,6.5,0],[62.8,22.8,0],[10.3,-5.1,0],[43.4,-83.9,0],[52.2,4.5,0],[41.2,-82.0,0],[32.1,-87.8,0],[0.2,51.8,0],[43.0,-78.9,0],[48.8,2.2,0],[41.4,-87.0,0],[36.5,-6.2,0],[51.6,-1.2,0],[13.8,99.8,0],[48.6,-109.2,0],[49.3,-123.2,0],[37.9,-122.3,0],[51.2,17.4,0],[52.3,2.1,0],[52.5,13.3,0],[45.4,-73.5,0],[31.8,-106.4,0],[45.5,13.4,0],[-34.6,-58.5,0],[40.1,26.4,0],[48.1,11.6,0],[53.3,-3.5,0],[33.5,-117.1,0],[-35.1,138.5,0],[53.2,-2.2,0],[30.5,-97.7,0],[15.0,102.1,0],[49.7,6.1,0],[27.7,85.3,0],[51.9,-1.0,0],[50.2,16.2,0],[47.4,8.4,0],[-37.8,145.2,0],[48.8,2.2,0],[48.8,2.2,0],[43.3,-2.9,0],[44.8,20.4,0],[38.7,20.9,0],[53.4,5.6,0],[59.4,29.6,0],[42.3,-83.7,0],[43.8,-99.2,0],[45.4,-73.5,0],[44.3,-73.7,0],[5.6,-73.4,0],[51.6,-0.1,0],[50.9,4.5,0],[41.7,-71.3,0],[49.2,17.0,0],[38.8,-75.2,0],[-23.1,-45.5,0],[-41.9,-73.8,0],[-33.6,-70.6,0],[52.2,0.1,0],[38.9,-77.3,0],[41.3,2.0,0],[51.5,5.5,0],[60.0,30.3,0],[53.6,-1.9,0],[24.4,54.6,0],[50.1,-5.5,0],[-33.7,-70.7,0],[39.9,-75.0,0],[1.4,103.9,0],[1.3,103.8,0],[53.2,5.9,0],[35.2,-80.8,0],[47.1,27.6,0],[-33.7,-70.7,0],[55.8,-2.0,0],[-32.9,151.7,0],[38.0,23.7,0],[46.3,5.3,0],[51.9,-2.0,0],[34.1,-84.5,0],[37.5,-122.5,0],[37.0,22.1,0],[-17.5,31.0,0],[41.5,-87.0,0],[48.9,8.7,0],[-34.5,-58.8,0],[49.6,-117.2,0],[-41.1,-71.4,0],[38.3,-85.9,0],[37.7,-122.1,0],[39.7,-104.9,0],[41.5,-87.0,0],[37.0,22.1,0],[38.0,23.0,0],[0.0,0.0,0],[-10.0,10.0,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[38.0,23.8,0],[51.2,-0.5,0],[38.7,-121.1,0],[60.2,24.9,0],[38.7,-82.2,0],[-33.9,18.4,0],[40.0,-75.3,0],[40.0,-75.3,0],[49.8,-97.1,0],[51.6,7.3,0],[52.0,-2.4,0],[39.0,-104.8,0],[-29.4,-50.8,0],[60.2,24.9,0],[38.0,23.7,0],[65.1,18.6,0],[-34.6,138.8,0],[37.8,-122.5,0],[-35.2,149.1,0],[48.3,14.2,0],[45.4,7.7,0],[43.8,11.2,0],[42.5,-83.7,0],[38.9,-77.2,0],[50.2,8.6,0],[42.5,-83.0,0],[34.0,-118.4,0],[-36.8,174.7,0],[-34.8,138.7,0],[65.1,18.6,0],[39.3,-76.9,0],[42.6,-83.7,0],[-37.8,145.3,0],[41.4,-74.0,0],[51.4,-0.8,0],[51.2,14.2,0],[51.7,5.3,0],[-37.8,145.3,0],[33.3,-86.9,0],[48.2,7.2,0],[34.6,-88.5,0],[-34.7,138.7,0],[52.5,13.4,0],[52.0,6.1,0],[55.9,37.7,0],[38.9,-104.8,0],[49.2,18.1,0],[48.8,2.2,0],[50.1,-5.5,0],[39.6,-75.1,0],[-33.9,151.1,0],[45.3,-73.7,0],[52.4,16.7,0],[-34.5,-58.5,0],[-33.9,151.1,0],[53.3,-9.1,0],[50.8,7.6,0],[55.9,-4.3,0],[33.3,-86.9,0],[-26.8,-65.2,0],[-26.8,-65.2,0],[42.5,-83.8,0],[-34.6,-54.2,0],[-37.3,-59.1,0],[39.7,-75.0,0],[52.2,0.1,0],[-26.3,28.1,0],[63.1,21.6,0],[63.1,21.6,0],[32.6,-98.3,0],[-26.8,-65.3,0],[48.8,2.4,0],[13.0,77.7,0],[55.5,28.7,0],[45.7,9.7,0],[62.0,-6.8,0],[51.1,-1.0,0],[31.9,-116.7,0],[62.0,-6.8,0],[40.1,-74.0,0],[37.2,-120.3,0],[30.4,-97.5,0],[34.1,-118.4,0],[34.1,-118.4,0],[52.3,9.6,0],[51.1,-0.9,0],[43.6,1.3,0],[44.6,-73.2,0],[49.2,18.7,0],[51.3,0.4,0],[27.9,-80.5,0],[42.1,-88.1,0],[42.1,-88.1,0],[9.9,-84.1,0],[44.3,-71.7,0],[-39.8,-73.2,0],[-35.2,150.6,0],[38.1,-121.4,0],[39.7,-75.2,0],[37.1,-3.6,0],[48.8,2.4,0],[40.6,-105.2,0],[37.1,-3.6,0],[51.4,6.8,0],[48.7,9.6,0],[48.7,9.1,0],[51.0,11.0,0],[51.0,11.0,0],[43.6,3.8,0],[32.9,-96.7,0],[49.9,-119.5,0],[33.9,-6.9,0],[13.0,77.7,0],[33.4,-111.9,0],[51.4,5.5,0],[39.5,-105.0,0],[40.6,-105.2,0],[45.7,-73.9,0],[28.1,-82.5,0],[50.1,14.4,0],[40.0,-75.3,0],[43.6,3.8,0],[-1.4,100.6,0],[18.2,-66.0,0],[52.1,-2.0,0],[52.2,0.5,0],[51.2,4.4,0],[39.5,-105.0,0],[39.5,-105.0,0],[-8.3,114.3,0],[-5.9,-35.2,0],[-32.0,115.9,0],[43.0,-88.8,0],[-38.1,145.1,0],[34.0,-84.4,0],[37.8,-122.4,0],[40.4,-3.6,0],[-27.6,-48.6,0],[54.7,-6.0,0],[54.0,27.7,0],[54.5,-6.2,0],[41.5,31.8,0],[55.6,-2.8,0],[40.4,-3.4,0],[50.9,8.0,0],[46.5,6.3,0],[52.0,-2.5,0],[-64.5,-31.4,0],[51.1,-4.1,0],[5.0,-74.5,0],[50.0,8.3,0],[38.0,23.7,0],[38.0,23.7,0],[-37.4,144.6,0],[28.5,-81.4,0],[-31.9,115.9,0],[38.0,23.7,0],[40.4,-3.7,0],[50.1,-5.5,0],[58.0,56.2,0],[55.7,37.6,0],[37.1,-3.6,0],[37.9,-90.6,0],[43.0,5.5,0],[25.0,121.2,0],[30.1,31.3,0],[51.1,-0.9,0],[25.0,121.2,0],[37.5,-122.2,0],[51.2,14.9,0],[38.0,23.7,0],[47.1,15.5,0],[45.5,9.2,0],[45.4,7.6,0],[-27.5,152.9,0],[51.2,-0.2,0],[-30.0,-51.2,0],[39.1,-77.8,0],[23.8,90.4,0],[-23.1,-46.4,0],[-7.0,110.4,0],[52.4,17.2,0],[39.8,-119.7,0],[28.1,-80.7,0],[-41.1,174.9,0],[51.2,-0.2,0],[48.8,2.6,0],[-8.2,111.7,0],[37.9,-90.6,0],[51.6,-2.5,0],[-34.6,-58.5,0],[44.9,25.6,0],[-19.9,-44.6,0],[23.8,90.4,0],[43.3,1.2,0],[39.0,-105.1,0],[53.3,6.9,0],[37.7,-97.3,0],[39.3,-76.8,0],[1.4,125.1,0],[52.3,7.2,0],[48.1,11.5,0],[60.5,15.4,0],[39.7,-75.0,0],[30.4,-91.2,0],[33.0,-116.8,0],[40.1,-77.0,0],[56.8,9.7,0],[0.4,101.4,0],[-6.4,106.6,0],[56.8,12.9,0],[-27.6,-48.4,0],[40.7,-8.6,0],[40.7,-8.6,0],[-33.0,-68.9,0],[-34.7,-58.6,0],[39.5,-77.8,0],[49.8,8.9,0],[39.3,-7.4,0],[-37.8,145.3,0],[50.0,-119.4,0],[40.4,-3.8,0],[29.0,77.0,0],[41.4,-82.0,0],[34.6,-86.5,0],[50.0,-119.3,0],[14.1,-87.2,0],[49.0,-119.0,0],[42.3,-83.7,0],[53.6,-113.5,0],[33.4,-111.9,0],[48.9,2.1,0],[51.5,-2.5,0],[-37.8,140.8,0],[44.7,-78.7,0],[-34.6,-58.4,0],[51.5,21.1,0],[51.4,-2.0,0],[14.8,100.6,0],[33.8,-84.4,0],[40.7,-73.9,0],[49.9,8.6,0],[-6.9,107.6,0],[38.8,-77.3,0],[39.3,-82.1,0],[-41.1,-71.4,0],[-35.8,-61.9,0],[39.5,-0.4,0],[28.1,-80.6,0],[35.0,-82.4,0],[34.6,-86.5,0],[53.6,-2.4,0],[49.8,10.0,0],[44.4,26.0,0],[13.7,100.6,0],[49.0,2.1,0],[19.0,72.9,0],[48.6,2.3,0],[1.3,103.8,0],[19.3,-99.2,0],[43.4,-3.9,0],[45.9,0.9,0],[34.6,-86.5,0],[57.0,10.1,0],[53.1,-2.1,0],[49.4,16.7,0],[-0.2,-78.5,0],[48.1,-123.4,0],[-35.3,149.1,0],[49.2,21.4,0],[55.6,12.6,0],[55.6,12.6,0],[43.6,1.5,0],[52.0,5.6,0],[-32.7,-62.3,0],[43.6,1.4,0],[43.6,1.4,0],[36.8,-76.5,0],[-34.6,-58.7,0],[40.4,-80.0,0],[47.8,-122.2,0],[45.0,2.0,0],[43.7,7.2,0],[46.5,-0.5,0],[14.2,-14.5,0],[35.0,-83.7,0],[36.8,-119.8,0],[40.4,-80.0,0],[39.6,-76.7,0],[37.9,-122.3,0],[-34.9,138.5,0],[52.7,1.3,0],[40.6,-74.3,0],[53.2,-4.3,0],[38.7,-90.5,0],[39.5,-0.4,0],[42.2,-85.4,0],[50.8,4.4,0],[50.0,19.9,0],[50.8,4.5,0],[50.0,5.2,0],[13.7,100.6,0],[46.6,0.2,0],[46.6,6.6,0],[52.6,1.3,0],[39.9,-105.0,0],[37.3,-121.8,0],[-35.3,149.1,0],[51.5,4.7,0],[-1.4,120.8,0],[50.0,19.9,0],[49.3,1.1,0],[44.5,4.8,0],[1.4,103.8,0],[44.8,-91.5,0],[52.1,-2.1,0],[1.4,125.1,0],[4.7,-74.1,0],[37.4,-122.0,0],[51.4,-1.9,0],[35.3,-94.4,0],[28.4,-80.7,0],[32.1,118.4,0],[39.6,19.9,0],[50.1,14.5,0],[51.2,-1.3,0],[34.0,-81.0,0],[13.7,100.8,0],[45.7,4.5,0],[41.5,31.8,0],[-34.9,138.6,0],[-34.9,138.7,0],[-35.0,138.6,0],[-34.9,138.5,0],[-35.2,138.5,0],[34.4,-117.4,0],[13.0,80.3,0],[38.3,-0.7,0],[45.6,-122.5,0],[32.9,-117.2,0],[-35.4,149.0,0],[-34.6,138.6,0],[16.1,120.4,0],[32.2,-110.8,0],[47.6,-122.2,0],[53.4,-2.7,0],[52.2,-0.9,0],[45.3,-73.7,0],[-34.1,18.8,0],[38.3,85.8,0],[54.9,-3.8,0],[42.3,-82.9,0],[48.2,-3.8,0],[46.4,6.5,0],[-43.0,147.4,0],[40.1,-2.9,0],[45.9,3.8,0],[-34.9,138.6,0],[-34.9,138.6,0],[69.1,18.5,0],[41.2,-87.8,0],[30.4,-97.5,0],[-35.0,139.0,0],[49.1,16.4,0],[-34.9,138.6,0],[-34.9,138.6,0],[-7.0,113.6,0],[37.4,-122.1,0],[6.9,79.9,0],[45.6,9.2,0],[28.2,-80.7,0],[-35.0,138.6,0],[-35.0,138.6,0],[-34.0,138.6,0],[40.9,29.4,0],[45.6,-73.3,0],[52.2,4.4,0],[50.8,4.4,0],[47.2,-53.6,0],[38.4,-0.4,0],[31.8,-93.1,0],[48.7,19.2,0],[37.8,-122.2,0],[52.3,6.8,0],[37.9,-122.3,0],[49.5,8.6,0],[37.7,-122.4,0],[50.0,36.0,0],[37.7,-122.4,0],[48.2,17.1,0],[47.6,-2.0,0],[44.4,9.0,0],[52.2,-0.9,0],[41.3,-81.8,0],[43.0,-88.3,0],[45.6,12.2,0],[46.5,25.4,0],[53.8,-9.4,0],[46.5,6.3,0],[17.7,74.0,0],[37.1,-3.6,0],[44.8,20.5,0],[51.4,5.5,0],[54.7,25.4,0],[38.2,-77.7,0],[-38.0,145.1,0],[-37.7,144.9,0],[50.9,10.7,0],[47.5,19.0,0],[50.9,3.2,0],[40.4,-3.5,0],[41.5,2.2,0],[36.8,-2.5,0],[32.4,48.4,0],[36.1,28.1,0],[36.1,28.1,0],[38.4,-0.5,0],[43.2,-2.1,0],[40.4,-3.7,0],[42.9,-88.1,0],[14.5,-90.5,0],[54.2,-4.5,0],[40.5,-3.3,0],[40.4,17.3,0],[42.3,-71.1,0],[48.9,2.3,0],[-34.8,138.6,0],[47.9,26.4,0],[39.5,-0.4,0],[34.7,-87.7,0],[42.9,-88.1,0],[44.8,85.6,0],[51.9,4.5,0],[52.3,9.8,0],[39.6,2.8,0],[51.8,18.1,0],[45.8,21.2,0],[42.3,-74.9,0],[33.0,-117.1,0],[19.6,-156.0,0],[42.6,-83.2,0],[-33.0,-60.7,0],[49.5,11.0,0],[52.2,0.5,0],[42.2,-71.6,0],[39.0,-76.9,0],[38.7,-121.1,0],[35.1,-81.0,0],[51.9,4.5,0],[38.9,-104.9,0],[53.1,7.0,0],[15.1,120.6,0],[10.5,-67.0,0],[52.3,-0.6,0],[39.0,-1.9,0],[-33.8,18.5,0],[20.6,-103.4,0],[43.8,-79.4,0],[-3.7,128.2,0],[41.6,2.0,0],[40.6,23.0,0],[-34.0,18.5,0],[-1.9,100.9,0],[38.2,14.9,0],[51.3,-2.4,0],[-37.3,-59.1,0],[45.2,-117.1,0],[-30.5,-62.0,0],[-36.0,-62.7,0],[37.4,-122.1,0],[51.4,4.8,0],[6.9,79.9,0],[61.1,-146.0,0],[69.7,19.0,0],[-32.9,-68.8,0],[45.8,24.2,0],[20.8,-156.3,0],[48.2,16.5,0],[48.2,16.5,0],[45.7,-121.1,0],[49.7,6.1,0],[43.8,11.2,0],[-32.8,151.8,0],[52.3,4.9,0],[35.6,-78.9,0],[52.3,9.7,0],[43.9,8.0,0],[49.0,17.6,0],[49.0,17.6,0],[37.0,-80.0,0],[44.8,-107.0,0],[49.5,-123.4,0],[14.6,121.0,0],[48.1,11.6,0],[39.9,-104.9,0],[-32.3,115.8,0],[-44.7,169.2,0],[43.5,-84.0,0],[-27.9,153.3,0],[41.8,-72.9,0],[51.9,37.0,0],[52.7,-1.2,0],[-29.7,-51.1,0],[-34.5,-58.5,0],[37.4,-121.9,0],[50.6,12.7,0],[45.5,-122.6,0],[46.0,-73.9,0],[51.9,-2.2,0],[51.4,7.2,0],[51.4,7.2,0],[51.4,7.2,0],[51.4,7.2,0],[-33.0,18.0,0],[-34.6,-58.4,0],[51.3,3.9,0],[48.9,8.7,0],[19.1,-98.2,0],[4.7,-74.1,0],[40.0,-105.2,0],[9.8,-83.9,0],[51.3,6.3,0],[26.0,-80.1,0],[36.1,-78.9,0],[37.4,27.3,0],[-35.1,138.6,0],[59.9,17.6,0],[51.2,14.2,0],[38.7,-9.2,0],[48.9,2.2,0],[55.8,-4.3,0],[43.0,-78.8,0],[44.0,4.2,0],[52.5,1.7,0],[49.4,8.4,0],[45.5,4.3,0],[53.6,10.0,0],[-5.6,12.2,0],[45.3,-75.7,0],[-4.8,11.9,0],[-4.8,11.9,0],[17.2,80.2,0],[50.7,-120.4,0],[50.3,18.7,0],[41.5,30.2,0],[25.7,-100.4,0],[19.6,-156.0,0],[24.4,118.3,0],[52.5,6.1,0],[35.0,-83.7,0],[37.8,-122.4,0],[20.5,-87.0,0],[26.4,-80.1,0],[45.6,-73.3,0],[49.2,16.6,0],[-3.6,128.2,0],[44.4,21.4,0],[39.7,-105.0,0],[30.2,-103.2,0],[53.0,-0.3,0],[35.0,-106.0,0],[43.9,1.3,0],[48.2,17.1,0],[51.2,0.5,0],[52.2,1.5,0],[-26.3,28.1,0],[46.0,4.1,0],[-37.8,145.0,0],[-25.8,28.2,0],[42.2,-8.7,0],[-34.5,-58.9,0],[19.4,-99.1,0],[19.5,-99.1,0],[44.4,21.4,0],[42.5,-83.1,0],[39.6,-104.8,0],[10.3,-68.8,0],[10.3,-68.8,0],[-34.2,150.6,0],[41.3,31.4,0],[-26.7,27.8,0],[-6.2,106.4,0],[23.2,-106.4,0],[42.4,-71.2,0],[-34.7,-58.5,0],[49.2,18.7,0],[48.7,9.3,0],[49.1,19.5,0],[37.1,-3.7,0],[39.2,-76.1,0],[41.2,-5.4,0],[39.2,-76.1,0],[40.1,-2.9,0],[49.0,2.1,0],[19.2,-103.7,0],[0.5,101.4,0],[-8.7,115.2,0],[-35.3,149.1,0],[43.3,-4.1,0],[1.0,120.8,0],[33.8,2.9,0],[33.8,2.9,0],[21.3,-157.8,0],[50.6,13.3,0],[59.4,24.4,0],[18.5,-70.0,0],[45.6,-73.3,0],[-15.8,-47.9,0],[-32.0,115.9,0],[38.0,23.8,0],[41.6,-87.1,0],[53.8,10.0,0],[46.1,15.3,0],[53.6,8.0,0],[43.5,-3.8,0],[43.3,-80.0,0],[43.3,-80.0,0],[42.4,-8.6,0],[24.8,121.0,0],[53.5,-6.8,0],[49.6,17.2,0],[49.9,-97.1,0],[46.1,15.2,0],[53.4,7.7,0],[53.4,7.7,0],[59.4,24.3,0],[-3.5,102.5,0],[4.8,-74.0,0],[53.6,8.0,0],[47.2,27.6,0],[60.1,30.4,0],[-33.8,151.2,0],[39.2,-84.3,0],[39.2,-82.2,0],[4.7,-74.1,0],[48.7,2.2,0],[43.6,1.5,0],[-12.1,-77.0,0],[47.5,19.0,0],[21.4,-157.8,0],[21.4,-157.8,0],[50.5,4.4,0],[46.3,5.3,0],[21.2,-97.7,0],[35.2,-117.8,0],[35.7,139.8,0],[51.1,-0.3,0],[53.3,6.5,0],[53.4,-2.9,0],[15.1,104.3,0],[53.0,-2.2,0],[21.3,-157.8,0],[38.0,23.8,0],[67.1,15.4,0],[24.7,46.7,0],[-8.7,115.2,0],[50.6,4.5,0],[45.2,10.8,0],[45.0,34.1,0],[40.1,-75.4,0],[13.7,100.6,0],[50.7,4.6,0],[43.5,1.5,0],[21.3,-157.8,0],[-34.5,-58.5,0],[15.4,74.0,0],[17.0,103.4,0],[34.2,108.5,0],[41.4,-82.0,0],[48.8,2.2,0],[52.0,4.4,0],[21.3,-157.8,0],[42.5,-88.5,0],[48.8,2.0,0],[41.5,-8.5,0],[50.6,-3.6,0],[50.2,23.1,0],[15.4,74.0,0],[48.4,7.9,0],[39.3,-76.4,0],[41.4,-74.0,0],[47.3,5.1,0],[55.7,12.5,0],[20.0,-155.6,0],[45.1,11.1,0],[62.0,-6.8,0],[39.2,-76.1,0],[-31.8,116.0,0],[45.3,-73.8,0],[53.6,-6.7,0],[35.6,-97.5,0],[-38.3,142.4,0],[41.7,-88.1,0],[40.0,116.3,0],[28.0,-80.0,0],[50.1,-95.8,0],[-4.0,-79.2,0],[23.2,87.9,0],[53.2,7.2,0],[32.2,34.8,0],[-23.5,-46.8,0],[14.6,121.0,0],[-32.6,-69.3,0],[53.3,-2.9,0],[47.5,16.0,0],[39.5,-8.5,0],[38.6,-9.1,0],[40.2,-105.1,0],[33.9,-83.4,0],[53.2,7.2,0],[-37.6,143.8,0],[39.7,-75.8,0],[-36.9,-60.3,0],[40.5,-3.7,0],[47.8,16.2,0],[-14.1,-72.6,0],[49.9,8.7,0],[35.7,139.5,0],[50.6,3.1,0],[4.7,-74.1,0],[4.7,-74.1,0],[70.4,31.1,0],[53.2,7.2,0],[28.7,77.3,0],[44.8,-0.6,0],[-41.1,146.8,0],[-27.6,-48.5,0],[42.5,-83.0,0],[59.5,18.1,0],[52.3,13.4,0],[45.1,25.6,0],[54.9,-3.0,0],[45.5,8.0,0],[34.8,134.9,0],[47.5,21.7,0],[-36.9,174.7,0],[37.8,-3.8,0],[53.2,6.8,0],[42.4,-8.7,0],[43.3,-75.8,0],[33.9,130.8,0],[45.5,-122.8,0],[49.6,6.2,0],[49.6,6.2,0],[57.5,18.1,0],[53.5,7.6,0],[51.8,-1.3,0],[10.0,10.0,0],[37.0,22.1,0],[40.7,-3.9,0],[-31.6,-68.5,0],[41.2,-83.0,0],[51.4,4.8,0],[51.5,3.6,0],[39.9,-105.1,0],[50.0,18.5,0],[49.1,11.9,0],[-8.3,115.0,0],[53.2,-1.9,0],[32.2,34.8,0],[18.9,99.0,0],[12.9,77.6,0],[37.5,-77.0,0],[51.1,-0.5,0],[59.2,16.2,0],[-6.3,106.8,0],[29.6,-81.2,0],[-23.5,-46.6,0],[47.6,6.1,0],[45.5,8.0,0],[42.1,-76.2,0],[48.8,2.3,0],[46.3,14.4,0],[51.7,45.6,0],[36.5,-82.9,0],[24.4,118.3,0],[43.7,6.9,0],[-23.1,-48.4,0],[37.0,22.1,0],[37.6,126.9,0],[24.7,121.8,0],[38.4,-82.2,0],[25.0,121.2,0],[41.5,2.4,0],[28.3,-81.4,0],[50.6,-3.5,0],[30.3,-98.0,0],[10.8,76.6,0],[50.6,22.1,0],[51.7,15.6,0],[41.9,-88.1,0],[53.1,6.1,0],[42.3,-83.7,0],[36.8,-119.8,0],[52.8,-0.4,0],[25.0,121.3,0],[45.5,9.2,0],[25.0,121.5,0],[41.1,-81.7,0],[37.8,-122.5,0],[43.6,1.4,0],[-27.4,-56.0,0],[45.7,12.3,0],[30.2,-92.1,0],[46.6,30.8,0],[43.6,1.4,0],[50.1,18.2,0],[51.8,0.8,0],[50.4,2.9,0],[37.0,-122.0,0],[53.2,16.7,0],[35.8,-78.7,0],[52.8,-0.4,0],[-7.3,112.7,0],[51.4,-1.2,0],[23.7,120.5,0],[41.4,2.2,0],[39.3,-77.0,0],[59.4,18.1,0],[37.4,-79.2,0],[47.7,7.4,0],[42.6,-71.4,0],[28.6,-81.2,0],[52.7,5.3,0],[52.4,16.8,0],[19.5,-98.8,0],[19.3,-99.2,0],[50.9,5.8,0],[39.1,-76.9,0],[42.6,-87.9,0],[33.1,-117.2,0],[51.6,6.9,0],[41.0,22.9,0],[46.0,4.2,0],[-23.0,-43.2,0],[60.2,24.7,0],[49.6,21.8,0],[41.9,12.5,0],[50.0,5.1,0],[48.8,2.4,0],[48.1,-3.4,0],[50.9,3.2,0],[42.4,-83.9,0],[50.8,4.4,0],[53.3,-2.5,0],[47.5,21.7,0],[42.3,-83.7,0],[35.3,-106.6,0],[53.3,-4.2,0],[-33.4,-70.7,0],[33.5,-111.9,0],[6.2,-75.5,0],[14.6,121.0,0],[45.8,-122.7,0],[51.9,0.9,0],[37.9,23.8,0],[41.6,-86.2,0],[49.7,8.1,0],[55.8,12.3,0],[27.6,85.4,0],[50.9,5.8,0],[43.0,-85.8,0],[47.5,19.1,0],[-7.3,112.7,0],[53.3,-2.5,0],[41.9,12.4,0],[43.4,-4.0,0],[52.0,-0.7,0],[52.5,13.4,0],[35.1,126.9,0],[-32.1,115.9,0],[-35.1,117.9,0],[50.2,14.0,0],[24.7,46.6,0],[45.8,9.8,0],[35.9,14.5,0],[49.9,14.0,0],[47.8,18.1,0],[25.3,45.9,0],[35.8,139.6,0],[53.1,-2.7,0],[36.4,127.4,0],[26.1,-80.3,0],[41.7,-87.7,0],[45.3,18.4,0],[18.6,98.9,0],[-10.7,-48.4,0],[13.1,80.2,0],[13.8,100.5,0],[-34.9,-58.1,0],[45.5,9.1,0],[33.9,-6.2,0],[47.8,19.9,0],[33.0,-117.1,0],[55.9,37.6,0],[49.1,19.4,0],[41.8,3.0,0],[44.3,26.0,0],[49.3,13.0,0],[52.1,4.5,0],[46.0,5.9,0],[35.8,139.5,0],[50.4,8.3,0],[51.2,-0.8,0],[40.5,23.0,0],[50.8,20.6,0],[35.1,126.9,0],[19.1,-98.3,0],[55.9,-3.7,0],[48.7,1.7,0],[-27.2,153.0,0],[-26.3,28.1,0],[39.6,2.7,0],[52.5,13.1,0],[48.7,19.1,0],[34.0,-81.3,0],[42.1,-72.6,0],[51.2,-102.5,0],[56.2,10.2,0],[50.6,22.1,0],[43.6,7.1,0],[51.9,-2.1,0],[51.7,5.0,0],[41.7,-111.8,0],[52.7,-1.1,0],[60.8,46.3,0],[41.8,-73.1,0],[-35.8,149.8,0],[51.5,7.5,0],[36.1,140.1,0],[43.3,1.7,0],[52.3,9.7,0],[53.4,14.4,0],[38.5,-82.6,0],[-35.2,149.1,0],[52.2,5.5,0],[51.5,7.5,0],[48.3,14.4,0],[55.9,11.9,0],[27.6,85.5,0],[-34.6,-58.4,0],[49.6,21.8,0],[52.7,15.2,0],[52.0,-1.0,0],[9.9,-83.9,0],[27.3,-82.5,0],[48.6,19.1,0],[41.9,1.9,0],[35.7,-106.0,0],[-30.7,-55.4,0],[42.7,23.3,0],[56.2,10.2,0],[35.6,140.1,0],[10.0,-84.0,0],[9.0,99.3,0],[45.3,-73.7,0],[38.0,-8.9,0],[39.5,-8.5,0],[47.9,11.5,0],[50.0,21.9,0],[31.8,-106.4,0],[40.5,-111.4,0],[35.8,139.5,0],[55.4,-4.6,0],[51.0,17.1,0],[12.1,-68.9,0],[-33.2,138.0,0],[-33.9,151.0,0],[51.2,4.4,0],[39.1,-77.8,0],[9.9,-83.9,0],[36.9,30.7,0],[34.5,-93.0,0],[12.9,79.9,0],[39.1,-84.4,0],[45.4,4.8,0],[45.4,4.8,0],[41.5,31.8,0],[45.3,-75.3,0],[1.3,103.7,0],[25.0,121.5,0],[53.4,-7.9,0],[16.9,74.6,0],[50.0,8.2,0],[-20.2,57.5,0],[4.3,114.0,0],[4.1,-73.6,0],[47.3,5.0,0],[35.1,-90.0,0],[36.8,-76.3,0],[53.1,-2.3,0],[40.5,-78.2,0],[-4.4,-39.3,0],[30.5,-86.9,0],[52.1,21.0,0],[41.6,-88.1,0],[40.6,14.4,0],[39.3,-120.9,0],[12.9,77.6,0],[36.2,-78.9,0],[44.7,-79.8,0],[18.5,-70.0,0],[53.4,-2.2,0],[46.5,14.2,0],[46.2,14.2,0],[46.2,15.2,0],[-23.5,-46.9,0],[37.3,-122.0,0],[44.9,-85.4,0],[59.7,10.6,0],[36.0,-86.7,0],[42.6,-83.2,0],[36.1,-86.8,0],[53.3,-6.3,0],[-20.3,57.5,0],[10.3,79.4,0],[40.1,-105.1,0],[48.8,2.0,0],[35.0,-80.8,0],[6.7,125.4,0],[45.5,-73.5,0],[51.1,17.1,0],[35.1,-106.6,0],[40.0,-105.2,0],[43.3,2.3,0],[54.6,39.8,0],[30.3,-81.6,0],[39.6,116.2,0],[42.3,-83.0,0],[53.2,-2.7,0],[45.0,35.4,0],[39.5,-76.3,0],[-3.7,128.2,0],[51.2,3.5,0],[46.9,7.3,0],[51.2,-0.6,0],[46.9,7.3,0],[56.0,92.8,0],[0.0,0.0,0],[42.0,-87.7,0],[26.1,-80.4,0],[45.4,8.8,0],[50.8,38.6,0],[54.1,45.0,0],[6.2,-75.6,0],[29.6,-82.4,0],[-21.3,55.5,0],[-34.6,-58.5,0],[51.1,-1.0,0],[-31.9,115.8,0],[-31.9,115.8,0],[-32.1,115.9,0],[48.1,-1.7,0],[50.0,16.2,0],[1.3,103.7,0],[43.0,-76.2,0],[27.7,85.4,0],[49.8,8.6,0],[6.2,-75.6,0],[52.2,9.5,0],[34.1,-117.5,0],[51.2,0.9,0],[51.1,-1.0,0],[-2.3,113.9,0],[40.6,-8.6,0],[52.5,-0.9,0],[17.2,78.5,0],[51.1,-1.0,0],[51.1,-1.0,0],[78.0,56.4,0],[52.2,9.5,0],[52.2,20.6,0],[6.3,-75.5,0],[51.6,-0.2,0],[41.6,24.6,0],[-27.6,153.2,0],[22.3,114.3,0],[47.0,2.4,0],[38.7,-9.3,0],[55.7,-4.7,0],[24.5,124.1,0],[42.9,13.5,0],[-32.1,116.0,0],[-32.0,115.9,0],[49.5,16.1,0],[26.1,38.8,0],[50.0,50.0,0],[33.8,130.9,0],[50.8,-3.2,0],[44.1,-84.5,0],[47.5,19.0,0],[54.0,-1.5,0],[41.8,12.3,0],[35.1,126.9,0],[25.1,55.4,0],[46.9,7.4,0],[28.3,113.2,0],[-33.4,-70.6,0],[51.3,7.2,0],[48.7,2.6,0],[50.8,3.2,0],[27.7,85.4,0],[59.3,18.1,0],[-2.3,113.9,0],[45.5,-122.5,0],[51.8,0.9,0],[-34.7,-58.5,0],[42.0,-5.7,0],[41.5,12.6,0],[14.9,103.5,0],[21.0,105.5,0],[56.2,10.2,0],[45.5,-73.8,0],[37.3,-107.9,0],[49.7,13.3,0],[52.2,7.8,0],[-2.3,113.9,0],[19.9,-98.4,0],[40.7,-74.0,0],[10.0,-84.2,0],[42.3,-83.7,0],[40.0,116.4,0],[53.9,14.6,0],[33.7,-117.8,0],[-32.0,115.8,0],[-32.0,115.8,0],[-23.5,-46.8,0],[49.8,-97.1,0],[50.7,6.2,0],[43.7,-79.4,0],[49.1,8.5,0],[49.9,14.9,0],[28.5,-16.3,0],[-32.5,115.7,0],[49.9,-97.3,0],[29.3,48.0,0],[29.3,48.0,0],[53.2,5.9,0],[-33.9,151.2,0],[33.9,-118.4,0],[18.4,-66.2,0],[41.2,29.0,0],[32.1,34.8,0],[-37.8,143.6,0],[39.2,-82.2,0],[29.3,48.0,0],[-43.3,-65.1,0],[37.3,-121.9,0],[53.7,-2.4,0],[50.7,3.1,0],[28.2,-16.7,0],[10.6,76.1,0],[35.7,-84.3,0],[-34.6,-58.5,0],[40.7,-74.1,0],[41.9,-87.7,0],[23.1,-82.5,0],[5.2,-52.7,0],[40.6,23.0,0],[53.3,-1.8,0],[52.5,13.3,0],[27.7,85.4,0],[9.4,-64.5,0],[50.0,19.9,0],[18.5,-70.0,0],[43.7,-79.4,0],[47.3,7.8,0],[52.5,13.4,0],[47.8,18.7,0],[10.0,-84.0,0],[55.6,24.2,0],[42.8,-86.2,0],[49.8,24.0,0],[48.7,-3.5,0],[-35.1,138.6,0],[-34.9,138.5,0],[35.7,140.1,0],[41.2,-81.4,0],[39.9,32.7,0],[32.3,-110.9,0],[42.5,-73.3,0],[43.7,-79.4,0],[34.0,-117.1,0],[36.1,-78.5,0],[33.1,-96.6,0],[41.2,40.9,0],[47.2,8.4,0],[-45.9,-67.5,0],[-31.8,115.8,0],[27.6,85.3,0],[49.9,8.7,0],[33.6,-117.7,0],[53.8,-2.3,0],[-34.7,-68.3,0],[43.5,-5.9,0],[-31.8,115.8,0],[52.0,13.8,0],[48.8,2.4,0],[55.7,13.1,0],[40.6,-3.7,0],[43.5,-76.2,0],[41.6,0.6,0],[37.9,-122.3,0],[52.5,13.3,0],[42.3,-83.7,0],[15.6,32.5,0],[-33.7,151.1,0],[19.3,-99.2,0],[45.4,9.2,0],[13.9,100.6,0],[-34.6,-58.4,0],[40.2,-75.5,0],[50.7,7.1,0],[39.0,-77.0,0],[53.2,-2.5,0],[50.0,5.2,0],[-12.0,-77.0,0],[-35.2,149.2,0],[35.3,139.5,0],[-31.9,115.8,0],[-31.9,115.8,0],[53.2,6.5,0],[51.5,0.7,0],[46.0,14.5,0],[39.8,30.5,0],[-12.0,-77.0,0],[45.6,4.3,0],[49.9,8.8,0],[29.1,48.1,0],[52.1,9.4,0],[39.0,-77.0,0],[4.7,-74.7,0],[33.4,-111.9,0],[28.1,-82.0,0],[34.1,-117.9,0],[41.7,44.9,0],[52.2,20.6,0],[6.2,-75.9,0],[43.5,-71.5,0],[38.9,-77.1,0],[33.9,-83.4,0],[51.4,-0.3,0],[35.8,-83.9,0],[39.0,-77.0,0],[49.6,14.9,0],[45.2,20.2,0],[52.3,14.4,0],[38.3,-76.5,0],[38.2,-0.5,0],[48.8,16.8,0],[42.6,-83.2,0],[42.3,-88.0,0],[44.0,4.1,0],[13.0,77.6,0],[1.4,125.1,0],[-34.7,-58.6,0],[36.4,127.4,0],[20.8,-103.5,0],[49.4,12.7,0],[41.6,-87.8,0],[41.6,-87.8,0],[40.5,-3.9,0],[51.4,0.1,0],[20.8,-103.5,0],[37.1,-76.5,0],[-25.3,-57.5,0],[-25.3,-57.5,0],[-25.3,-57.5,0],[20.8,-103.5,0],[43.8,-79.5,0],[28.5,-81.3,0],[49.9,8.6,0],[51.8,-1.3,0],[50.0,21.9,0],[35.9,-84.5,0],[35.7,-84.3,0],[46.5,6.5,0],[19.3,-99.1,0],[6.6,80.0,0],[48.2,11.2,0],[49.1,-122.5,0],[-16.0,-48.0,0],[49.2,-123.1,0],[-33.2,117.3,0],[-33.2,117.3,0],[53.1,7.4,0],[41.6,-87.8,0],[41.5,1.9,0],[33.3,-86.9,0],[41.4,2.2,0],[-21.4,55.5,0],[51.1,-114.2,0],[47.4,8.0,0],[41.9,2.2,0],[50.1,19.9,0],[32.0,30.0,0],[38.9,-77.7,0],[19.5,-99.2,0],[49.8,10.0,0],[55.8,-4.9,0],[53.5,14.6,0],[9.0,38.8,0],[48.7,21.3,0],[49.8,10.0,0],[39.5,-77.0,0],[49.5,18.0,0],[-7.3,112.7,0],[41.7,-71.4,0],[52.0,-0.7,0],[48.7,9.3,0],[49.9,12.6,0],[46.1,0.4,0],[57.4,21.5,0],[-0.2,-78.5,0],[49.1,19.5,0],[40.2,44.5,0],[37.4,-122.1,0],[55.5,-4.6,0],[-26.1,28.0,0],[33.4,-111.9,0],[19.2,-103.7,0],[-23.5,-46.8,0],[60.0,30.4,0],[4.6,-74.1,0],[1.3,103.9,0],[38.7,35.4,0],[38.6,-89.9,0],[-34.5,-58.8,0],[52.2,20.9,0],[18.5,-69.9,0],[53.8,27.5,0],[50.2,12.6,0],[41.0,28.6,0],[-2.6,-44.2,0],[39.9,32.7,0],[42.3,-83.7,0],[43.3,-2.9,0],[47.6,7.1,0],[34.3,-118.4,0],[60.2,24.7,0],[49.2,22.0,0],[49.4,8.7,0],[43.3,21.9,0],[60.2,24.8,0],[52.3,6.8,0],[42.6,-83.2,0],[42.6,-83.2,0],[34.8,-87.0,0],[52.2,5.6,0],[26.5,87.3,0],[-35.6,138.6,0],[-35.6,138.6,0],[50.9,5.2,0],[47.0,15.5,0],[56.2,120.6,0],[56.3,-120.9,0],[65.6,22.1,0],[42.7,-7.4,0],[40.0,32.6,0],[34.5,135.5,0],[78.2,15.7,0],[41.1,28.8,0],[57.0,23.6,0],[53.5,-6.2,0],[32.7,74.8,0],[40.6,-105.2,0],[35.0,-81.1,0],[60.2,24.8,0],[37.8,51.3,0],[-34.7,-58.5,0],[36.1,28.1,0],[26.7,-80.1,0],[13.1,77.6,0],[-17.4,-66.2,0],[43.3,-3.9,0],[52.3,-0.9,0],[50.0,22.0,0],[61.7,129.4,0],[55.9,-3.1,0],[40.0,32.6,0],[49.5,1.1,0],[51.8,15.0,0],[51.3,-2.2,0],[35.5,139.5,0],[40.6,-105.2,0],[51.2,-0.6,0],[-41.1,-71.3,0],[43.4,-80.5,0],[49.8,6.4,0],[17.5,78.5,0],[39.0,-76.8,0],[42.3,-83.7,0],[17.5,78.5,0],[6.1,80.2,0],[53.7,9.8,0],[37.4,-122.0,0],[39.8,-4.2,0],[31.9,-116.7,0],[35.7,-106.0,0],[31.9,-116.7,0],[23.0,23.0,0],[40.6,23.0,0],[35.3,-82.2,0],[56.2,10.2,0],[43.9,-79.9,0],[55.4,10.4,0],[38.9,-77.7,0],[20.7,-103.4,0],[40.6,23.0,0],[11.4,78.7,0],[56.2,10.2,0],[39.9,-105.0,0],[48.2,18.6,0],[50.8,4.4,0],[50.8,-0.7,0],[31.9,-102.4,0],[50.8,-0.7,0],[25.0,67.1,0],[50.8,-0.7,0],[49.2,18.8,0],[42.6,-73.9,0],[42.1,-76.2,0],[61.8,34.4,0],[52.6,1.7,0],[60.0,30.4,0],[33.7,-117.2,0],[50.9,4.7,0],[55.7,37.3,0],[10.9,76.9,0],[49.6,14.9,0],[21.3,-158.1,0],[40.0,-105.2,0],[17.4,78.4,0],[23.2,120.2,0],[47.7,-122.4,0],[8.6,77.0,0],[41.8,12.6,0],[41.9,2.2,0],[40.4,-4.3,0],[22.9,120.3,0],[17.4,78.4,0],[55.4,10.4,0],[63.9,20.2,0],[24.2,120.9,0],[21.1,105.4,0],[8.6,77.0,0],[40.6,-105.2,0],[7.1,125.6,0],[43.3,-5.9,0],[38.2,-85.7,0],[43.3,-8.4,0],[38.0,23.7,0],[42.4,-71.1,0],[17.1,82.1,0],[33.4,-111.9,0],[37.6,22.7,0],[25.3,51.2,0],[33.6,133.7,0],[-34.9,-58.0,0],[49.5,7.7,0],[13.2,144.4,0],[35.3,25.1,0],[52.2,6.0,0],[53.1,-2.7,0],[55.8,37.6,0],[55.7,37.3,0],[17.7,78.3,0],[-1.0,-80.7,0],[54.3,10.1,0],[42.2,-8.7,0],[55.8,37.0,0],[41.5,12.6,0],[53.3,-6.3,0],[38.0,-84.5,0],[45.8,16.0,0],[-31.4,-60.3,0],[29.9,-90.0,0],[48.1,17.4,0],[39.9,32.7,0],[17.1,82.1,0],[35.7,139.8,0],[16.3,-61.5,0],[29.9,-97.9,0],[33.5,-112.1,0],[37.3,15.1,0],[45.5,-122.7,0],[-6.3,107.1,0],[53.8,9.6,0],[56.0,-4.6,0],[33.4,-111.9,0],[33.4,-111.9,0],[52.4,4.9,0],[46.7,7.7,0],[-35.0,138.5,0],[34.6,-112.5,0],[53.3,-1.7,0],[21.1,-89.7,0],[42.3,-5.4,0],[56.7,-2.5,0],[56.7,-2.5,0],[54.1,-128.6,0],[50.8,6.1,0],[40.9,-73.3,0],[-35.0,138.6,0],[23.0,120.2,0],[45.0,35.3,0],[33.5,-112.1,0],[39.9,32.7,0],[47.0,8.3,0],[-32.0,115.9,0],[50.0,19.9,0],[51.3,4.4,0],[59.5,28.0,0],[38.7,-2.5,0],[47.5,19.1,0],[55.8,9.6,0],[46.1,19.7,0],[38.7,-2.5,0],[39.0,-1.9,0],[36.7,-4.3,0],[42.2,-88.1,0],[41.4,2.2,0],[-23.2,-45.9,0],[51.6,-0.4,0],[43.7,-79.4,0],[27.2,111.9,0],[48.2,16.5,0],[35.1,136.1,0],[-31.5,-64.5,0],[24.9,121.7,0],[20.0,80.0,0],[17.2,81.8,0],[-17.5,31.0,0],[47.0,15.3,0],[22.6,114.0,0],[35.1,-106.7,0],[25.2,121.7,0],[29.9,-97.9,0],[28.5,-16.4,0],[51.5,-0.1,0],[50.6,31.0,0],[-22.5,-60.0,0],[35.7,-78.5,0],[51.2,4.5,0],[47.2,8.3,0],[25.9,89.4,0],[43.5,-1.5,0],[43.5,-1.5,0],[40.4,-80.0,0],[38.5,27.0,0],[51.8,8.9,0],[50.9,-2.6,0],[45.6,11.3,0],[51.2,4.5,0],[64.6,40.6,0],[41.6,-8.4,0],[41.4,2.2,0],[53.4,-2.3,0],[33.5,-86.6,0],[40.5,-3.9,0],[47.2,8.1,0],[-1.0,117.0,0],[-7.8,110.3,0],[45.5,9.4,0],[41.9,12.5,0],[53.0,-6.0,0],[44.6,-63.6,0],[50.1,4.9,0],[33.6,-112.0,0],[26.1,89.2,0],[19.9,-96.9,0],[7.1,-73.1,0],[43.6,-116.3,0],[43.6,-116.3,0],[39.8,-84.0,0],[39.8,116.5,0],[52.7,1.2,0],[51.3,-1.5,0],[51.3,-1.5,0],[35.5,24.0,0],[35.5,24.0,0],[43.3,3.2,0],[43.3,3.2,0],[43.3,3.2,0],[55.6,37.1,0],[60.0,30.4,0],[44.7,-75.0,0],[35.7,139.8,0],[34.2,-118.9,0],[24.9,121.3,0],[42.7,-8.3,0],[29.5,-95.1,0],[50.0,19.9,0],[50.8,16.5,0],[34.2,-118.9,0],[25.9,89.4,0],[13.1,80.2,0],[20.7,-103.4,0],[48.2,16.5,0],[53.1,6.1,0],[39.8,32.5,0],[47.5,19.1,0],[51.8,-0.9,0],[60.4,34.1,0],[-33.3,-60.2,0],[49.2,16.6,0],[49.7,7.3,0],[53.0,8.9,0],[20.7,-103.4,0],[37.6,-122.0,0],[48.4,17.0,0],[49.2,19.3,0],[26.3,127.8,0],[27.7,85.3,0],[49.2,19.3,0],[47.8,16.2,0],[47.8,16.2,0],[50.0,5.3,0],[55.6,37.6,0],[42.2,-8.7,0],[18.0,-92.9,0],[43.6,5.1,0],[40.9,29.3,0],[52.2,14.0,0],[43.6,5.1,0],[3.0,101.5,0],[4.7,-74.1,0],[39.9,32.7,0],[39.8,32.8,0],[39.9,41.2,0],[39.9,32.7,0],[33.7,-112.2,0],[37.9,-122.3,0],[65.1,25.4,0],[55.4,42.1,0],[39.8,32.8,0],[34.1,-117.8,0],[-36.6,-71.9,0],[49.9,8.6,0],[46.1,5.1,0],[39.5,-87.3,0],[47.5,-114.9,0],[42.6,-83.1,0],[57.6,-3.6,0],[49.9,6.9,0],[53.3,10.0,0],[55.6,37.1,0],[-1.4,100.6,0],[40.2,-111.6,0],[34.0,-117.8,0],[44.8,16.7,0],[2.1,40.1,0],[48.1,2.1,0],[-32.9,151.7,0],[48.2,11.2,0],[39.8,32.7,0],[49.5,18.0,0],[52.4,-8.8,0],[62.0,34.1,0],[56.2,43.9,0],[56.3,44.0,0],[36.7,30.5,0],[60.0,30.4,0],[60.0,30.0,0],[52.2,-7.1,0],[44.7,-93.3,0],[49.0,17.2,0],[38.3,-0.7,0],[52.6,13.2,0],[56.3,101.7,0],[33.5,73.0,0],[-37.9,145.3,0],[40.2,-105.1,0],[30.1,-99.2,0],[42.0,-87.7,0],[39.0,-76.9,0],[60.2,24.8,0],[47.3,4.8,0],[42.7,23.3,0],[13.6,-15.6,0],[44.7,-93.3,0],[55.6,37.7,0],[46.4,20.0,0],[39.7,-75.1,0],[18.0,4.0,0],[50.8,0.2,0],[30.5,-97.7,0],[42.3,-83.2,0],[38.9,-94.6,0],[20.0,99.9,0],[40.2,-105.1,0],[-34.9,-56.2,0],[-26.3,152.9,0],[54.7,-8.2,0],[-31.9,116.2,0],[50.8,9.0,0],[47.0,28.8,0],[50.9,-114.3,0],[8.6,77.0,0],[40.5,-37.0,0],[53.5,-0.2,0],[43.6,5.1,0],[49.7,21.4,0],[-22.0,-47.9,0],[9.0,38.8,0],[-30.9,128.1,0],[13.6,100.6,0],[-33.8,151.3,0],[-6.2,106.7,0],[42.2,-83.6,0],[-20.7,116.8,0],[27.7,85.4,0],[6.0,42.0,0],[64.1,-21.8,0],[47.0,15.3,0],[5.1,100.5,0],[17.3,78.3,0],[-29.7,-51.1,0],[42.4,-88.1,0],[39.5,-104.9,0],[37.2,-80.0,0],[-34.6,-58.5,0],[52.9,-2.5,0],[35.4,-105.4,0],[44.4,26.1,0],[41.6,0.6,0],[27.7,85.4,0],[-35.0,138.9,0],[18.4,-65.7,0],[22.9,120.4,0],[39.5,-8.5,0],[55.4,-2.5,0],[-0.0,-0.0,0],[39.6,-104.8,0],[4.0,4.0,0],[56.1,-3.8,0],[-33.7,151.1,0],[34.2,-118.9,0],[44.8,-117.9,0],[33.6,-111.9,0],[45.8,4.9,0],[37.6,-105.4,0],[41.6,-87.8,0],[35.9,-5.3,0],[42.2,-83.8,0],[25.0,121.2,0],[39.9,32.7,0],[52.0,4.2,0],[52.2,5.4,0],[38.0,23.8,0],[51.3,-2.1,0],[64.9,-148.3,0],[39.0,-76.9,0],[51.5,5.5,0],[-3.7,128.2,0],[5.0,10.0,0],[43.7,-79.4,0],[43.5,-3.8,0],[44.8,-0.6,0],[43.5,-3.8,0],[51.5,4.2,0],[22.7,120.3,0],[42.0,-88.0,0],[52.1,-106.6,0],[37.9,23.8,0],[49.8,10.0,0],[30.1,-97.9,0],[47.1,-122.8,0],[14.1,100.6,0],[-32.9,-68.9,0],[47.4,8.5,0],[36.1,-78.9,0],[16.8,-93.1,0],[30.5,-87.9,0],[43.7,-79.6,0],[36.4,127.4,0],[-1.0,117.0,0],[-16.5,-71.5,0],[36.4,-76.1,0],[42.9,-2.7,0],[-31.9,116.1,0],[50.7,-2.1,0],[52.2,21.0,0],[37.7,-121.9,0],[37.1,-80.0,0],[56.8,9.7,0],[39.7,-75.0,0],[48.3,-4.7,0],[50.3,18.7,0],[17.4,78.5,0],[47.4,20.6,0],[16.2,80.6,0],[8.9,76.6,0],[51.7,0.8,0],[14.0,100.6,0],[15.5,8.4,0],[50.6,5.6,0],[39.6,2.8,0],[-16.5,-71.5,0],[45.7,8.5,0],[47.4,8.5,0],[40.1,-75.3,0],[47.2,9.6,0],[20.0,40.0,0],[41.0,-73.9,0],[48.8,2.2,0],[11.4,78.7,0],[52.3,-7.2,0],[60.0,30.4,0],[44.4,26.1,0],[56.2,10.2,0],[47.8,16.2,0],[38.0,23.7,0],[51.5,-2.6,0],[47.4,8.6,0],[30.6,-96.3,0],[-34.6,-58.5,0],[33.9,-118.4,0],[39.5,-104.9,0],[2.8,-60.7,0],[52.4,13.2,0],[60.0,30.4,0],[60.0,30.4,0],[60.0,30.4,0],[60.0,30.4,0],[55.7,37.5,0],[33.0,-96.8,0],[47.4,9.8,0],[53.0,-6.0,0],[50.9,4.4,0],[60.0,30.4,0],[60.0,30.4,0],[50.6,13.0,0],[-41.3,174.8,0],[51.6,7.0,0],[37.3,-122.0,0],[26.4,-80.1,0],[39.8,32.9,0],[28.4,77.0,0],[0.0,0.0,0],[43.6,79.6,0],[48.2,17.0,0],[44.9,11.1,0],[49.1,18.3,0],[52.3,5.6,0],[31.6,-8.0,0],[48.0,-1.5,0],[45.3,38.1,0],[53.9,-6.5,0],[37.0,22.1,0],[36.4,127.4,0],[55.3,-7.2,0],[39.7,2.8,0],[52.1,-10.4,0],[6.7,80.1,0],[51.5,-2.8,0],[-12.0,-77.0,0],[32.9,-105.9,0],[33.0,-106.0,0],[33.8,-79.2,0],[54.9,-112.3,0],[33.0,-106.0,0],[17.4,78.4,0],[48.5,9.1,0],[32.6,-16.9,0],[16.2,80.6,0],[38.7,-77.8,0],[51.0,13.8,0],[44.9,-123.1,0],[52.2,4.5,0],[35.9,-86.5,0],[36.1,-5.4,0],[51.2,4.4,0],[-7.9,110.1,0],[53.3,-6.1,0],[53.5,-7.4,0],[51.5,0.6,0],[53.3,-6.3,0],[42.8,10.4,0],[55.4,11.6,0],[46.5,6.6,0],[-41.0,-54.6,0],[-41.0,-54.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[29.6,111.9,0],[53.8,10.3,0],[49.6,6.2,0],[41.5,13.0,0],[41.1,-0.5,0],[53.0,19.1,0],[-37.7,175.2,0],[55.4,37.5,0],[44.1,28.6,0],[38.9,-121.3,0],[-16.4,-71.5,0],[64.5,40.6,0],[-43.6,172.6,0],[33.2,-111.6,0],[64.9,-147.1,0],[52.2,21.0,0],[14.5,-90.5,0],[19.0,72.9,0],[37.4,-122.2,0],[28.4,77.1,0],[41.6,-87.8,0],[43.7,7.2,0],[45.5,-73.4,0],[53.3,-6.3,0],[32.6,-16.9,0],[45.5,-110.5,0],[0.0,0.0,0],[-6.7,-35.4,0],[50.9,-1.1,0],[47.2,7.6,0],[8.6,99.4,0],[25.0,121.2,0],[25.1,121.8,0],[53.5,-0.1,0],[19.5,75.0,0],[37.0,35.4,0],[44.8,20.4,0],[23.2,77.4,0],[48.5,10.8,0],[25.2,121.8,0],[53.6,-0.0,0],[39.8,-75.2,0],[49.8,6.4,0],[51.8,8.9,0],[53.0,36.1,0],[42.5,-71.2,0],[49.8,6.4,0],[47.0,8.3,0],[50.4,-4.2,0],[30.2,-95.7,0],[41.0,-5.7,0],[43.4,-5.8,0],[52.7,13.2,0],[15.0,59.0,0],[-2.6,-44.3,0],[17.1,54.2,0],[50.7,4.6,0],[-27.2,153.1,0],[16.8,-93.1,0],[23.8,90.4,0],[48.9,2.5,0],[43.2,-2.9,0],[45.7,3.1,0],[20.3,85.8,0],[47.4,18.9,0],[31.6,-8.0,0],[52.1,-0.5,0],[41.0,-5.7,0],[-1.6,103.5,0],[54.2,18.4,0],[13.0,77.6,0],[64.5,40.5,0],[48.7,2.2,0],[49.9,3.3,0],[48.9,2.5,0],[-28.9,121.9,0],[50.8,-1.9,0],[52.1,7.0,0],[-33.0,18.4,0],[45.6,9.2,0],[32.2,-96.1,0],[10.9,106.8,0],[-34.8,138.7,0],[26.4,-80.1,0],[43.3,-1.8,0],[37.2,-88.9,0],[45.7,25.5,0],[-33.9,151.2,0],[41.2,-8.7,0],[49.3,-122.9,0],[-33.9,151.2,0],[-23.5,-46.7,0],[38.9,-104.9,0],[39.6,-3.2,0],[45.9,22.9,0],[41.8,-88.0,0],[41.5,87.6,0],[41.5,87.6,0],[41.5,87.6,0],[41.5,87.6,0],[37.5,15.1,0],[42.8,-2.7,0],[-22.9,-43.3,0],[53.7,-6.7,0],[55.9,-3.7,0],[54.1,-1.7,0],[46.2,4.3,0],[48.7,2.2,0],[13.8,100.4,0],[14.6,-89.3,0],[-26.3,152.9,0],[55.7,12.6,0],[35.0,-106.0,0],[4.1,-76.2,0],[36.7,-4.3,0],[44.0,8.2,0],[42.5,12.9,0],[-16.7,-49.2,0],[-23.5,-46.7,0],[54.2,49.6,0],[44.6,-63.7,0],[0.0,0.0,0],[-31.4,-64.2,0],[12.7,78.3,0],[45.1,7.5,0],[-19.9,-44.6,0],[20.1,110.3,0],[35.7,139.5,0],[50.1,14.4,0],[12.3,76.6,0],[29.6,-95.1,0],[-23.3,-51.2,0],[0.0,0.0,0],[31.6,-8.0,0],[0.0,0.0,0],[53.0,-1.7,0],[0.0,0.0,0],[48.9,2.5,0],[49.8,14.7,0],[50.9,-1.5,0],[45.4,-75.7,0],[50.1,14.0,0],[48.7,2.2,0],[34.5,136.7,0],[39.2,-1.8,0],[37.2,127.1,0],[52.1,-0.9,0],[0.0,0.0,0],[53.8,-2.4,0],[48.1,11.3,0],[52.2,11.0,0],[4.8,-75.7,0],[48.5,-123.3,0],[21.3,-157.8,0],[37.4,-122.0,0],[19.1,72.9,0],[39.0,-2.5,0],[30.8,31.0,0],[10.4,-75.6,0],[46.0,-66.6,0],[41.4,2.2,0],[-16.6,-49.3,0],[-7.0,107.6,0],[45.6,8.9,0],[51.5,6.9,0],[30.4,-90.1,0],[30.1,-95.6,0],[48.3,11.7,0],[48.3,11.7,0],[48.5,11.9,0],[44.1,28.6,0],[59.3,18.1,0],[41.6,-72.5,0],[26.7,-81.7,0],[26.7,-81.7,0],[41.5,12.7,0],[-23.6,-46.3,0],[27.6,84.5,0],[39.9,32.6,0],[57.4,21.5,0],[34.1,-118.1,0],[35.4,139.3,0],[41.9,-88.2,0],[33.4,-111.9,0],[-32.1,115.8,0],[52.4,4.9,0],[35.0,135.7,0],[38.0,23.7,0],[0.0,0.0,0],[63.9,23.1,0],[44.5,-93.2,0],[29.0,-81.0,0],[18.5,-69.9,0],[27.9,78.1,0],[42.5,71.2,0],[35.3,139.5,0],[42.5,-71.2,0],[44.3,4.7,0],[0.0,0.0,0],[18.5,-69.9,0],[49.7,6.1,0],[42.5,-71.0,0],[48.6,8.0,0],[39.4,-84.3,0],[46.0,-66.6,0],[43.5,-71.5,0],[-15.8,-43.3,0],[45.8,126.7,0],[25.0,121.2,0],[38.7,-9.3,0],[37.2,-80.0,0],[38.7,-9.0,0],[14.7,-17.2,0],[54.2,-4.6,0],[43.6,-71.4,0],[42.2,88.0,0],[49.1,1.5,0],[50.6,-119.7,0],[45.3,-94.2,0],[0.0,0.0,0],[38.9,-9.0,0],[33.1,-96.7,0],[54.5,-6.0,0],[50.5,5.7,0],[24.8,121.0,0],[-26.1,28.0,0],[39.9,32.8,0],[-26.5,28.3,0],[-32.5,19.3,0],[33.0,-96.8,0],[35.7,-105.9,0],[33.7,-117.8,0],[12.3,7.6,0],[35.3,25.1,0],[41.9,12.5,0],[51.1,0.1,0],[52.5,13.3,0],[51.8,-1.3,0],[39.1,-76.8,0],[28.1,-80.6,0],[45.5,-122.6,0],[53.2,-3.0,0],[41.5,-8.3,0],[55.8,12.3,0],[19.1,-98.2,0],[61.6,-149.2,0],[29.3,48.0,0],[40.6,-83.1,0],[32.1,-110.9,0],[53.7,-0.4,0],[40.5,-8.1,0],[0.0,0.0,0],[45.0,-93.5,0],[39.9,32.7,0],[57.0,23.6,0],[44.3,9.3,0],[-30.9,128.1,0],[38.9,-9.0,0],[-32.0,116.0,0],[56.0,-4.9,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[-2.4,-80.7,0],[0.0,0.0,0],[52.2,16.8,0],[48.1,11.7,0],[52.2,5.2,0],[45.7,-109.4,0],[38.1,-121.4,0],[12.9,80.2,0],[53.1,8.8,0],[0.0,0.0,0],[38.7,-9.3,0],[0.0,0.0,0],[50.1,14.5,0],[50.1,14.5,0],[50.1,14.5,0],[45.3,8.9,0],[45.8,-108.6,0],[21.0,-89.6,0],[43.8,4.1,0],[41.6,-87.8,0],[48.7,2.0,0],[47.5,16.3,0],[42.8,-73.8,0],[0.0,0.0,0],[39.6,-76.0,0],[0.0,0.0,0],[43.8,4.1,0],[-26.1,27.9,0],[43.8,4.1,0],[43.8,4.1,0],[63.4,10.4,0],[53.3,-110.0,0],[1.3,103.8,0],[32.0,-102.2,0],[41.6,-8.4,0],[44.1,2.1,0],[35.1,-120.6,0],[50.3,15.0,0],[0.0,0.0,0],[45.2,5.7,0],[55.9,-4.3,0],[51.3,-0.1,0],[-31.9,115.8,0],[-23.6,-46.6,0],[-39.8,-73.2,0],[50.1,14.5,0],[53.8,10.3,0],[32.1,-81.1,0],[18.9,99.0,0],[49.0,12.4,0],[0.0,0.0,0],[0.0,0.0,0],[-40.9,175.7,0],[0.0,0.0,0],[35.9,79.1,0],[42.0,-87.7,0],[-32.0,115.9,0],[48.2,16.4,0],[46.6,17.6,0],[49.3,6.2,0],[25.7,-100.3,0],[51.7,-2.4,0],[38.9,-77.1,0],[-16.7,-49.2,0],[-34.9,138.5,0],[31.2,121.3,0],[0.0,0.0,0],[4.7,-74.1,0],[-34.6,-58.5,0],[40.0,-104.6,0],[0.0,0.0,0],[39.9,116.6,0],[-34.5,-58.5,0],[0.0,0.0,0],[43.1,-2.4,0],[36.8,-76.2,0],[29.8,-81.3,0],[37.2,-3.7,0],[48.2,16.3,0],[51.5,30.8,0],[33.6,-88.6,0],[13.4,77.7,0],[-34.9,-57.9,0],[0.0,0.0,0],[45.9,16.8,0],[0.0,0.0,0],[45.5,16.8,0],[46.1,16.9,0],[45.8,16.0,0],[44.2,5.9,0],[50.0,14.8,0],[-35.3,149.1,0],[40.2,44.6,0],[41.4,-87.3,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[45.8,16.0,0],[45.7,21.2,0],[48.5,-123.4,0],[39.5,-0.3,0],[47.2,38.9,0],[47.5,12.1,0],[48.2,16.3,0],[12.3,76.6,0],[26.6,84.2,0],[45.1,14.7,0],[0.0,0.0,0],[52.9,-0.6,0],[44.1,15.2,0],[-34.9,-58.1,0],[53.1,8.9,0],[21.3,-157.8,0],[47.7,19.6,0],[45.8,16.0,0],[0.0,0.0,0],[52.2,5.2,0],[41.0,40.6,0],[58.4,-3.1,0],[0.0,0.0,0],[47.8,-2.8,0],[45.1,14.1,0],[46.4,16.5,0],[48.5,8.9,0],[52.7,9.6,0],[37.8,-122.5,0],[0.0,0.0,0],[-32.0,115.9,0],[41.0,39.7,0],[39.9,-75.3,0],[0.0,0.0,0],[0.0,0.0,0],[30.6,116.1,0],[-34.7,138.7,0],[42.1,-8.5,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[43.5,5.4,0],[47.7,-122.3,0],[0.0,0.0,0],[37.4,-6.0,0],[55.9,-4.3,0],[51.4,4.5,0],[40.5,-3.5,0],[50.2,-5.1,0],[41.1,-96.1,0],[30.4,-87.2,0],[44.6,-69.6,0],[39.5,2.5,0],[48.7,9.3,0],[48.0,33.5,0],[49.7,12.1,0],[48.7,9.3,0],[21.3,-157.8,0],[42.7,23.3,0],[36.1,136.4,0],[42.3,-7.9,0],[46.5,-120.7,0],[29.4,-98.5,0],[-11.5,-77.0,0],[51.5,7.0,0],[0.0,0.0,0],[49.3,-124.1,0],[53.8,-1.6,0],[37.0,-7.9,0],[36.5,127.4,0],[0.0,0.0,0],[41.1,-112.0,0],[40.0,-6.7,0],[37.8,-122.4,0],[48.9,2.3,0],[42.4,13.0,0],[43.7,1.2,0],[47.2,-122.4,0],[42.8,-91.1,0],[43.5,-5.6,0],[47.7,-122.3,0],[55.8,37.7,0],[37.1,-113.6,0],[31.0,75.0,0],[50.1,19.8,0],[53.0,14.0,0],[50.5,5.6,0],[40.0,-75.4,0],[19.0,72.9,0],[0.0,0.0,0],[-32.0,115.9,0],[32.4,-110.9,0],[-37.8,145.3,0],[40.8,-82.4,0],[32.3,-111.0,0],[0.0,0.0,0],[45.6,-89.5,0],[46.1,3.5,0],[0.0,0.0,0],[-11.9,-77.0,0],[59.7,9.6,0],[33.7,-117.8,0],[35.9,-97.9,0],[36.5,127.2,0],[39.5,-0.4,0],[48.7,9.7,0],[0.0,0.0,0],[56.3,-177.3,0],[0.0,0.0,0],[21.0,105.9,0],[50.1,14.5,0],[48.9,2.2,0],[59.8,10.3,0],[-24.2,-53.0,0],[50.2,-5.1,0],[30.2,-85.6,0],[30.7,-88.3,0],[17.4,78.6,0],[60.0,30.0,0],[31.0,30.5,0],[6.5,51.4,0],[30.0,-97.2,0],[49.2,7.0,0],[-32.0,115.9,0],[0.0,0.0,0],[49.4,12.6,0],[54.7,20.5,0],[48.5,9.1,0],[55.9,38.2,0],[-7.8,110.4,0],[0.0,0.0,0],[49.5,11.1,0],[49.2,7.0,0],[25.0,25.0,0],[49.2,7.0,0],[50.9,-1.2,0],[41.4,69.2,0],[-37.8,145.0,0],[0.0,0.0,0],[31.1,121.4,0],[12.3,79.5,0],[55.6,37.1,0],[0.0,0.0,0],[27.9,78.1,0],[40.2,-78.9,0],[0.0,0.0,0],[15.5,73.8,0],[47.5,19.1,0],[39.9,32.7,0],[39.9,32.7,0],[39.9,32.7,0],[49.2,7.0,0],[51.2,17.4,0],[51.2,17.4,0],[60.4,24.4,0],[0.0,0.0,0],[0.0,0.0,0],[49.2,7.0,0],[52.3,6.7,0],[43.7,6.9,0],[-31.9,115.8,0],[46.6,6.6,0],[0.0,0.0,0],[49.1,-99.3,0],[0.0,0.0,0],[40.6,-83.1,0],[55.6,37.1,0],[38.8,-121.3,0],[0.0,0.0,0],[32.7,-99.8,0],[53.7,10.2,0],[53.2,-1.6,0],[51.3,-0.9,0],[-34.5,-58.5,0],[0.0,0.0,0],[36.4,127.4,0],[55.7,37.5,0],[37.9,23.7,0],[52.0,1.2,0],[22.4,114.0,0],[41.4,69.2,0],[52.5,13.4,0],[-2.1,106.1,0],[35.1,-106.7,0],[-33.9,18.6,0],[21.0,105.5,0],[0.0,0.0,0],[47.6,-121.9,0],[45.7,9.2,0],[6.3,107.0,0],[32.7,-99.8,0],[-11.9,-77.0,0],[39.9,-4.3,0],[60.1,32.3,0],[38.0,12.5,0],[36.5,127.4,0],[35.7,139.7,0],[35.7,139.7,0],[52.4,4.9,0],[39.4,-84.1,0],[52.1,21.1,0],[35.0,137.1,0],[45.6,13.8,0],[0.0,0.0,0],[0.0,0.0,0],[36.7,-4.4,0],[42.5,-70.9,0],[0.0,0.0,0],[34.0,-118.4,0],[48.9,9.1,0],[54.5,18.5,0],[38.8,-77.2,0],[30.0,31.0,0],[51.0,8.0,0],[-6.1,106.1,0],[33.4,-111.9,0],[51.6,-0.7,0],[52.1,22.2,0],[4.7,-74.1,0],[52.5,13.5,0],[25.0,121.2,0],[-2.6,140.7,0],[52.5,21.0,0],[-0.4,100.4,0],[50.6,29.9,0],[45.8,14.7,0],[0.0,0.0,0],[51.6,-1.8,0],[32.7,-97.1,0],[29.8,-95.4,0],[4.7,-74.1,0],[37.0,-122.0,0],[33.8,-79.2,0],[0.0,0.0,0],[38.9,-104.8,0],[39.0,104.8,0],[13.0,77.5,0],[52.0,7.6,0],[0.0,0.0,0],[0.0,0.0,0],[54.0,-3.2,0],[49.6,16.9,0],[29.5,-95.5,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[41.9,1.8,0],[41.4,2.1,0],[42.5,26.5,0],[41.7,-88.0,0],[0.0,0.0,0],[38.5,-94.2,0],[-5.4,105.3,0],[50.0,8.7,0],[49.7,4.7,0],[42.2,-87.8,0],[13.7,100.5,0],[-5.4,105.3,0],[35.0,-80.8,0],[50.4,30.5,0],[52.3,77.0,0],[42.7,23.3,0],[51.2,-0.4,0],[35.8,-78.7,0],[50.5,30.6,0],[0.0,0.0,0],[50.4,30.5,0],[42.4,-8.7,0],[51.8,-1.0,0],[12.9,77.6,0],[54.6,-1.3,0],[21.0,105.9,0],[50.0,4.0,0],[49.2,16.6,0],[49.2,16.6,0],[49.2,16.6,0],[49.2,16.6,0],[0.0,0.0,0],[18.5,73.9,0],[-16.0,-48.1,0],[0.0,0.0,0],[-32.0,115.9,0],[12.3,78.9,0],[35.7,139.8,0],[46.1,2.7,0],[48.8,2.2,0],[-21.4,-43.2,0],[34.0,117.6,0],[48.8,14.4,0],[39.9,32.9,0],[17.5,78.4,0],[49.2,16.6,0],[31.1,-97.7,0],[0.0,0.0,0],[39.9,32.9,0],[-24.8,-65.4,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[50.5,30.5,0],[45.4,-75.8,0],[13.0,77.6,0],[53.1,-1.2,0],[28.5,-81.2,0],[28.5,-81.2,0],[13.9,100.5,0],[38.7,-78.0,0],[0.0,0.0,0],[50.5,30.6,0],[52.5,13.3,0],[45.2,5.7,0],[21.0,105.9,0],[21.0,105.9,0],[41.7,25.0,0],[21.0,105.9,0],[52.8,18.1,0],[38.2,-6.3,0],[-32.9,-60.7,0],[53.3,-2.6,0],[45.5,15.6,0],[0.0,0.0,0],[26.7,-80.1,0],[53.1,8.9,0],[0.0,0.0,0],[0.0,0.0,0],[47.6,-65.8,0],[1.1,104.4,0],[13.4,77.7,0],[-16.7,-43.8,0],[44.4,-76.7,0],[45.5,-73.5,0],[32.2,-80.7,0],[13.0,77.5,0],[54.6,39.9,0],[0.0,0.0,0],[40.0,18.0,0],[51.1,6.5,0],[4.9,-74.1,0],[34.9,-82.4,0],[52.2,-0.9,0],[54.7,25.3,0],[49.3,-123.0,0],[0.0,0.0,0],[28.4,75.6,0],[33.7,-118.0,0],[37.8,-122.3,0],[41.6,9.0,0],[-34.9,138.5,0],[40.1,-75.1,0],[40.5,-81.5,0],[51.4,-0.3,0],[0.0,0.0,0],[0.0,0.0,0],[50.0,21.9,0],[56.4,-3.2,0],[51.4,-0.3,0],[47.2,5.0,0],[0.0,0.0,0],[50.6,7.6,0],[52.4,6.6,0],[-12.0,-77.1,0],[38.8,-94.3,0],[34.3,-118.3,0],[-34.9,138.6,0],[0.0,0.0,0],[42.7,23.3,0],[-23.3,150.5,0],[35.0,137.2,0],[49.1,6.2,0],[51.6,-3.7,0],[32.1,-81.1,0],[0.0,0.0,0],[52.8,4.8,0],[41.7,25.0,0],[29.6,-95.6,0],[-32.0,115.8,0],[41.1,-81.4,0],[-37.8,145.0,0],[43.3,28.0,0],[51.1,17.1,0],[0.0,0.0,0],[50.0,36.4,0],[54.9,-5.8,0],[0.0,0.0,0],[-32.0,115.9,0],[0.0,0.0,0],[-8.7,115.2,0],[38.0,23.7,0],[38.0,23.7,0],[38.0,-122.3,0],[35.6,139.7,0],[-31.9,115.8,0],[35.6,140.0,0],[-31.5,115.5,0],[40.5,-3.4,0],[45.5,-71.9,0],[0.0,0.0,0],[0.0,0.0,0],[53.5,-113.6,0],[50.1,14.5,0],[56.9,24.1,0],[35.7,139.8,0],[39.8,32.8,0],[37.6,-122.2,0],[47.5,19.2,0],[0.0,0.0,0],[38.0,-91.6,0],[0.0,0.0,0],[48.8,9.1,0],[39.0,-77.4,0],[53.3,7.7,0],[40.4,-3.7,0],[50.9,-1.2,0],[0.0,0.0,0],[48.1,11.1,0],[43.6,1.5,0],[44.7,8.7,0],[38.7,-9.1,0],[50.1,14.5,0],[38.0,23.7,0],[0.0,110.9,0],[45.7,11.5,0],[35.6,140.0,0],[36.0,139.6,0],[21.3,-157.8,0],[45.6,6.3,0],[39.9,32.8,0],[37.1,140.8,0],[49.6,5.8,0],[0.0,0.0,0],[10.1,76.5,0],[-22.6,27.1,0],[42.7,23.3,0],[35.3,139.6,0],[0.0,0.0,0],[52.4,-1.8,0],[49.7,13.4,0],[10.9,76.5,0],[4.7,-74.1,0],[52.2,21.0,0],[0.0,0.0,0],[0.0,0.0,0],[6.6,80.0,0],[48.5,25.7,0],[4.7,-74.1,0],[33.4,-111.9,0],[45.0,-93.2,0],[35.5,51.5,0],[36.3,-95.3,0],[55.9,-4.2,0],[0.0,0.0,0],[38.1,-7.5,0],[50.8,7.6,0],[35.4,51.5,0],[55.9,-4.2,0],[0.0,0.0,0],[47.5,19.1,0],[0.0,0.0,0],[36.4,105.6,0],[49.2,-124.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[29.5,-98.4,0],[0.0,0.0,0],[21.0,105.9,0],[47.5,19.1,0],[13.9,100.5,0],[37.0,-121.8,0],[13.9,100.5,0],[13.9,100.5,0],[48.5,7.5,0],[33.0,-97.1,0],[41.4,-72.0,0],[34.1,-118.0,0],[42.5,-83.9,0],[2.3,102.3,0],[0.0,0.0,0],[42.2,42.7,0],[36.4,140.4,0],[38.7,35.5,0],[0.0,0.0,0],[17.2,78.5,0],[40.5,-86.9,0],[-31.7,115.8,0],[40.7,-73.9,0],[35.0,137.1,0],[0.0,0.0,0],[0.0,0.0,0],[41.4,-87.4,0],[42.1,3.1,0],[-27.4,-65.6,0],[51.9,4.4,0],[48.0,7.3,0],[0.0,0.0,0],[-23.2,-45.9,0],[27.2,56.3,0],[40.5,-89.0,0],[44.7,-78.7,0],[0.0,0.0,0],[40.6,-8.7,0],[50.4,30.5,0],[37.6,127.1,0],[49.6,16.9,0],[25.5,81.7,0],[0.0,0.0,0],[-6.9,107.6,0],[0.0,0.0,0],[0.0,0.0,0],[52.8,1.5,0],[3.3,101.7,0],[38.0,23.7,0],[13.0,77.7,0],[52.2,15.8,0],[35.1,-118.6,0],[40.9,40.3,0],[51.7,-0.3,0],[46.6,10.8,0],[50.2,19.1,0],[55.7,12.5,0],[50.9,7.0,0],[49.1,-122.9,0],[37.3,-6.3,0],[33.3,44.4,0],[0.0,0.0,0],[43.6,3.9,0],[47.4,-53.3,0],[-3.7,-38.5,0],[-23.6,-46.7,0],[33.2,-116.4,0],[51.1,17.2,0],[-0.5,117.1,0],[0.0,0.0,0],[51.2,22.5,0],[49.4,5.5,0],[33.4,-111.9,0],[18.5,-69.9,0],[40.9,40.3,0],[27.7,85.3,0],[30.4,-97.7,0],[49.3,-123.0,0],[50.0,6.5,0],[0.0,0.0,0],[0.0,0.0,0],[49.3,-123.0,0],[0.0,0.0,0],[50.7,6.2,0],[47.6,8.9,0],[41.0,119.0,0],[47.5,-117.6,0],[50.1,-5.2,0],[-7.1,112.7,0],[35.8,14.5,0],[0.0,0.0,0],[49.4,18.0,0],[41.9,-87.7,0],[37.6,15.0,0],[51.0,5.8,0],[20.8,-156.3,0],[35.5,-95.5,0],[40.4,-3.7,0],[13.0,77.6,0],[51.6,-3.7,0],[40.4,-75.4,0],[51.7,19.8,0],[0.0,0.0,0],[49.2,4.0,0],[49.6,6.1,0],[40.5,-3.4,0],[39.6,-84.1,0],[36.8,3.1,0],[-62.1,-58.5,0],[0.0,0.0,0],[11.0,77.0,0],[0.0,0.0,0],[-62.1,-58.6,0],[42.1,24.8,0],[37.3,-6.0,0],[48.2,16.3,0],[42.0,21.4,0],[0.0,0.0,0],[40.4,-3.8,0],[-33.0,-60.7,0],[42.2,-8.7,0],[33.5,-84.8,0],[45.8,21.2,0],[0.0,0.0,0],[43.8,11.5,0],[47.7,7.3,0],[0.0,0.0,0],[-0.2,-78.5,0],[19.0,-98.2,0],[48.2,16.3,0],[25.4,51.5,0],[13.7,100.5,0],[-0.2,-78.5,0],[48.6,21.2,0],[25.3,51.5,0],[7.8,98.4,0],[3.1,101.7,0],[25.4,51.5,0],[21.6,-158.2,0],[24.7,46.7,0],[51.1,17.1,0],[31.0,-104.8,0],[41.1,24.9,0],[47.3,16.7,0],[0.0,0.0,0],[52.7,5.2,0],[17.2,78.5,0],[25.2,51.5,0],[-2.1,-79.6,0],[45.1,8.2,0],[35.3,-120.7,0],[35.7,-82.0,0],[51.5,-2.6,0],[36.8,10.2,0],[12.3,76.6,0],[33.4,-111.9,0],[48.2,-0.1,0],[59.7,30.4,0],[25.4,51.5,0],[0.0,0.0,0],[40.1,68.7,0],[40.4,-111.9,0],[35.0,-80.7,0],[18.8,99.0,0],[38.6,23.6,0],[40.6,-8.7,0],[20.7,-100.5,0],[25.3,51.6,0],[-42.9,147.3,0],[37.8,-107.7,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[28.1,120.7,0],[-37.7,176.2,0],[27.7,85.4,0],[45.4,8.8,0],[42.4,23.1,0],[51.1,5.0,0],[18.8,99.0,0],[50.6,9.7,0],[0.0,0.0,0],[50.6,2.8,0],[40.4,-111.8,0],[-43.0,147.3,0],[0.0,0.0,0],[49.2,16.6,0],[49.2,6.7,0],[22.8,108.3,0],[0.0,0.0,0],[27.7,85.4,0],[51.3,6.8,0],[45.5,9.1,0],[51.3,6.8,0],[43.6,-95.0,0],[49.5,5.9,0],[42.0,0.8,0],[49.5,5.9,0],[19.1,98.9,0],[2.9,101.7,0],[35.1,126.9,0],[47.0,-104.2,0],[35.8,128.5,0],[49.5,17.4,0],[49.6,6.2,0],[49.7,13.4,0],[40.1,-76.2,0],[33.0,-96.6,0],[48.2,9.4,0],[43.0,-83.1,0],[-26.5,29.2,0],[52.1,-106.6,0],[25.2,51.4,0],[38.6,23.6,0],[32.2,-110.8,0],[25.3,51.5,0],[42.1,23.1,0],[47.6,-122.2,0],[19.1,72.9,0],[0.0,0.0,0],[0.0,0.0,0],[42.8,13.7,0],[24.0,-104.7,0],[44.1,-79.1,0],[44.9,37.3,0],[52.6,6.3,0],[38.0,-121.4,0],[44.8,11.3,0],[46.9,7.5,0],[52.3,16.9,0],[55.0,-1.5,0],[48.0,11.2,0],[0.0,0.0,0],[0.0,0.0,0],[17.5,78.4,0],[11.0,-74.9,0],[51.5,4.3,0],[42.1,-72.3,0],[38.6,20.7,0],[51.1,17.0,0],[25.3,51.5,0],[44.3,26.0,0],[-37.0,174.9,0],[43.5,-5.7,0],[43.4,-5.8,0],[43.4,-5.8,0],[61.2,22.1,0],[34.6,-86.5,0],[55.8,37.7,0],[42.3,-3.7,0],[25.3,51.5,0],[0.0,0.0,0],[51.1,17.1,0],[0.0,0.0,0],[0.0,0.0,0],[-5.4,105.3,0],[51.1,17.1,0],[55.7,12.6,0],[25.3,51.5,0],[0.0,0.0,0],[-27.6,-48.6,0],[13.0,77.6,0],[-33.9,151.1,0],[46.6,15.6,0],[35.1,-81.7,0],[55.9,12.4,0],[43.6,1.3,0],[31.5,74.3,0],[-33.4,-70.6,0],[30.2,-97.4,0],[30.2,97.4,0],[50.9,5.1,0],[36.5,-105.7,0],[47.5,19.1,0],[4.6,-74.1,0],[43.9,25.9,0],[33.8,-118.4,0],[25.3,51.5,0],[13.2,77.8,0],[50.9,-114.3,0],[0.0,0.0,0],[38.6,-121.6,0],[34.1,-118.4,0],[0.0,0.0,0],[50.8,-2.0,0],[51.9,-0.5,0],[49.7,13.4,0],[0.0,0.0,0],[25.3,51.5,0],[57.6,18.3,0],[-28.6,-49.4,0],[13.2,77.7,0],[34.5,-87.6,0],[44.1,12.5,0],[0.0,0.0,0],[-37.8,144.8,0],[0.0,0.0,0],[34.5,-77.5,0],[34.5,-77.5,0],[30.2,120.2,0],[43.7,1.1,0],[29.7,-98.4,0],[39.7,-8.8,0],[31.8,117.3,0],[-27.6,-48.6,0],[0.0,0.0,0],[34.1,-117.8,0],[-27.4,-59.0,0],[0.0,0.0,0],[33.2,-97.2,0],[-8.6,115.2,0],[51.9,-0.5,0],[46.2,4.3,0],[0.0,0.0,0],[52.1,19.9,0],[40.3,-80.4,0],[42.5,11.8,0],[51.3,15.6,0],[42.3,-89.0,0],[11.9,79.8,0],[28.1,-15.6,0],[51.1,17.1,0],[0.0,0.0,0],[45.2,26.9,0],[-20.3,57.5,0],[0.0,0.0,0],[0.0,0.0,0],[41.3,69.2,0],[21.0,105.8,0],[28.7,77.1,0],[55.4,10.4,0],[43.6,1.4,0],[33.5,36.4,0],[39.8,-8.8,0],[42.9,-85.8,0],[-43.0,147.3,0],[42.9,-85.6,0],[34.7,-120.5,0],[49.1,13.8,0],[14.7,-17.2,0],[51.8,4.3,0],[43.0,-85.9,0],[52.4,16.8,0],[0.0,0.0,0],[41.8,12.8,0],[47.8,-3.3,0],[43.7,-7.9,0],[0.0,0.0,0],[49.1,15.6,0],[49.0,16.0,0],[50.9,5.7,0],[42.1,23.1,0],[49.2,-121.8,0],[34.0,-118.3,0],[60.2,24.8,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[-23.3,-47.7,0],[37.0,30.6,0],[48.7,7.8,0],[50.1,20.0,0],[48.1,11.6,0],[0.0,0.0,0],[39.9,22.2,0],[49.2,-121.8,0],[13.1,77.6,0],[49.2,-121.8,0],[33.4,-111.9,0],[41.8,-71.4,0],[-20.5,-43.7,0],[-20.5,-43.7,0],[49.3,-123.0,0],[47.0,15.2,0],[-2.2,-80.0,0],[40.1,-3.6,0],[39.1,117.2,0],[39.4,22.9,0],[32.8,12.7,0],[-0.2,-78.5,0],[-12.4,130.9,0],[36.0,120.2,0],[48.9,21.0,0],[0.0,0.0,0],[-33.4,-70.7,0],[-35.4,149.1,0],[0.0,0.0,0],[47.1,4.1,0],[0.0,0.0,0],[55.9,25.8,0],[39.9,32.8,0],[-16.5,-71.5,0],[0.0,0.0,0],[28.5,-16.4,0],[0.0,0.0,0],[11.0,77.0,0],[50.8,4.2,0],[49.5,17.5,0],[48.1,11.7,0],[49.5,17.7,0],[53.2,6.8,0],[18.5,100.2,0],[35.6,139.4,0],[40.6,-112.5,0],[43.0,23.9,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[18.5,100.2,0],[-38.0,-57.6,0],[-27.7,152.9,0],[0.0,0.0,0],[42.7,23.4,0],[0.0,0.0,0]],"counts":{"total":4402,"online":321},"taxonomy":{"weather":50,"earth-obs":352,"comms":42,"comms-mega":11417,"science":77,"cubesat-edu":150,"defence":33},"growth":[{"year":2014,"leo_launched":66,"cum_sats":66,"dishes_added":0,"cum_dishes":0,"sats_per_dish":null},{"year":2015,"leo_launched":48,"cum_sats":114,"dishes_added":4,"cum_dishes":4,"sats_per_dish":28.5},{"year":2016,"leo_launched":41,"cum_sats":155,"dishes_added":1,"cum_dishes":5,"sats_per_dish":31.0},{"year":2017,"leo_launched":94,"cum_sats":249,"dishes_added":25,"cum_dishes":30,"sats_per_dish":8.3},{"year":2018,"leo_launched":137,"cum_sats":386,"dishes_added":343,"cum_dishes":373,"sats_per_dish":1.0},{"year":2019,"leo_launched":102,"cum_sats":488,"dishes_added":687,"cum_dishes":1060,"sats_per_dish":0.5},{"year":2020,"leo_launched":383,"cum_sats":871,"dishes_added":595,"cum_dishes":1655,"sats_per_dish":0.5},{"year":2021,"leo_launched":989,"cum_sats":1860,"dishes_added":479,"cum_dishes":2134,"sats_per_dish":0.9},{"year":2022,"leo_launched":1710,"cum_sats":3570,"dishes_added":407,"cum_dishes":2541,"sats_per_dish":1.4},{"year":2023,"leo_launched":2243,"cum_sats":5813,"dishes_added":421,"cum_dishes":2962,"sats_per_dish":2.0},{"year":2024,"leo_launched":2409,"cum_sats":8222,"dishes_added":394,"cum_dishes":3356,"sats_per_dish":2.4},{"year":2025,"leo_launched":4259,"cum_sats":12481,"dishes_added":622,"cum_dishes":3978,"sats_per_dish":3.1},{"year":2026,"leo_launched":2497,"cum_sats":14978,"dishes_added":424,"cum_dishes":4402,"sats_per_dish":3.4}],"sample_day":{"priority":{"windows":{"DMSP 5D-3 F16 (USA 172)":163,"DMSP 5D-3 F17 (USA 191)":110,"FENGYUN 3A":174,"DMSP 5D-3 F18 (USA 210)":193,"FENGYUN 3B":202,"SUOMI NPP":158,"METOP-B":158,"FENGYUN 3C":180,"METEOR-M 2":83,"SENTINEL-3A":182,"CYGFM05":120,"CYGFM04":116},"delivered_gb":{"DMSP 5D-3 F16 (USA 172)":499.9,"DMSP 5D-3 F17 (USA 191)":428.4,"FENGYUN 3A":637.7,"DMSP 5D-3 F18 (USA 210)":681.0,"FENGYUN 3B":721.6,"SUOMI NPP":502.3,"METOP-B":504.0,"FENGYUN 3C":642.6,"METEOR-M 2":332.0,"SENTINEL-3A":714.8,"CYGFM05":463.6,"CYGFM04":464.0},"max_gap_h":{"DMSP 5D-3 F16 (USA 172)":2.2,"DMSP 5D-3 F17 (USA 191)":2.9,"FENGYUN 3A":2.9,"DMSP 5D-3 F18 (USA 210)":3.0,"FENGYUN 3B":2.2,"SUOMI NPP":2.9,"METOP-B":3.0,"FENGYUN 3C":2.2,"METEOR-M 2":3.0,"SENTINEL-3A":2.0,"CYGFM05":2.8,"CYGFM04":2.8},"total_gb":6591.9,"starved":0,"worst_gap_h":3.0,"busiest_quietest_ratio":2.4,"contentions":195,"vetoes":0,"critical_served":16,"critical_max_wait_min":56},"broker":{"windows":{"DMSP 5D-3 F16 (USA 172)":134,"DMSP 5D-3 F17 (USA 191)":140,"FENGYUN 3A":174,"DMSP 5D-3 F18 (USA 210)":143,"FENGYUN 3B":202,"SUOMI NPP":156,"METOP-B":157,"FENGYUN 3C":179,"METEOR-M 2":133,"SENTINEL-3A":184,"CYGFM05":123,"CYGFM04":116},"delivered_gb":{"DMSP 5D-3 F16 (USA 172)":474.7,"DMSP 5D-3 F17 (USA 191)":520.0,"FENGYUN 3A":637.7,"DMSP 5D-3 F18 (USA 210)":563.5,"FENGYUN 3B":721.6,"SUOMI NPP":502.3,"METOP-B":504.0,"FENGYUN 3C":642.6,"METEOR-M 2":532.0,"SENTINEL-3A":714.8,"CYGFM05":475.6,"CYGFM04":464.0},"max_gap_h":{"DMSP 5D-3 F16 (USA 172)":2.2,"DMSP 5D-3 F17 (USA 191)":2.9,"FENGYUN 3A":2.9,"DMSP 5D-3 F18 (USA 210)":3.0,"FENGYUN 3B":2.2,"SUOMI NPP":2.9,"METOP-B":3.0,"FENGYUN 3C":2.2,"METEOR-M 2":2.9,"SENTINEL-3A":2.0,"CYGFM05":2.8,"CYGFM04":2.8},"total_gb":6752.7,"starved":0,"worst_gap_h":3.0,"busiest_quietest_ratio":1.7,"contentions":210,"vetoes":0,"critical_served":16,"critical_max_wait_min":56}},"sample_stations":["KH6DAD-UHF EggNOG","KN6BKT-433","LU3ARN","EA3AGB","NUUGS2","Gemini_UHF"],"sats":{"commercial":["ONEWEB-0012","ONEWEB-0010","ONEWEB-0008","ONEWEB-0007","ONEWEB-0006","ONEWEB-0011","ONEWEB-0013","ONEWEB-0017","ONEWEB-0020","ONEWEB-0021","ONEWEB-0023","ONEWEB-0024","ONEWEB-0025","ONEWEB-0026"],"earth-obs":["DMSP 5D-3 F16 (USA 172)","METEOSAT-9 (MSG-2)","DMSP 5D-3 F17 (USA 191)","FENGYUN 3A","EWS-G3 (GOES 14)","DMSP 5D-3 F18 (USA 210)","EWS-G2 (GOES 15)","COMS 1","FENGYUN 3B","SUOMI NPP","METEOSAT-10 (MSG-3)","METOP-B","INSAT-3D","FENGYUN 3C"],"science":["HST","POLAR","SWAS","CXO","XMM-NEWTON","TERRA","CLUSTER II-FM7 (SAMBA)","CLUSTER II-FM8 (TANGO)","ODIN","TIMED","CORIOLIS","SORCE","MOST","SCISAT 1"],"cubesat":["CUTE-1 (CO-55)","CUBESAT XI-IV (CO-57)","CUBESAT XI-V","CUTE-1.7+APD II (CO-65)","CANX-2","SEEDS II (CO-66)","SWISSCUBE","BEESAT-1","ITUPSAT1","TISAT 1","STRAND-1","BRITE-AUSTRIA","NEE-01 PEGASO","POPACS 2"]},"dishes":[{"name":"KH6DAD-UHF EggNOG","lat":21.36,"lon":-158.03},{"name":"UVSD-SatNOGS","lat":48.46,"lon":-123.31},{"name":"KN6BKT-433","lat":34.12,"lon":-118.08},{"name":"Not Quite ESL","lat":38.58,"lon":-90.0},{"name":"LU3ARN","lat":-34.57,"lon":-58.48},{"name":"sat-rx","lat":51.9,"lon":-8.66},{"name":"EA3AGB","lat":40.69,"lon":0.57},{"name":"UX5UL","lat":50.36,"lon":30.39},{"name":"NUUGS2","lat":41.35,"lon":69.2},{"name":"HS0ZQS_900_Patch","lat":13.87,"lon":100.5},{"name":"Gemini_UHF","lat":23.0,"lon":120.22},{"name":"VK2BYF-VHF","lat":-34.85,"lon":150.6}],"world":{"leo":15303,"online":321,"total":4402,"pair_minutes":935176342,"days":6}};
+const D = {"stations":[[38.4,21.8,1],[53.0,-2.2,1],[50.8,6.2,1],[52.8,6.4,1],[52.8,6.4,1],[29.9,-96.5,1],[52.0,9.9,1],[50.8,-2.0,1],[42.3,-71.4,1],[52.1,12.5,1],[48.6,1.8,1],[-31.8,115.8,1],[59.2,18.2,1],[35.0,139.1,1],[39.7,-75.2,1],[42.3,-71.4,1],[43.2,-79.8,1],[39.1,-0.5,1],[48.3,11.7,1],[52.2,4.4,1],[42.5,-71.2,1],[38.2,21.7,1],[37.2,22.9,1],[51.7,5.0,1],[42.8,-71.5,1],[45.7,21.2,1],[56.3,10.3,1],[43.6,1.5,1],[-34.9,150.6,1],[29.1,48.1,1],[35.0,-80.8,1],[-41.0,175.7,1],[50.8,2.9,1],[38.1,-121.4,1],[30.2,-92.1,1],[51.6,-1.3,1],[52.3,-1.3,1],[46.3,14.4,1],[48.9,8.7,1],[59.5,17.9,1],[52.6,-0.5,1],[52.2,4.4,1],[45.6,12.2,1],[59.3,17.8,1],[37.9,-122.3,1],[51.4,-0.8,1],[43.6,1.5,1],[51.2,22.5,1],[45.5,-73.6,1],[46.1,4.0,1],[42.5,-71.2,1],[51.2,4.5,1],[39.0,-1.8,1],[49.0,18.3,1],[46.1,14.3,1],[-34.9,138.6,1],[42.4,-71.1,1],[52.0,4.2,1],[52.0,4.2,1],[52.0,4.2,1],[33.3,-86.9,1],[45.7,-73.6,1],[52.5,13.5,1],[38.6,-90.0,1],[33.7,-116.4,1],[48.0,20.8,1],[51.6,4.9,1],[39.9,32.9,1],[18.0,-92.9,1],[51.4,7.2,1],[51.4,7.2,1],[30.1,-99.2,1],[38.9,-3.2,1],[51.7,5.0,1],[48.1,7.9,1],[49.2,9.4,1],[53.9,27.2,1],[-6.3,106.8,1],[49.8,16.1,1],[45.2,19.8,1],[40.7,0.6,1],[52.5,13.3,1],[-38.3,-57.9,1],[63.9,20.2,1],[46.6,6.6,1],[54.9,-112.3,1],[-27.5,153.1,1],[-27.5,153.1,1],[29.6,-95.1,1],[54.9,-112.3,1],[53.9,27.1,1],[48.3,11.7,1],[34.7,-86.8,1],[36.1,140.2,1],[-27.3,151.5,1],[51.1,-0.2,1],[40.0,-105.2,1],[48.3,17.4,1],[37.1,-121.6,1],[51.7,5.0,1],[-34.7,-58.3,1],[49.7,9.0,1],[49.7,9.0,1],[53.9,27.0,1],[52.3,19.2,1],[53.3,-6.2,1],[48.4,10.3,1],[50.0,8.2,1],[35.1,-90.0,1],[47.9,19.9,1],[47.3,16.6,1],[30.1,-99.2,1],[45.5,-73.6,1],[21.1,105.9,1],[50.8,6.1,1],[41.7,-111.8,1],[19.3,-99.1,1],[46.5,14.8,1],[38.7,-77.8,1],[48.5,1.4,1],[45.9,-66.8,1],[47.0,15.3,1],[48.9,12.4,1],[-35.3,138.5,1],[23.0,120.2,1],[59.5,17.9,1],[47.1,15.4,1],[49.2,18.1,1],[45.3,8.8,1],[47.2,7.6,1],[42.3,-83.7,1],[19.4,-154.9,1],[39.6,32.7,1],[50.4,30.4,1],[33.4,-111.9,1],[13.1,77.5,1],[24.9,121.3,1],[51.4,-0.5,1],[33.8,-79.2,1],[36.4,-76.8,1],[19.4,-154.9,1],[53.6,-2.6,1],[39.8,32.8,1],[13.8,100.9,1],[38.4,140.8,1],[42.0,-71.1,1],[33.4,-111.9,1],[50.5,5.7,1],[41.4,-87.0,1],[52.7,-6.9,1],[41.0,39.3,1],[48.5,-123.3,1],[60.1,24.7,1],[48.2,16.3,1],[45.3,-93.7,1],[-27.5,153.1,1],[1.3,103.8,1],[1.3,103.8,1],[47.5,19.5,1],[30.6,-96.3,1],[52.2,5.2,1],[52.0,4.2,1],[51.5,12.0,1],[56.9,24.7,1],[52.5,-2.6,1],[49.8,10.0,1],[49.8,10.0,1],[34.1,-117.9,1],[41.8,-72.5,1],[35.1,-120.6,1],[52.2,5.2,1],[47.5,19.0,1],[52.2,5.2,1],[43.5,-5.7,1],[41.4,2.1,1],[52.2,5.2,1],[33.8,-79.0,1],[51.9,-8.7,1],[39.6,-3.2,1],[38.8,-77.1,1],[40.6,23.0,1],[-25.8,28.2,1],[32.2,-111.0,1],[-26.5,28.3,1],[53.2,13.3,1],[24.9,121.2,1],[60.0,10.8,1],[49.2,16.6,1],[49.5,11.1,1],[49.9,8.6,1],[-32.0,116.0,1],[69.0,33.1,1],[50.1,14.5,1],[-70.7,-8.3,1],[49.0,12.1,1],[40.3,-77.0,1],[-5.4,105.3,1],[50.7,2.8,1],[54.5,18.5,1],[-33.7,151.3,1],[-35.0,-57.9,1],[56.9,24.7,1],[50.6,29.9,1],[-34.9,-57.9,1],[51.6,-0.4,1],[50.6,29.9,1],[50.4,30.5,1],[56.9,24.7,1],[-31.9,115.8,1],[43.6,3.8,1],[59.6,150.8,1],[41.7,-111.8,1],[49.6,9.1,1],[49.6,9.1,1],[-33.9,138.6,1],[50.4,11.2,1],[28.5,-81.2,1],[42.5,23.4,1],[51.4,-0.5,1],[1.3,103.8,1],[50.5,5.7,1],[48.4,19.1,1],[-6.6,106.8,1],[59.2,18.2,1],[-34.9,-58.1,1],[43.6,1.5,1],[41.4,69.2,1],[41.4,69.2,1],[48.2,9.4,1],[40.0,32.8,1],[50.0,-5.2,1],[53.8,-1.6,1],[51.0,21.1,1],[44.2,4.1,1],[-8.7,115.2,1],[45.3,-93.7,1],[39.0,-83.9,1],[1.4,124.8,1],[-34.9,138.6,1],[-34.9,138.6,1],[45.7,12.2,1],[42.7,23.4,1],[33.9,130.8,1],[48.5,1.4,1],[40.1,-105.2,1],[33.9,130.8,1],[-8.7,115.2,1],[39.5,-104.6,1],[43.0,24.9,1],[49.2,16.6,1],[44.3,-76.4,1],[41.5,2.1,1],[47.5,9.7,1],[34.1,-118.1,1],[40.4,-3.8,1],[29.3,48.1,1],[50.8,4.7,1],[1.3,103.7,1],[37.3,-122.0,1],[45.8,-111.2,1],[53.4,-6.2,1],[34.5,-77.5,1],[21.4,-158.0,1],[22.8,108.3,1],[38.8,-77.1,1],[36.7,-4.5,1],[44.3,-76.4,1],[51.3,6.8,1],[45.4,8.8,1],[49.0,17.4,1],[49.2,-121.8,1],[53.5,-2.2,1],[-34.9,-57.9,1],[13.9,100.5,1],[44.2,28.6,1],[42.1,-72.3,1],[42.1,-72.3,1],[-5.4,105.3,1],[49.2,-121.8,1],[25.3,55.4,1],[51.9,-0.5,1],[39.6,-104.7,1],[49.2,-121.8,1],[35.6,139.4,1],[42.0,12.1,1],[36.0,139.6,1],[25.0,121.5,1],[38.0,23.7,1],[29.5,-98.8,1],[51.0,-114.1,1],[41.2,-104.5,1],[30.6,-81.6,1],[-20.9,55.3,1],[51.1,17.0,1],[38.1,15.5,1],[52.5,13.5,1],[40.6,140.5,1],[-33.6,151.1,1],[49.2,-121.8,1],[-5.4,105.2,1],[13.8,100.5,1],[38.6,23.6,1],[49.3,-123.0,1],[-34.6,-58.5,1],[33.9,130.8,1],[49.8,18.2,1],[37.4,126.9,1],[49.0,16.4,1],[49.8,18.2,1],[57.3,18.5,1],[49.8,18.2,1],[41.9,25.5,1],[43.1,-8.5,1],[33.5,-111.9,1],[-35.4,149.1,1],[50.9,4.7,1],[41.7,-111.8,1],[49.9,36.4,1],[49.2,18.1,1],[37.7,-122.4,1],[46.2,11.8,1],[38.0,23.7,0],[38.0,23.7,0],[42.7,-71.5,0],[-34.7,138.7,0],[45.5,-122.7,0],[46.8,15.0,0],[29.9,-96.5,0],[2.8,-60.7,0],[51.2,-0.6,0],[38.0,23.9,0],[48.0,17.4,0],[48.6,18.3,0],[44.7,7.8,0],[53.5,10.2,0],[57.0,10.0,0],[38.4,-81.7,0],[48.7,2.1,0],[37.7,-25.6,0],[41.8,-87.7,0],[42.4,-83.4,0],[48.0,11.7,0],[48.3,11.7,0],[52.8,6.4,0],[49.4,7.8,0],[-0.2,-78.5,0],[37.8,-79.0,0],[41.7,-8.8,0],[52.5,7.5,0],[48.8,2.0,0],[40.0,-85.9,0],[52.1,12.7,0],[35.8,-106.2,0],[60.0,10.8,0],[64.1,19.0,0],[43.4,24.6,0],[48.0,7.4,0],[-16.4,145.4,0],[46.6,6.6,0],[52.0,19.7,0],[21.0,105.8,0],[46.3,14.4,0],[-34.8,138.6,0],[19.3,-99.1,0],[-34.8,138.6,0],[51.7,5.0,0],[43.0,-88.3,0],[-34.7,148.8,0],[48.7,9.8,0],[-34.7,148.8,0],[42.1,1.9,0],[42.0,0.7,0],[48.5,-123.4,0],[44.2,5.1,0],[-38.3,142.4,0],[63.9,20.2,0],[40.7,-3.9,0],[50.1,14.5,0],[46.6,6.6,0],[48.5,-123.4,0],[43.6,1.4,0],[64.8,-147.5,0],[51.5,3.8,0],[55.9,-4.4,0],[42.0,-4.5,0],[53.7,-2.4,0],[52.8,6.4,0],[47.9,19.9,0],[27.9,-80.7,0],[51.2,-0.6,0],[52.0,4.2,0],[43.5,-5.7,0],[40.0,-105.2,0],[33.3,-111.9,0],[45.5,-122.7,0],[35.8,-84.6,0],[52.1,0.6,0],[1.3,103.9,0],[19.2,-103.7,0],[49.7,6.1,0],[35.1,-120.6,0],[40.0,32.6,0],[52.0,6.0,0],[33.3,-111.9,0],[78.2,15.6,0],[39.6,-80.0,0],[48.2,16.4,0],[45.9,-66.6,0],[50.6,7.2,0],[55.4,37.5,0],[32.3,-110.8,0],[40.0,-105.2,0],[52.0,4.2,0],[52.2,5.2,0],[45.1,14.7,0],[2.8,-60.7,0],[45.9,-66.8,0],[41.9,-71.6,0],[41.0,-5.7,0],[52.0,4.2,0],[48.2,17.1,0],[44.9,25.6,0],[49.7,7.3,0],[49.6,6.2,0],[61.2,27.7,0],[40.2,44.5,0],[43.5,-1.4,0],[50.9,-1.3,0],[53.8,19.7,0],[32.3,-111.9,0],[32.3,-111.9,0],[34.6,-112.5,0],[39.2,-96.6,0],[49.1,17.0,0],[-70.7,-8.3,0],[42.6,-5.6,0],[48.9,16.4,0],[33.6,-88.6,0],[-32.0,115.9,0],[47.4,19.1,0],[-1.0,-80.7,0],[49.5,11.1,0],[49.5,11.1,0],[-33.9,138.6,0],[49.2,10.7,0],[-6.2,106.8,0],[42.6,23.4,0],[34.0,-81.0,0],[52.5,13.3,0],[33.3,-111.9,0],[29.0,-81.0,0],[60.2,24.9,0],[39.0,-76.7,0],[28.6,-81.2,0],[12.5,-70.0,0],[52.5,4.9,0],[39.0,-76.7,0],[45.7,8.5,0],[34.3,134.2,0],[33.4,-111.9,0],[48.8,2.0,0],[-16.6,-49.3,0],[36.4,127.4,0],[44.3,-76.4,0],[47.4,-122.1,0],[22.4,114.1,0],[33.4,-111.9,0],[48.6,8.0,0],[51.6,18.9,0],[-38.7,143.8,0],[38.6,-120.6,0],[52.5,13.5,0],[-34.3,-58.3,0],[60.0,30.3,0],[13.8,100.5,0],[29.1,-82.2,0],[53.1,17.9,0],[33.9,-7.0,0],[38.0,23.7,0],[39.2,-86.3,0],[47.1,15.5,0],[38.0,23.8,0],[35.5,24.0,0],[38.0,23.8,0],[38.0,23.7,0],[55.6,12.6,0],[53.4,-3.0,0],[-34.7,138.7,0],[-43.0,147.3,0],[37.0,22.1,0],[43.3,-88.0,0],[-32.1,115.9,0],[-32.1,115.9,0],[38.8,-121.3,0],[37.2,-80.5,0],[37.2,-80.5,0],[54.6,-5.7,0],[38.0,23.7,0],[54.5,-3.6,0],[63.4,10.4,0],[46.8,7.4,0],[41.8,-87.6,0],[45.3,5.6,0],[28.5,-16.3,0],[27.6,85.5,0],[53.1,8.9,0],[47.8,9.6,0],[40.4,-4.0,0],[55.6,12.6,0],[30.6,-90.5,0],[51.9,12.7,0],[42.3,-71.2,0],[42.3,-71.2,0],[-46.4,168.6,0],[37.9,23.5,0],[49.2,-122.9,0],[49.0,1.9,0],[53.4,14.5,0],[-26.7,27.8,0],[44.8,4.8,0],[40.3,-84.2,0],[-27.9,153.3,0],[42.2,-85.6,0],[43.6,3.9,0],[47.1,9.9,0],[19.0,72.9,0],[55.8,12.4,0],[54.7,25.4,0],[51.0,13.8,0],[41.7,-73.9,0],[36.1,-115.2,0],[50.8,6.1,0],[51.5,8.0,0],[38.0,23.7,0],[38.0,23.7,0],[39.7,-83.9,0],[44.6,26.1,0],[40.4,-3.9,0],[51.5,-0.2,0],[57.0,10.0,0],[36.8,-87.5,0],[45.1,-83.5,0],[41.7,-4.7,0],[-34.4,138.4,0],[-34.4,138.4,0],[-33.6,151.3,0],[24.8,46.7,0],[-34.8,138.5,0],[48.6,2.2,0],[51.5,5.6,0],[14.7,121.0,0],[47.8,9.4,0],[40.0,-75.3,0],[39.7,-83.9,0],[29.6,106.5,0],[39.6,3.2,0],[49.8,15.9,0],[52.1,5.2,0],[1.5,103.8,0],[47.5,-121.8,0],[50.3,19.6,0],[42.4,-71.1,0],[17.9,-88.0,0],[-32.1,115.9,0],[42.8,1.6,0],[39.8,-84.0,0],[10.4,-84.5,0],[30.7,104.1,0],[35.9,14.5,0],[43.6,3.8,0],[50.0,15.8,0],[47.7,9.4,0],[57.7,-3.3,0],[37.8,-122.2,0],[48.9,2.2,0],[-6.2,107.0,0],[63.9,20.2,0],[47.2,0.2,0],[40.1,21.4,0],[42.4,-71.1,0],[45.9,6.2,0],[11.6,104.9,0],[52.9,-1.5,0],[48.4,10.9,0],[38.4,-81.7,0],[47.3,5.1,0],[23.7,90.4,0],[24.8,46.7,0],[47.6,-122.2,0],[37.9,139.1,0],[53.3,-4.0,0],[34.0,-84.6,0],[51.8,10.6,0],[42.4,23.2,0],[37.9,-122.5,0],[-37.2,174.8,0],[38.1,106.3,0],[42.7,23.3,0],[53.0,-1.8,0],[50.8,7.6,0],[50.7,-1.8,0],[37.7,-122.4,0],[43.1,-89.3,0],[40.1,-76.3,0],[50.8,12.9,0],[27.7,85.4,0],[38.6,-78.1,0],[41.8,71.4,0],[41.8,-71.4,0],[45.5,-122.7,0],[40.6,-3.7,0],[55.7,37.3,0],[38.0,23.7,0],[51.1,17.0,0],[37.3,22.6,0],[58.4,11.9,0],[12.3,98.8,0],[56.2,13.3,0],[52.5,13.4,0],[53.3,-1.1,0],[38.0,23.8,0],[38.0,23.7,0],[38.6,-78.1,0],[13.1,77.6,0],[56.0,12.6,0],[59.8,17.7,0],[9.9,-84.1,0],[55.6,13.1,0],[-7.0,110.4,0],[38.0,21.3,0],[59.8,17.7,0],[55.6,36.9,0],[42.2,-85.6,0],[36.0,-115.1,0],[38.0,21.3,0],[62.0,29.8,0],[53.2,-4.0,0],[52.5,13.4,0],[40.1,21.4,0],[40.1,21.4,0],[39.8,-75.1,0],[39.3,3.0,0],[40.4,-79.9,0],[50.8,12.9,0],[46.5,6.6,0],[42.7,23.4,0],[52.0,6.6,0],[39.1,23.7,0],[-34.7,138.7,0],[54.6,18.3,0],[52.5,13.4,0],[50.7,3.9,0],[-26.7,27.8,0],[37.3,-122.0,0],[38.4,-0.4,0],[52.0,6.6,0],[54.4,-6.2,0],[52.0,6.6,0],[52.0,6.6,0],[52.0,6.6,0],[36.8,34.6,0],[42.8,-71.0,0],[49.3,-122.9,0],[60.2,24.9,0],[39.6,2.6,0],[36.8,34.6,0],[29.4,98.5,0],[50.9,-1.4,0],[54.5,18.5,0],[38.3,-0.7,0],[38.6,-78.1,0],[54.0,-2.8,0],[39.9,32.8,0],[60.9,14.5,0],[38.0,-1.2,0],[39.7,-83.9,0],[38.4,-93.4,0],[-34.9,-56.2,0],[37.3,22.5,0],[56.8,60.6,0],[34.2,-118.4,0],[33.9,35.7,0],[47.9,-99.5,0],[47.0,3.1,0],[48.2,-78.0,0],[43.8,-1.4,0],[38.0,23.8,0],[38.0,23.8,0],[55.8,37.9,0],[51.1,5.2,0],[51.4,5.5,0],[49.8,13.3,0],[52.8,-0.0,0],[33.0,-117.2,0],[41.5,-87.0,0],[-34.9,-56.2,0],[40.0,-75.3,0],[40.0,-75.3,0],[43.5,-84.1,0],[49.4,-123.7,0],[39.3,-84.3,0],[52.0,6.6,0],[35.1,-80.1,0],[49.3,-123.0,0],[-35.0,138.6,0],[39.2,-86.3,0],[60.2,24.9,0],[52.7,5.7,0],[11.1,106.7,0],[-34.9,138.5,0],[52.0,-0.7,0],[48.0,7.8,0],[35.8,-78.6,0],[45.7,12.3,0],[-34.9,138.6,0],[41.8,-71.4,0],[-31.4,-64.2,0],[28.4,-80.7,0],[36.1,-87.1,0],[4.7,-74.1,0],[48.9,9.2,0],[-0.9,119.9,0],[35.0,33.9,0],[49.3,8.7,0],[56.1,9.7,0],[51.4,5.6,0],[54.5,-3.6,0],[52.7,5.7,0],[-34.9,138.5,0],[51.6,7.6,0],[-34.8,138.4,0],[-35.0,138.6,0],[50.5,4.9,0],[41.3,-72.9,0],[41.9,-87.6,0],[59.6,16.6,0],[-25.8,28.3,0],[-25.8,28.3,0],[40.5,-3.5,0],[40.0,-75.3,0],[52.4,13.2,0],[33.2,-87.5,0],[48.3,17.5,0],[52.2,21.3,0],[28.5,-16.5,0],[32.9,-96.5,0],[30.2,71.4,0],[30.3,-81.5,0],[42.6,-73.6,0],[-33.3,-70.5,0],[7.1,79.9,0],[53.5,14.6,0],[40.5,-3.9,0],[-34.3,138.0,0],[59.6,17.8,0],[39.9,32.8,0],[53.3,15.1,0],[52.2,21.0,0],[42.5,-88.2,0],[10.8,76.6,0],[-17.4,-66.2,0],[-34.9,138.6,0],[53.3,14.9,0],[48.8,8.8,0],[41.2,16.4,0],[43.4,-1.4,0],[37.7,-97.1,0],[-41.5,-73.0,0],[37.6,126.9,0],[41.6,-93.8,0],[43.8,-1.4,0],[-5.8,-35.2,0],[-27.6,-48.6,0],[-34.9,-56.2,0],[49.4,-123.3,0],[51.8,10.3,0],[47.5,19.1,0],[42.8,1.6,0],[55.5,8.4,0],[16.7,74.2,0],[-17.4,-63.3,0],[41.4,2.2,0],[10.7,-61.5,0],[40.4,-79.9,0],[46.7,18.0,0],[39.1,-86.5,0],[49.6,15.6,0],[33.7,-112.0,0],[40.6,-74.2,0],[45.8,5.3,0],[53.8,9.6,0],[30.2,71.4,0],[50.4,4.8,0],[53.0,-2.2,0],[49.0,17.5,0],[-35.1,138.6,0],[25.0,55.2,0],[52.5,16.9,0],[50.4,4.8,0],[48.8,2.6,0],[50.4,4.8,0],[55.8,12.3,0],[47.8,1.9,0],[43.1,-85.6,0],[40.6,22.9,0],[52.4,13.4,0],[43.8,-79.6,0],[42.2,-8.7,0],[19.0,73.1,0],[18.3,-67.2,0],[40.4,-3.6,0],[48.7,2.1,0],[46.9,7.4,0],[44.0,8.2,0],[53.2,-4.1,0],[52.2,4.5,0],[-27.7,-48.6,0],[35.3,25.2,0],[-27.6,-48.6,0],[39.8,-85.5,0],[52.4,16.7,0],[39.7,-76.7,0],[50.7,4.5,0],[55.7,37.5,0],[53.6,10.0,0],[45.4,13.5,0],[38.0,-1.2,0],[51.5,-0.2,0],[44.4,26.1,0],[42.0,-79.9,0],[39.1,-86.5,0],[33.6,73.1,0],[33.9,130.8,0],[55.0,-1.5,0],[36.6,36.2,0],[38.0,23.8,0],[50.9,3.1,0],[45.5,-122.6,0],[-34.9,138.7,0],[35.0,137.0,0],[-37.7,145.1,0],[48.9,2.4,0],[33.7,-83.9,0],[30.3,-81.5,0],[33.6,-117.8,0],[45.0,-124.0,0],[47.6,-122.2,0],[49.4,8.7,0],[48.6,2.2,0],[49.4,17.2,0],[-43.1,147.2,0],[51.7,36.1,0],[-34.8,-58.4,0],[51.7,36.1,0],[19.2,72.8,0],[43.1,-85.2,0],[-27.9,153.3,0],[48.0,7.4,0],[45.5,-122.6,0],[39.9,32.7,0],[51.9,4.5,0],[27.7,85.4,0],[27.7,85.3,0],[37.8,-25.7,0],[4.9,-52.5,0],[49.2,7.9,0],[32.0,36.0,0],[43.9,18.4,0],[45.0,15.0,0],[0.0,0.0,0],[9.9,-83.9,0],[39.1,-86.5,0],[40.6,-74.3,0],[45.0,-93.4,0],[90.0,90.0,0],[43.4,40.0,0],[38.6,-90.2,0],[47.1,28.9,0],[35.1,-78.9,0],[53.2,-4.0,0],[57.0,10.0,0],[28.2,84.0,0],[33.2,-87.5,0],[-71.7,-2.8,0],[-34.1,18.8,0],[47.2,7.1,0],[50.3,-115.9,0],[-34.9,138.6,0],[51.8,10.8,0],[41.2,-8.1,0],[40.1,-105.3,0],[-34.7,-58.6,0],[-34.7,-58.6,0],[40.3,-105.3,0],[46.5,6.7,0],[29.6,-98.4,0],[41.5,-8.3,0],[-26.0,28.1,0],[-34.6,-58.5,0],[33.4,-87.6,0],[60.3,25.1,0],[-42.7,147.3,0],[52.4,-1.9,0],[47.6,-122.2,0],[33.4,-111.7,0],[60.4,5.4,0],[45.6,-73.2,0],[-33.7,151.1,0],[53.2,-4.3,0],[47.1,6.9,0],[49.1,2.3,0],[52.3,-0.1,0],[50.9,-3.9,0],[28.4,-16.5,0],[13.7,100.8,0],[33.9,130.8,0],[42.9,-83.6,0],[38.7,-9.1,0],[50.3,18.7,0],[-41.1,-71.3,0],[33.0,-118.6,0],[41.7,-111.8,0],[45.1,8.4,0],[63.4,10.4,0],[33.0,-96.8,0],[43.6,-71.5,0],[-34.5,-58.5,0],[43.1,-70.9,0],[45.0,41.2,0],[26.2,50.5,0],[45.2,5.8,0],[43.6,1.4,0],[47.5,42.2,0],[42.8,20.5,0],[35.1,-106.6,0],[24.4,54.6,0],[56.8,9.7,0],[39.0,-77.4,0],[49.2,10.7,0],[57.0,10.0,0],[41.5,-87.0,0],[41.7,-71.5,0],[18.5,-66.9,0],[-38.0,-57.6,0],[28.5,-81.4,0],[48.7,2.4,0],[18.2,120.6,0],[30.1,-95.2,0],[44.9,-93.3,0],[39.8,-75.9,0],[33.2,-96.8,0],[51.2,3.0,0],[55.6,-2.8,0],[53.7,-1.6,0],[13.3,74.8,0],[42.0,-88.1,0],[38.9,-84.3,0],[43.3,-1.5,0],[45.4,-73.6,0],[51.1,-114.1,0],[45.6,8.9,0],[43.3,5.6,0],[52.2,5.9,0],[51.4,-1.7,0],[52.0,-0.4,0],[47.0,-124.2,0],[52.5,-2.1,0],[36.7,119.8,0],[40.4,-86.9,0],[45.5,-122.9,0],[40.1,-75.5,0],[29.5,-95.2,0],[42.3,-82.7,0],[32.3,-90.1,0],[46.6,15.7,0],[45.8,7.6,0],[50.5,-3.8,0],[42.0,-93.7,0],[30.3,-81.4,0],[42.8,-87.8,0],[30.0,-98.1,0],[-41.1,175.1,0],[51.9,-2.1,0],[-34.6,-58.5,0],[55.9,-3.5,0],[41.8,-70.5,0],[15.1,120.6,0],[20.9,-156.5,0],[32.7,-16.8,0],[50.8,4.4,0],[52.5,1.7,0],[37.8,12.5,0],[43.6,116.3,0],[47.4,18.8,0],[39.0,-9.4,0],[60.6,24.9,0],[52.2,-2.2,0],[51.2,-0.6,0],[53.6,10.0,0],[51.3,4.8,0],[-23.9,151.2,0],[-23.9,151.2,0],[51.4,-0.3,0],[13.1,77.6,0],[39.0,-77.4,0],[52.3,20.9,0],[-33.9,18.9,0],[33.5,-117.1,0],[35.1,-92.5,0],[42.4,-71.1,0],[52.4,-110.5,0],[51.2,0.1,0],[45.4,5.7,0],[33.6,-83.2,0],[39.8,-84.9,0],[40.6,-4.0,0],[45.4,9.4,0],[49.4,-123.4,0],[50.9,0.3,0],[53.4,-2.8,0],[39.5,21.8,0],[51.1,-114.1,0],[28.1,-16.7,0],[51.6,-0.2,0],[-37.8,176.3,0],[37.9,-122.1,0],[35.7,51.5,0],[-34.9,150.6,0],[48.6,9.3,0],[49.5,0.1,0],[45.2,9.4,0],[41.9,12.5,0],[51.8,-2.7,0],[45.3,19.8,0],[-27.5,-48.4,0],[39.8,-105.0,0],[52.2,0.1,0],[53.4,-3.0,0],[43.2,-70.6,0],[37.3,-122.0,0],[34.0,-84.6,0],[48.2,11.6,0],[51.6,-4.0,0],[-22.2,-54.8,0],[83.5,2.9,0],[46.0,3.5,0],[51.5,7.4,0],[34.9,-82.3,0],[42.7,-71.3,0],[39.3,-9.3,0],[36.8,-76.2,0],[-34.9,150.6,0],[-37.8,175.3,0],[50.0,36.0,0],[51.2,4.7,0],[45.5,11.4,0],[27.7,85.4,0],[34.0,-84.2,0],[33.6,-117.8,0],[44.2,5.0,0],[45.2,5.7,0],[-35.4,149.2,0],[1.5,110.3,0],[39.2,-86.3,0],[33.4,-111.8,0],[-39.8,-73.2,0],[-39.8,-73.2,0],[48.9,8.7,0],[48.0,37.4,0],[46.8,-100.7,0],[40.4,-80.2,0],[51.5,-0.1,0],[39.8,-84.1,0],[30.2,-87.9,0],[40.0,-82.4,0],[33.5,-111.5,0],[-38.0,145.1,0],[45.0,-93.4,0],[42.7,23.3,0],[51.5,3.6,0],[52.2,0.7,0],[36.1,140.1,0],[42.7,23.4,0],[40.4,-79.9,0],[41.5,2.2,0],[39.0,-5.8,0],[37.4,-122.2,0],[-43.3,172.7,0],[36.5,-6.2,0],[37.4,-77.5,0],[40.7,-75.6,0],[33.0,-111.8,0],[48.2,-77.9,0],[47.8,13.8,0],[46.0,14.3,0],[7.1,-73.1,0],[23.7,90.4,0],[39.9,-74.9,0],[31.9,35.0,0],[23.7,90.4,0],[45.0,35.4,0],[48.1,13.9,0],[48.8,2.2,0],[51.2,14.2,0],[40.4,-4.0,0],[47.4,12.8,0],[51.7,36.1,0],[63.1,21.6,0],[55.4,-2.5,0],[43.7,7.4,0],[51.2,14.2,0],[51.8,18.1,0],[14.6,-90.7,0],[39.1,-77.8,0],[26.0,-98.0,0],[41.5,-87.0,0],[40.6,23.0,0],[51.5,-1.0,0],[46.5,6.6,0],[52.2,4.4,0],[52.7,5.2,0],[41.4,-87.0,0],[45.0,-75.0,0],[52.5,13.3,0],[30.5,-97.6,0],[34.3,-84.8,0],[-27.5,153.1,0],[-27.6,153.1,0],[-2.5,-44.3,0],[58.2,8.1,0],[52.4,13.1,0],[43.5,-3.8,0],[29.9,-96.5,0],[55.4,-2.5,0],[38.6,-122.8,0],[53.4,-2.9,0],[47.7,-122.1,0],[28.3,-81.4,0],[30.5,-97.6,0],[51.5,5.4,0],[19.0,73.1,0],[52.4,12.8,0],[45.3,25.7,0],[45.8,12.9,0],[31.9,-116.6,0],[49.3,-123.2,0],[55.7,37.3,0],[58.4,25.6,0],[54.4,-0.5,0],[50.2,6.5,0],[62.8,22.8,0],[10.3,-5.1,0],[43.4,-83.9,0],[52.2,4.5,0],[41.2,-82.0,0],[32.1,-87.8,0],[0.2,51.8,0],[43.0,-78.9,0],[48.8,2.2,0],[41.4,-87.0,0],[36.5,-6.2,0],[51.6,-1.2,0],[13.8,99.8,0],[48.6,-109.2,0],[49.3,-123.2,0],[37.9,-122.3,0],[51.2,17.4,0],[52.3,2.1,0],[52.5,13.3,0],[45.4,-73.5,0],[31.8,-106.4,0],[45.5,13.4,0],[-34.6,-58.5,0],[40.1,26.4,0],[48.1,11.6,0],[53.3,-3.5,0],[33.5,-117.1,0],[-35.1,138.5,0],[53.2,-2.2,0],[30.5,-97.7,0],[15.0,102.1,0],[49.7,6.1,0],[27.7,85.3,0],[51.9,-1.0,0],[50.2,16.2,0],[47.4,8.4,0],[-37.8,145.2,0],[48.8,2.2,0],[48.8,2.2,0],[43.3,-2.9,0],[44.8,20.4,0],[38.7,20.9,0],[53.4,5.6,0],[59.4,29.6,0],[42.3,-83.7,0],[43.8,-99.2,0],[45.4,-73.5,0],[44.3,-73.7,0],[5.6,-73.4,0],[51.6,-0.1,0],[50.9,4.5,0],[41.7,-71.3,0],[49.2,17.0,0],[38.8,-75.2,0],[-23.1,-45.5,0],[-41.9,-73.8,0],[-33.6,-70.6,0],[52.2,0.1,0],[38.9,-77.3,0],[41.3,2.0,0],[51.5,5.5,0],[60.0,30.3,0],[53.6,-1.9,0],[24.4,54.6,0],[50.1,-5.5,0],[-33.7,-70.7,0],[39.9,-75.0,0],[1.4,103.9,0],[1.3,103.8,0],[53.2,5.9,0],[35.2,-80.8,0],[47.1,27.6,0],[-33.7,-70.7,0],[55.8,-2.0,0],[-32.9,151.7,0],[38.0,23.7,0],[46.3,5.3,0],[51.9,-2.0,0],[34.1,-84.5,0],[37.5,-122.5,0],[37.0,22.1,0],[-17.5,31.0,0],[41.5,-87.0,0],[48.9,8.7,0],[-34.5,-58.8,0],[49.6,-117.2,0],[-41.1,-71.4,0],[38.3,-85.9,0],[37.7,-122.1,0],[39.7,-104.9,0],[41.5,-87.0,0],[37.0,22.1,0],[38.0,23.0,0],[0.0,0.0,0],[-10.0,10.0,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[37.0,22.1,0],[38.0,23.8,0],[51.2,-0.5,0],[38.7,-121.1,0],[60.2,24.9,0],[38.7,-82.2,0],[-33.9,18.4,0],[40.0,-75.3,0],[40.0,-75.3,0],[49.8,-97.1,0],[51.6,7.3,0],[52.0,-2.4,0],[39.0,-104.8,0],[-29.4,-50.8,0],[60.2,24.9,0],[38.0,23.7,0],[65.1,18.6,0],[-34.6,138.8,0],[37.8,-122.5,0],[-35.2,149.1,0],[48.3,14.2,0],[45.4,7.7,0],[43.8,11.2,0],[42.5,-83.7,0],[38.9,-77.2,0],[50.2,8.6,0],[42.5,-83.0,0],[34.0,-118.4,0],[-36.8,174.7,0],[-34.8,138.7,0],[65.1,18.6,0],[39.3,-76.9,0],[42.6,-83.7,0],[-37.8,145.3,0],[41.4,-74.0,0],[51.4,-0.8,0],[51.2,14.2,0],[51.7,5.3,0],[-37.8,145.3,0],[33.3,-86.9,0],[48.2,7.2,0],[34.6,-88.5,0],[-34.7,138.7,0],[52.5,13.4,0],[52.0,6.1,0],[55.9,37.7,0],[38.9,-104.8,0],[49.2,18.1,0],[48.8,2.2,0],[50.1,-5.5,0],[39.6,-75.1,0],[-33.9,151.1,0],[45.3,-73.7,0],[52.4,16.7,0],[-34.5,-58.5,0],[-33.9,151.1,0],[53.3,-9.1,0],[50.8,7.6,0],[55.9,-4.3,0],[33.3,-86.9,0],[-26.8,-65.2,0],[-26.8,-65.2,0],[42.5,-83.8,0],[-34.6,-54.2,0],[-37.3,-59.1,0],[39.7,-75.0,0],[52.2,0.1,0],[-26.3,28.1,0],[63.1,21.6,0],[63.1,21.6,0],[32.6,-98.3,0],[-26.8,-65.3,0],[48.8,2.4,0],[13.0,77.7,0],[55.5,28.7,0],[45.7,9.7,0],[62.0,-6.8,0],[51.1,-1.0,0],[31.9,-116.7,0],[62.0,-6.8,0],[40.1,-74.0,0],[37.2,-120.3,0],[30.4,-97.5,0],[34.1,-118.4,0],[34.1,-118.4,0],[52.3,9.6,0],[51.1,-0.9,0],[43.6,1.3,0],[44.6,-73.2,0],[49.2,18.7,0],[51.3,0.4,0],[27.9,-80.5,0],[42.1,-88.1,0],[42.1,-88.1,0],[9.9,-84.1,0],[44.3,-71.7,0],[-39.8,-73.2,0],[-35.2,150.6,0],[38.1,-121.4,0],[39.7,-75.2,0],[37.1,-3.6,0],[48.8,2.4,0],[40.6,-105.2,0],[37.1,-3.6,0],[51.4,6.8,0],[48.7,9.6,0],[48.7,9.1,0],[51.0,11.0,0],[51.0,11.0,0],[43.6,3.8,0],[32.9,-96.7,0],[49.9,-119.5,0],[33.9,-6.9,0],[13.0,77.7,0],[33.4,-111.9,0],[51.4,5.5,0],[39.5,-105.0,0],[40.6,-105.2,0],[45.7,-73.9,0],[28.1,-82.5,0],[50.1,14.4,0],[40.0,-75.3,0],[43.6,3.8,0],[-1.4,100.6,0],[18.2,-66.0,0],[52.1,-2.0,0],[52.2,0.5,0],[51.2,4.4,0],[39.5,-105.0,0],[39.5,-105.0,0],[-8.3,114.3,0],[-5.9,-35.2,0],[-32.0,115.9,0],[43.0,-88.8,0],[-38.1,145.1,0],[34.0,-84.4,0],[37.8,-122.4,0],[40.4,-3.6,0],[-27.6,-48.6,0],[54.7,-6.0,0],[54.0,27.7,0],[54.5,-6.2,0],[41.5,31.8,0],[55.6,-2.8,0],[40.4,-3.4,0],[50.9,8.0,0],[46.5,6.3,0],[52.0,-2.5,0],[-64.5,-31.4,0],[51.1,-4.1,0],[5.0,-74.5,0],[50.0,8.3,0],[38.0,23.7,0],[38.0,23.7,0],[-37.4,144.6,0],[28.5,-81.4,0],[-31.9,115.9,0],[38.0,23.7,0],[40.4,-3.7,0],[50.1,-5.5,0],[58.0,56.2,0],[55.7,37.6,0],[37.1,-3.6,0],[37.9,-90.6,0],[43.0,5.5,0],[25.0,121.2,0],[30.1,31.3,0],[51.1,-0.9,0],[25.0,121.2,0],[37.5,-122.2,0],[51.2,14.9,0],[38.0,23.7,0],[47.1,15.5,0],[45.5,9.2,0],[45.4,7.6,0],[-27.5,152.9,0],[51.2,-0.2,0],[-30.0,-51.2,0],[39.1,-77.8,0],[23.8,90.4,0],[-23.1,-46.4,0],[-7.0,110.4,0],[52.4,17.2,0],[39.8,-119.7,0],[28.1,-80.7,0],[-41.1,174.9,0],[51.2,-0.2,0],[48.8,2.6,0],[-8.2,111.7,0],[37.9,-90.6,0],[51.6,-2.5,0],[-34.6,-58.5,0],[44.9,25.6,0],[-19.9,-44.6,0],[23.8,90.4,0],[43.3,1.2,0],[39.0,-105.1,0],[53.3,6.9,0],[37.7,-97.3,0],[39.3,-76.8,0],[1.4,125.1,0],[52.3,7.2,0],[48.1,11.5,0],[60.5,15.4,0],[39.7,-75.0,0],[30.4,-91.2,0],[33.0,-116.8,0],[40.1,-77.0,0],[56.8,9.7,0],[0.4,101.4,0],[-6.4,106.6,0],[56.8,12.9,0],[-27.6,-48.4,0],[40.7,-8.6,0],[40.7,-8.6,0],[-33.0,-68.9,0],[-34.7,-58.6,0],[39.5,-77.8,0],[49.8,8.9,0],[39.3,-7.4,0],[-37.8,145.3,0],[50.0,-119.4,0],[40.4,-3.8,0],[29.0,77.0,0],[41.4,-82.0,0],[34.6,-86.5,0],[50.0,-119.3,0],[14.1,-87.2,0],[49.0,-119.0,0],[42.3,-83.7,0],[53.6,-113.5,0],[33.4,-111.9,0],[48.9,2.1,0],[51.5,-2.5,0],[-37.8,140.8,0],[44.7,-78.7,0],[-34.6,-58.4,0],[51.5,21.1,0],[51.4,-2.0,0],[14.8,100.6,0],[33.8,-84.4,0],[40.7,-73.9,0],[49.9,8.6,0],[-6.9,107.6,0],[38.8,-77.3,0],[39.3,-82.1,0],[-41.1,-71.4,0],[-35.8,-61.9,0],[39.5,-0.4,0],[28.1,-80.6,0],[35.0,-82.4,0],[34.6,-86.5,0],[53.6,-2.4,0],[49.8,10.0,0],[44.4,26.0,0],[13.7,100.6,0],[49.0,2.1,0],[19.0,72.9,0],[48.6,2.3,0],[1.3,103.8,0],[19.3,-99.2,0],[43.4,-3.9,0],[45.9,0.9,0],[34.6,-86.5,0],[57.0,10.1,0],[53.1,-2.1,0],[49.4,16.7,0],[-0.2,-78.5,0],[48.1,-123.4,0],[-35.3,149.1,0],[49.2,21.4,0],[55.6,12.6,0],[55.6,12.6,0],[43.6,1.5,0],[52.0,5.6,0],[-32.7,-62.3,0],[43.6,1.4,0],[43.6,1.4,0],[36.8,-76.5,0],[-34.6,-58.7,0],[40.4,-80.0,0],[47.8,-122.2,0],[45.0,2.0,0],[43.7,7.2,0],[46.5,-0.5,0],[14.2,-14.5,0],[35.0,-83.7,0],[36.8,-119.8,0],[40.4,-80.0,0],[39.6,-76.7,0],[37.9,-122.3,0],[-34.9,138.5,0],[52.7,1.3,0],[40.6,-74.3,0],[53.2,-4.3,0],[38.7,-90.5,0],[39.5,-0.4,0],[42.2,-85.4,0],[50.8,4.4,0],[50.0,19.9,0],[50.8,4.5,0],[50.0,5.2,0],[13.7,100.6,0],[46.6,0.2,0],[46.6,6.6,0],[52.6,1.3,0],[39.9,-105.0,0],[37.3,-121.8,0],[-35.3,149.1,0],[51.5,4.7,0],[-1.4,120.8,0],[50.0,19.9,0],[49.3,1.1,0],[44.5,4.8,0],[1.4,103.8,0],[44.8,-91.5,0],[52.1,-2.1,0],[1.4,125.1,0],[4.7,-74.1,0],[37.4,-122.0,0],[51.4,-1.9,0],[35.3,-94.4,0],[28.4,-80.7,0],[32.1,118.4,0],[39.6,19.9,0],[50.1,14.5,0],[51.2,-1.3,0],[34.0,-81.0,0],[13.7,100.8,0],[45.7,4.5,0],[41.5,31.8,0],[-34.9,138.6,0],[-34.9,138.7,0],[-35.0,138.6,0],[-34.9,138.5,0],[-35.2,138.5,0],[34.4,-117.4,0],[13.0,80.3,0],[38.3,-0.7,0],[45.6,-122.5,0],[32.9,-117.2,0],[-35.4,149.0,0],[-34.6,138.6,0],[16.1,120.4,0],[32.2,-110.8,0],[47.6,-122.2,0],[53.4,-2.7,0],[52.2,-0.9,0],[45.3,-73.7,0],[-34.1,18.8,0],[38.3,85.8,0],[54.9,-3.8,0],[42.3,-82.9,0],[48.2,-3.8,0],[46.4,6.5,0],[-43.0,147.4,0],[40.1,-2.9,0],[45.9,3.8,0],[-34.9,138.6,0],[-34.9,138.6,0],[69.1,18.5,0],[41.2,-87.8,0],[30.4,-97.5,0],[-35.0,139.0,0],[49.1,16.4,0],[-34.9,138.6,0],[-34.9,138.6,0],[-7.0,113.6,0],[37.4,-122.1,0],[6.9,79.9,0],[45.6,9.2,0],[28.2,-80.7,0],[-35.0,138.6,0],[-35.0,138.6,0],[-34.0,138.6,0],[40.9,29.4,0],[45.6,-73.3,0],[52.2,4.4,0],[50.8,4.4,0],[47.2,-53.6,0],[38.4,-0.4,0],[31.8,-93.1,0],[48.7,19.2,0],[37.8,-122.2,0],[52.3,6.8,0],[37.9,-122.3,0],[49.5,8.6,0],[37.7,-122.4,0],[50.0,36.0,0],[37.7,-122.4,0],[48.2,17.1,0],[47.6,-2.0,0],[44.4,9.0,0],[52.2,-0.9,0],[41.3,-81.8,0],[43.0,-88.3,0],[45.6,12.2,0],[46.5,25.4,0],[53.8,-9.4,0],[46.5,6.3,0],[17.7,74.0,0],[37.1,-3.6,0],[44.8,20.5,0],[51.4,5.5,0],[54.7,25.4,0],[38.2,-77.7,0],[-38.0,145.1,0],[-37.7,144.9,0],[50.9,10.7,0],[47.5,19.0,0],[50.9,3.2,0],[40.4,-3.5,0],[41.5,2.2,0],[36.8,-2.5,0],[32.4,48.4,0],[36.1,28.1,0],[36.1,28.1,0],[38.4,-0.5,0],[43.2,-2.1,0],[40.4,-3.7,0],[42.9,-88.1,0],[14.5,-90.5,0],[54.2,-4.5,0],[40.5,-3.3,0],[40.4,17.3,0],[42.3,-71.1,0],[48.9,2.3,0],[-34.8,138.6,0],[47.9,26.4,0],[39.5,-0.4,0],[34.7,-87.7,0],[42.9,-88.1,0],[44.8,85.6,0],[51.9,4.5,0],[52.3,9.8,0],[39.6,2.8,0],[51.8,18.1,0],[45.8,21.2,0],[42.3,-74.9,0],[33.0,-117.1,0],[19.6,-156.0,0],[42.6,-83.2,0],[-33.0,-60.7,0],[49.5,11.0,0],[52.2,0.5,0],[42.2,-71.6,0],[39.0,-76.9,0],[38.7,-121.1,0],[35.1,-81.0,0],[51.9,4.5,0],[38.9,-104.9,0],[53.1,7.0,0],[15.1,120.6,0],[10.5,-67.0,0],[52.3,-0.6,0],[39.0,-1.9,0],[-33.8,18.5,0],[20.6,-103.4,0],[43.8,-79.4,0],[-3.7,128.2,0],[41.6,2.0,0],[40.6,23.0,0],[-34.0,18.5,0],[-1.9,100.9,0],[38.2,14.9,0],[51.3,-2.4,0],[-37.3,-59.1,0],[45.2,-117.1,0],[-30.5,-62.0,0],[-36.0,-62.7,0],[37.4,-122.1,0],[51.4,4.8,0],[6.9,79.9,0],[61.1,-146.0,0],[69.7,19.0,0],[-32.9,-68.8,0],[45.8,24.2,0],[20.8,-156.3,0],[48.2,16.5,0],[48.2,16.5,0],[45.7,-121.1,0],[49.7,6.1,0],[43.8,11.2,0],[-32.8,151.8,0],[52.3,4.9,0],[35.6,-78.9,0],[52.3,9.7,0],[43.9,8.0,0],[49.0,17.6,0],[49.0,17.6,0],[37.0,-80.0,0],[44.8,-107.0,0],[49.5,-123.4,0],[14.6,121.0,0],[48.1,11.6,0],[39.9,-104.9,0],[-32.3,115.8,0],[-44.7,169.2,0],[43.5,-84.0,0],[-27.9,153.3,0],[41.8,-72.9,0],[51.9,37.0,0],[52.7,-1.2,0],[-29.7,-51.1,0],[-34.5,-58.5,0],[37.4,-121.9,0],[50.6,12.7,0],[45.5,-122.6,0],[46.0,-73.9,0],[51.9,-2.2,0],[51.4,7.2,0],[51.4,7.2,0],[51.4,7.2,0],[51.4,7.2,0],[-33.0,18.0,0],[-34.6,-58.4,0],[51.3,3.9,0],[48.9,8.7,0],[19.1,-98.2,0],[4.7,-74.1,0],[40.0,-105.2,0],[9.8,-83.9,0],[51.3,6.3,0],[26.0,-80.1,0],[36.1,-78.9,0],[37.4,27.3,0],[-35.1,138.6,0],[59.9,17.6,0],[51.2,14.2,0],[38.7,-9.2,0],[48.9,2.2,0],[55.8,-4.3,0],[43.0,-78.8,0],[44.0,4.2,0],[52.5,1.7,0],[49.4,8.4,0],[45.5,4.3,0],[53.6,10.0,0],[-5.6,12.2,0],[45.3,-75.7,0],[-4.8,11.9,0],[-4.8,11.9,0],[17.2,80.2,0],[50.7,-120.4,0],[50.3,18.7,0],[41.5,30.2,0],[25.7,-100.4,0],[19.6,-156.0,0],[24.4,118.3,0],[52.5,6.1,0],[35.0,-83.7,0],[37.8,-122.4,0],[20.5,-87.0,0],[26.4,-80.1,0],[45.6,-73.3,0],[49.2,16.6,0],[-3.6,128.2,0],[44.4,21.4,0],[39.7,-105.0,0],[30.2,-103.2,0],[53.0,-0.3,0],[35.0,-106.0,0],[43.9,1.3,0],[48.2,17.1,0],[51.2,0.5,0],[52.2,1.5,0],[-26.3,28.1,0],[46.0,4.1,0],[-37.8,145.0,0],[-25.8,28.2,0],[42.2,-8.7,0],[-34.5,-58.9,0],[19.4,-99.1,0],[19.5,-99.1,0],[44.4,21.4,0],[42.5,-83.1,0],[39.6,-104.8,0],[10.3,-68.8,0],[10.3,-68.8,0],[-34.2,150.6,0],[41.3,31.4,0],[-26.7,27.8,0],[-6.2,106.4,0],[23.2,-106.4,0],[42.4,-71.2,0],[-34.7,-58.5,0],[49.2,18.7,0],[48.7,9.3,0],[49.1,19.5,0],[37.1,-3.7,0],[39.2,-76.1,0],[41.2,-5.4,0],[39.2,-76.1,0],[40.1,-2.9,0],[49.0,2.1,0],[19.2,-103.7,0],[0.5,101.4,0],[-8.7,115.2,0],[-35.3,149.1,0],[43.3,-4.1,0],[1.0,120.8,0],[33.8,2.9,0],[33.8,2.9,0],[21.3,-157.8,0],[50.6,13.3,0],[59.4,24.4,0],[18.5,-70.0,0],[45.6,-73.3,0],[-15.8,-47.9,0],[-32.0,115.9,0],[38.0,23.8,0],[41.6,-87.1,0],[53.8,10.0,0],[46.1,15.3,0],[53.6,8.0,0],[43.5,-3.8,0],[43.3,-80.0,0],[43.3,-80.0,0],[42.4,-8.6,0],[24.8,121.0,0],[53.5,-6.8,0],[49.6,17.2,0],[49.9,-97.1,0],[46.1,15.2,0],[53.4,7.7,0],[53.4,7.7,0],[59.4,24.3,0],[-3.5,102.5,0],[4.8,-74.0,0],[53.6,8.0,0],[47.2,27.6,0],[60.1,30.4,0],[-33.8,151.2,0],[39.2,-84.3,0],[39.2,-82.2,0],[4.7,-74.1,0],[48.7,2.2,0],[43.6,1.5,0],[-12.1,-77.0,0],[47.5,19.0,0],[21.4,-157.8,0],[21.4,-157.8,0],[50.5,4.4,0],[46.3,5.3,0],[21.2,-97.7,0],[35.2,-117.8,0],[35.7,139.8,0],[51.1,-0.3,0],[53.3,6.5,0],[53.4,-2.9,0],[15.1,104.3,0],[53.0,-2.2,0],[21.3,-157.8,0],[38.0,23.8,0],[67.1,15.4,0],[24.7,46.7,0],[-8.7,115.2,0],[50.6,4.5,0],[45.2,10.8,0],[45.0,34.1,0],[40.1,-75.4,0],[13.7,100.6,0],[50.7,4.6,0],[43.5,1.5,0],[21.3,-157.8,0],[-34.5,-58.5,0],[15.4,74.0,0],[17.0,103.4,0],[34.2,108.5,0],[41.4,-82.0,0],[48.8,2.2,0],[52.0,4.4,0],[21.3,-157.8,0],[42.5,-88.5,0],[48.8,2.0,0],[41.5,-8.5,0],[50.6,-3.6,0],[50.2,23.1,0],[15.4,74.0,0],[48.4,7.9,0],[39.3,-76.4,0],[41.4,-74.0,0],[47.3,5.1,0],[55.7,12.5,0],[20.0,-155.6,0],[45.1,11.1,0],[62.0,-6.8,0],[39.2,-76.1,0],[-31.8,116.0,0],[45.3,-73.8,0],[53.6,-6.7,0],[35.6,-97.5,0],[-38.3,142.4,0],[41.7,-88.1,0],[40.0,116.3,0],[28.0,-80.0,0],[50.1,-95.8,0],[-4.0,-79.2,0],[23.2,87.9,0],[53.2,7.2,0],[32.2,34.8,0],[-23.5,-46.8,0],[14.6,121.0,0],[-32.6,-69.3,0],[53.3,-2.9,0],[47.5,16.0,0],[39.5,-8.5,0],[38.6,-9.1,0],[40.2,-105.1,0],[33.9,-83.4,0],[53.2,7.2,0],[-37.6,143.8,0],[39.7,-75.8,0],[-36.9,-60.3,0],[40.5,-3.7,0],[47.8,16.2,0],[-14.1,-72.6,0],[49.9,8.7,0],[35.7,139.5,0],[50.6,3.1,0],[4.7,-74.1,0],[4.7,-74.1,0],[70.4,31.1,0],[53.2,7.2,0],[28.7,77.3,0],[44.8,-0.6,0],[-41.1,146.8,0],[-27.6,-48.5,0],[42.5,-83.0,0],[59.5,18.1,0],[52.3,13.4,0],[45.1,25.6,0],[54.9,-3.0,0],[45.5,8.0,0],[34.8,134.9,0],[47.5,21.7,0],[-36.9,174.7,0],[37.8,-3.8,0],[53.2,6.8,0],[42.4,-8.7,0],[43.3,-75.8,0],[33.9,130.8,0],[45.5,-122.8,0],[49.6,6.2,0],[49.6,6.2,0],[57.5,18.1,0],[53.5,7.6,0],[51.8,-1.3,0],[10.0,10.0,0],[37.0,22.1,0],[40.7,-3.9,0],[-31.6,-68.5,0],[41.2,-83.0,0],[51.4,4.8,0],[51.5,3.6,0],[39.9,-105.1,0],[50.0,18.5,0],[49.1,11.9,0],[-8.3,115.0,0],[53.2,-1.9,0],[32.2,34.8,0],[18.9,99.0,0],[12.9,77.6,0],[37.5,-77.0,0],[51.1,-0.5,0],[59.2,16.2,0],[-6.3,106.8,0],[29.6,-81.2,0],[-23.5,-46.6,0],[47.6,6.1,0],[45.5,8.0,0],[42.1,-76.2,0],[48.8,2.3,0],[46.3,14.4,0],[51.7,45.6,0],[36.5,-82.9,0],[24.4,118.3,0],[43.7,6.9,0],[-23.1,-48.4,0],[37.0,22.1,0],[37.6,126.9,0],[24.7,121.8,0],[38.4,-82.2,0],[25.0,121.2,0],[41.5,2.4,0],[28.3,-81.4,0],[50.6,-3.5,0],[30.3,-98.0,0],[10.8,76.6,0],[50.6,22.1,0],[51.7,15.6,0],[41.9,-88.1,0],[53.1,6.1,0],[42.3,-83.7,0],[36.8,-119.8,0],[52.8,-0.4,0],[25.0,121.3,0],[45.5,9.2,0],[25.0,121.5,0],[41.1,-81.7,0],[37.8,-122.5,0],[43.6,1.4,0],[-27.4,-56.0,0],[45.7,12.3,0],[30.2,-92.1,0],[46.6,30.8,0],[43.6,1.4,0],[50.1,18.2,0],[51.8,0.8,0],[50.4,2.9,0],[37.0,-122.0,0],[53.2,16.7,0],[35.8,-78.7,0],[52.8,-0.4,0],[-7.3,112.7,0],[51.4,-1.2,0],[23.7,120.5,0],[41.4,2.2,0],[39.3,-77.0,0],[59.4,18.1,0],[37.4,-79.2,0],[47.7,7.4,0],[42.6,-71.4,0],[28.6,-81.2,0],[52.7,5.3,0],[52.4,16.8,0],[19.5,-98.8,0],[19.3,-99.2,0],[50.9,5.8,0],[39.1,-76.9,0],[42.6,-87.9,0],[33.1,-117.2,0],[51.6,6.9,0],[41.0,22.9,0],[46.0,4.2,0],[-23.0,-43.2,0],[60.2,24.7,0],[49.6,21.8,0],[41.9,12.5,0],[50.0,5.1,0],[48.8,2.4,0],[48.1,-3.4,0],[50.9,3.2,0],[42.4,-83.9,0],[50.8,4.4,0],[53.3,-2.5,0],[47.5,21.7,0],[42.3,-83.7,0],[35.3,-106.6,0],[53.3,-4.2,0],[-33.4,-70.7,0],[33.5,-111.9,0],[6.2,-75.5,0],[14.6,121.0,0],[45.8,-122.7,0],[51.9,0.9,0],[37.9,23.8,0],[41.6,-86.2,0],[49.7,8.1,0],[55.8,12.3,0],[27.6,85.4,0],[50.9,5.8,0],[43.0,-85.8,0],[47.5,19.1,0],[-7.3,112.7,0],[53.3,-2.5,0],[41.9,12.4,0],[43.4,-4.0,0],[52.0,-0.7,0],[52.5,13.4,0],[35.1,126.9,0],[-32.1,115.9,0],[-35.1,117.9,0],[50.2,14.0,0],[24.7,46.6,0],[45.8,9.8,0],[35.9,14.5,0],[49.9,14.0,0],[47.8,18.1,0],[25.3,45.9,0],[35.8,139.6,0],[53.1,-2.7,0],[36.4,127.4,0],[26.1,-80.3,0],[41.7,-87.7,0],[45.3,18.4,0],[18.6,98.9,0],[-10.7,-48.4,0],[13.1,80.2,0],[13.8,100.5,0],[-34.9,-58.1,0],[45.5,9.1,0],[33.9,-6.2,0],[47.8,19.9,0],[33.0,-117.1,0],[55.9,37.6,0],[49.1,19.4,0],[41.8,3.0,0],[44.3,26.0,0],[49.3,13.0,0],[52.1,4.5,0],[46.0,5.9,0],[35.8,139.5,0],[50.4,8.3,0],[51.2,-0.8,0],[40.5,23.0,0],[50.8,20.6,0],[35.1,126.9,0],[19.1,-98.3,0],[55.9,-3.7,0],[48.7,1.7,0],[-27.2,153.0,0],[-26.3,28.1,0],[39.6,2.7,0],[52.5,13.1,0],[48.7,19.1,0],[34.0,-81.3,0],[42.1,-72.6,0],[51.2,-102.5,0],[56.2,10.2,0],[50.6,22.1,0],[43.6,7.1,0],[51.9,-2.1,0],[51.7,5.0,0],[41.7,-111.8,0],[52.7,-1.1,0],[60.8,46.3,0],[41.8,-73.1,0],[-35.8,149.8,0],[51.5,7.5,0],[36.1,140.1,0],[43.3,1.7,0],[52.3,9.7,0],[53.4,14.4,0],[38.5,-82.6,0],[-35.2,149.1,0],[52.2,5.5,0],[51.5,7.5,0],[48.3,14.4,0],[55.9,11.9,0],[27.6,85.5,0],[-34.6,-58.4,0],[49.6,21.8,0],[52.7,15.2,0],[52.0,-1.0,0],[9.9,-83.9,0],[27.3,-82.5,0],[48.6,19.1,0],[41.9,1.9,0],[35.7,-106.0,0],[-30.7,-55.4,0],[42.7,23.3,0],[56.2,10.2,0],[35.6,140.1,0],[10.0,-84.0,0],[9.0,99.3,0],[45.3,-73.7,0],[38.0,-8.9,0],[39.5,-8.5,0],[47.9,11.5,0],[50.0,21.9,0],[31.8,-106.4,0],[40.5,-111.4,0],[35.8,139.5,0],[55.4,-4.6,0],[51.0,17.1,0],[12.1,-68.9,0],[-33.2,138.0,0],[-33.9,151.0,0],[51.2,4.4,0],[39.1,-77.8,0],[9.9,-83.9,0],[36.9,30.7,0],[34.5,-93.0,0],[12.9,79.9,0],[39.1,-84.4,0],[45.4,4.8,0],[45.4,4.8,0],[41.5,31.8,0],[45.3,-75.3,0],[1.3,103.7,0],[25.0,121.5,0],[53.4,-7.9,0],[16.9,74.6,0],[50.0,8.2,0],[-20.2,57.5,0],[4.3,114.0,0],[4.1,-73.6,0],[47.3,5.0,0],[35.1,-90.0,0],[36.8,-76.3,0],[53.1,-2.3,0],[40.5,-78.2,0],[-4.4,-39.3,0],[30.5,-86.9,0],[52.1,21.0,0],[41.6,-88.1,0],[40.6,14.4,0],[39.3,-120.9,0],[12.9,77.6,0],[36.2,-78.9,0],[44.7,-79.8,0],[18.5,-70.0,0],[53.4,-2.2,0],[46.5,14.2,0],[46.2,14.2,0],[46.2,15.2,0],[-23.5,-46.9,0],[37.3,-122.0,0],[44.9,-85.4,0],[59.7,10.6,0],[36.0,-86.7,0],[42.6,-83.2,0],[36.1,-86.8,0],[53.3,-6.3,0],[-20.3,57.5,0],[10.3,79.4,0],[40.1,-105.1,0],[48.8,2.0,0],[35.0,-80.8,0],[6.7,125.4,0],[45.5,-73.5,0],[51.1,17.1,0],[35.1,-106.6,0],[40.0,-105.2,0],[43.3,2.3,0],[54.6,39.8,0],[30.3,-81.6,0],[39.6,116.2,0],[42.3,-83.0,0],[53.2,-2.7,0],[45.0,35.4,0],[39.5,-76.3,0],[-3.7,128.2,0],[51.2,3.5,0],[46.9,7.3,0],[51.2,-0.6,0],[46.9,7.3,0],[56.0,92.8,0],[0.0,0.0,0],[42.0,-87.7,0],[26.1,-80.4,0],[45.4,8.8,0],[50.8,38.6,0],[54.1,45.0,0],[6.2,-75.6,0],[29.6,-82.4,0],[-21.3,55.5,0],[-34.6,-58.5,0],[51.1,-1.0,0],[-31.9,115.8,0],[-31.9,115.8,0],[-32.1,115.9,0],[48.1,-1.7,0],[50.0,16.2,0],[1.3,103.7,0],[43.0,-76.2,0],[27.7,85.4,0],[49.8,8.6,0],[6.2,-75.6,0],[52.2,9.5,0],[34.1,-117.5,0],[51.2,0.9,0],[51.1,-1.0,0],[-2.3,113.9,0],[40.6,-8.6,0],[52.5,-0.9,0],[17.2,78.5,0],[51.1,-1.0,0],[51.1,-1.0,0],[78.0,56.4,0],[52.2,9.5,0],[52.2,20.6,0],[6.3,-75.5,0],[51.6,-0.2,0],[41.6,24.6,0],[-27.6,153.2,0],[22.3,114.3,0],[47.0,2.4,0],[38.7,-9.3,0],[55.7,-4.7,0],[24.5,124.1,0],[42.9,13.5,0],[-32.1,116.0,0],[-32.0,115.9,0],[49.5,16.1,0],[26.1,38.8,0],[50.0,50.0,0],[33.8,130.9,0],[50.8,-3.2,0],[44.1,-84.5,0],[47.5,19.0,0],[54.0,-1.5,0],[41.8,12.3,0],[35.1,126.9,0],[25.1,55.4,0],[46.9,7.4,0],[28.3,113.2,0],[-33.4,-70.6,0],[51.3,7.2,0],[48.7,2.6,0],[50.8,3.2,0],[27.7,85.4,0],[59.3,18.1,0],[-2.3,113.9,0],[45.5,-122.5,0],[51.8,0.9,0],[-34.7,-58.5,0],[42.0,-5.7,0],[41.5,12.6,0],[14.9,103.5,0],[21.0,105.5,0],[56.2,10.2,0],[45.5,-73.8,0],[37.3,-107.9,0],[49.7,13.3,0],[52.2,7.8,0],[-2.3,113.9,0],[19.9,-98.4,0],[40.7,-74.0,0],[10.0,-84.2,0],[42.3,-83.7,0],[40.0,116.4,0],[53.9,14.6,0],[33.7,-117.8,0],[-32.0,115.8,0],[-32.0,115.8,0],[-23.5,-46.8,0],[49.8,-97.1,0],[50.7,6.2,0],[43.7,-79.4,0],[49.1,8.5,0],[49.9,14.9,0],[28.5,-16.3,0],[-32.5,115.7,0],[49.9,-97.3,0],[29.3,48.0,0],[29.3,48.0,0],[53.2,5.9,0],[-33.9,151.2,0],[33.9,-118.4,0],[18.4,-66.2,0],[41.2,29.0,0],[32.1,34.8,0],[-37.8,143.6,0],[39.2,-82.2,0],[29.3,48.0,0],[-43.3,-65.1,0],[37.3,-121.9,0],[53.7,-2.4,0],[50.7,3.1,0],[28.2,-16.7,0],[10.6,76.1,0],[35.7,-84.3,0],[-34.6,-58.5,0],[40.7,-74.1,0],[41.9,-87.7,0],[23.1,-82.5,0],[5.2,-52.7,0],[40.6,23.0,0],[53.3,-1.8,0],[52.5,13.3,0],[27.7,85.4,0],[9.4,-64.5,0],[50.0,19.9,0],[18.5,-70.0,0],[43.7,-79.4,0],[47.3,7.8,0],[52.5,13.4,0],[47.8,18.7,0],[10.0,-84.0,0],[55.6,24.2,0],[42.8,-86.2,0],[49.8,24.0,0],[48.7,-3.5,0],[-35.1,138.6,0],[-34.9,138.5,0],[35.7,140.1,0],[41.2,-81.4,0],[39.9,32.7,0],[32.3,-110.9,0],[42.5,-73.3,0],[43.7,-79.4,0],[34.0,-117.1,0],[36.1,-78.5,0],[33.1,-96.6,0],[41.2,40.9,0],[47.2,8.4,0],[-45.9,-67.5,0],[-31.8,115.8,0],[27.6,85.3,0],[49.9,8.7,0],[33.6,-117.7,0],[53.8,-2.3,0],[-34.7,-68.3,0],[43.5,-5.9,0],[-31.8,115.8,0],[52.0,13.8,0],[48.8,2.4,0],[55.7,13.1,0],[40.6,-3.7,0],[43.5,-76.2,0],[41.6,0.6,0],[37.9,-122.3,0],[52.5,13.3,0],[42.3,-83.7,0],[15.6,32.5,0],[-33.7,151.1,0],[19.3,-99.2,0],[45.4,9.2,0],[13.9,100.6,0],[-34.6,-58.4,0],[40.2,-75.5,0],[50.7,7.1,0],[39.0,-77.0,0],[53.2,-2.5,0],[50.0,5.2,0],[-12.0,-77.0,0],[-35.2,149.2,0],[35.3,139.5,0],[-31.9,115.8,0],[-31.9,115.8,0],[53.2,6.5,0],[51.5,0.7,0],[46.0,14.5,0],[39.8,30.5,0],[-12.0,-77.0,0],[45.6,4.3,0],[49.9,8.8,0],[29.1,48.1,0],[52.1,9.4,0],[39.0,-77.0,0],[4.7,-74.7,0],[33.4,-111.9,0],[28.1,-82.0,0],[34.1,-117.9,0],[41.7,44.9,0],[52.2,20.6,0],[6.2,-75.9,0],[43.5,-71.5,0],[38.9,-77.1,0],[33.9,-83.4,0],[51.4,-0.3,0],[35.8,-83.9,0],[39.0,-77.0,0],[49.6,14.9,0],[45.2,20.2,0],[52.3,14.4,0],[38.3,-76.5,0],[38.2,-0.5,0],[48.8,16.8,0],[42.6,-83.2,0],[42.3,-88.0,0],[44.0,4.1,0],[13.0,77.6,0],[1.4,125.1,0],[-34.7,-58.6,0],[36.4,127.4,0],[20.8,-103.5,0],[49.4,12.7,0],[41.6,-87.8,0],[41.6,-87.8,0],[40.5,-3.9,0],[51.4,0.1,0],[20.8,-103.5,0],[37.1,-76.5,0],[-25.3,-57.5,0],[-25.3,-57.5,0],[-25.3,-57.5,0],[20.8,-103.5,0],[43.8,-79.5,0],[28.5,-81.3,0],[49.9,8.6,0],[51.8,-1.3,0],[50.0,21.9,0],[35.9,-84.5,0],[35.7,-84.3,0],[46.5,6.5,0],[19.3,-99.1,0],[6.6,80.0,0],[48.2,11.2,0],[49.1,-122.5,0],[-16.0,-48.0,0],[49.2,-123.1,0],[-33.2,117.3,0],[-33.2,117.3,0],[53.1,7.4,0],[41.6,-87.8,0],[41.5,1.9,0],[33.3,-86.9,0],[41.4,2.2,0],[-21.4,55.5,0],[51.1,-114.2,0],[47.4,8.0,0],[41.9,2.2,0],[50.1,19.9,0],[32.0,30.0,0],[38.9,-77.7,0],[19.5,-99.2,0],[49.8,10.0,0],[55.8,-4.9,0],[53.5,14.6,0],[9.0,38.8,0],[48.7,21.3,0],[49.8,10.0,0],[39.5,-77.0,0],[49.5,18.0,0],[-7.3,112.7,0],[41.7,-71.4,0],[52.0,-0.7,0],[48.7,9.3,0],[49.9,12.6,0],[46.1,0.4,0],[57.4,21.5,0],[-0.2,-78.5,0],[49.1,19.5,0],[40.2,44.5,0],[37.4,-122.1,0],[55.5,-4.6,0],[-26.1,28.0,0],[33.4,-111.9,0],[19.2,-103.7,0],[-23.5,-46.8,0],[60.0,30.4,0],[4.6,-74.1,0],[1.3,103.9,0],[38.7,35.4,0],[38.6,-89.9,0],[-34.5,-58.8,0],[52.2,20.9,0],[18.5,-69.9,0],[53.8,27.5,0],[50.2,12.6,0],[41.0,28.6,0],[-2.6,-44.2,0],[39.9,32.7,0],[42.3,-83.7,0],[43.3,-2.9,0],[47.6,7.1,0],[34.3,-118.4,0],[60.2,24.7,0],[49.2,22.0,0],[49.4,8.7,0],[43.3,21.9,0],[60.2,24.8,0],[52.3,6.8,0],[42.6,-83.2,0],[42.6,-83.2,0],[34.8,-87.0,0],[52.2,5.6,0],[26.5,87.3,0],[-35.6,138.6,0],[-35.6,138.6,0],[50.9,5.2,0],[47.0,15.5,0],[56.2,120.6,0],[56.3,-120.9,0],[65.6,22.1,0],[42.7,-7.4,0],[40.0,32.6,0],[34.5,135.5,0],[78.2,15.7,0],[41.1,28.8,0],[57.0,23.6,0],[53.5,-6.2,0],[32.7,74.8,0],[40.6,-105.2,0],[35.0,-81.1,0],[60.2,24.8,0],[37.8,51.3,0],[-34.7,-58.5,0],[36.1,28.1,0],[26.7,-80.1,0],[13.1,77.6,0],[-17.4,-66.2,0],[43.3,-3.9,0],[52.3,-0.9,0],[50.0,22.0,0],[61.7,129.4,0],[55.9,-3.1,0],[40.0,32.6,0],[49.5,1.1,0],[51.8,15.0,0],[51.3,-2.2,0],[35.5,139.5,0],[40.6,-105.2,0],[51.2,-0.6,0],[-41.1,-71.3,0],[43.4,-80.5,0],[49.8,6.4,0],[17.5,78.5,0],[39.0,-76.8,0],[42.3,-83.7,0],[17.5,78.5,0],[6.1,80.2,0],[53.7,9.8,0],[37.4,-122.0,0],[39.8,-4.2,0],[31.9,-116.7,0],[35.7,-106.0,0],[31.9,-116.7,0],[23.0,23.0,0],[40.6,23.0,0],[35.3,-82.2,0],[56.2,10.2,0],[43.9,-79.9,0],[55.4,10.4,0],[38.9,-77.7,0],[20.7,-103.4,0],[40.6,23.0,0],[11.4,78.7,0],[56.2,10.2,0],[39.9,-105.0,0],[48.2,18.6,0],[50.8,4.4,0],[50.8,-0.7,0],[31.9,-102.4,0],[50.8,-0.7,0],[25.0,67.1,0],[50.8,-0.7,0],[49.2,18.8,0],[42.6,-73.9,0],[42.1,-76.2,0],[61.8,34.4,0],[52.6,1.7,0],[60.0,30.4,0],[33.7,-117.2,0],[50.9,4.7,0],[55.7,37.3,0],[10.9,76.9,0],[49.6,14.9,0],[21.3,-158.1,0],[40.0,-105.2,0],[17.4,78.4,0],[23.2,120.2,0],[47.7,-122.4,0],[8.6,77.0,0],[41.8,12.6,0],[41.9,2.2,0],[40.4,-4.3,0],[22.9,120.3,0],[17.4,78.4,0],[55.4,10.4,0],[63.9,20.2,0],[24.2,120.9,0],[21.1,105.4,0],[8.6,77.0,0],[40.6,-105.2,0],[7.1,125.6,0],[43.3,-5.9,0],[38.2,-85.7,0],[43.3,-8.4,0],[38.0,23.7,0],[42.4,-71.1,0],[17.1,82.1,0],[33.4,-111.9,0],[37.6,22.7,0],[25.3,51.2,0],[33.6,133.7,0],[-34.9,-58.0,0],[49.5,7.7,0],[13.2,144.4,0],[35.3,25.1,0],[52.2,6.0,0],[53.1,-2.7,0],[55.8,37.6,0],[55.7,37.3,0],[17.7,78.3,0],[-1.0,-80.7,0],[54.3,10.1,0],[42.2,-8.7,0],[55.8,37.0,0],[41.5,12.6,0],[53.3,-6.3,0],[38.0,-84.5,0],[45.8,16.0,0],[-31.4,-60.3,0],[29.9,-90.0,0],[48.1,17.4,0],[39.9,32.7,0],[17.1,82.1,0],[35.7,139.8,0],[16.3,-61.5,0],[29.9,-97.9,0],[33.5,-112.1,0],[37.3,15.1,0],[45.5,-122.7,0],[-6.3,107.1,0],[53.8,9.6,0],[56.0,-4.6,0],[33.4,-111.9,0],[33.4,-111.9,0],[52.4,4.9,0],[46.7,7.7,0],[-35.0,138.5,0],[34.6,-112.5,0],[53.3,-1.7,0],[21.1,-89.7,0],[42.3,-5.4,0],[56.7,-2.5,0],[56.7,-2.5,0],[54.1,-128.6,0],[50.8,6.1,0],[40.9,-73.3,0],[-35.0,138.6,0],[23.0,120.2,0],[45.0,35.3,0],[33.5,-112.1,0],[39.9,32.7,0],[47.0,8.3,0],[-32.0,115.9,0],[50.0,19.9,0],[51.3,4.4,0],[59.5,28.0,0],[38.7,-2.5,0],[47.5,19.1,0],[55.8,9.6,0],[46.1,19.7,0],[38.7,-2.5,0],[39.0,-1.9,0],[36.7,-4.3,0],[42.2,-88.1,0],[41.4,2.2,0],[-23.2,-45.9,0],[51.6,-0.4,0],[43.7,-79.4,0],[27.2,111.9,0],[48.2,16.5,0],[35.1,136.1,0],[-31.5,-64.5,0],[24.9,121.7,0],[20.0,80.0,0],[17.2,81.8,0],[-17.5,31.0,0],[47.0,15.3,0],[22.6,114.0,0],[35.1,-106.7,0],[25.2,121.7,0],[29.9,-97.9,0],[28.5,-16.4,0],[51.5,-0.1,0],[50.6,31.0,0],[-22.5,-60.0,0],[35.7,-78.5,0],[51.2,4.5,0],[47.2,8.3,0],[25.9,89.4,0],[43.5,-1.5,0],[43.5,-1.5,0],[40.4,-80.0,0],[38.5,27.0,0],[51.8,8.9,0],[50.9,-2.6,0],[45.6,11.3,0],[51.2,4.5,0],[64.6,40.6,0],[41.6,-8.4,0],[41.4,2.2,0],[53.4,-2.3,0],[33.5,-86.6,0],[40.5,-3.9,0],[47.2,8.1,0],[-1.0,117.0,0],[-7.8,110.3,0],[45.5,9.4,0],[41.9,12.5,0],[53.0,-6.0,0],[44.6,-63.6,0],[50.1,4.9,0],[33.6,-112.0,0],[26.1,89.2,0],[19.9,-96.9,0],[7.1,-73.1,0],[43.6,-116.3,0],[43.6,-116.3,0],[39.8,-84.0,0],[39.8,116.5,0],[52.7,1.2,0],[51.3,-1.5,0],[51.3,-1.5,0],[35.5,24.0,0],[35.5,24.0,0],[43.3,3.2,0],[43.3,3.2,0],[43.3,3.2,0],[55.6,37.1,0],[60.0,30.4,0],[44.7,-75.0,0],[35.7,139.8,0],[34.2,-118.9,0],[24.9,121.3,0],[42.7,-8.3,0],[29.5,-95.1,0],[50.0,19.9,0],[50.8,16.5,0],[34.2,-118.9,0],[25.9,89.4,0],[13.1,80.2,0],[20.7,-103.4,0],[48.2,16.5,0],[53.1,6.1,0],[39.8,32.5,0],[47.5,19.1,0],[51.8,-0.9,0],[60.4,34.1,0],[-33.3,-60.2,0],[49.2,16.6,0],[49.7,7.3,0],[53.0,8.9,0],[20.7,-103.4,0],[37.6,-122.0,0],[48.4,17.0,0],[49.2,19.3,0],[26.3,127.8,0],[27.7,85.3,0],[49.2,19.3,0],[47.8,16.2,0],[47.8,16.2,0],[50.0,5.3,0],[55.6,37.6,0],[42.2,-8.7,0],[18.0,-92.9,0],[43.6,5.1,0],[40.9,29.3,0],[52.2,14.0,0],[43.6,5.1,0],[3.0,101.5,0],[4.7,-74.1,0],[39.9,32.7,0],[39.8,32.8,0],[39.9,41.2,0],[39.9,32.7,0],[33.7,-112.2,0],[37.9,-122.3,0],[65.1,25.4,0],[55.4,42.1,0],[39.8,32.8,0],[34.1,-117.8,0],[-36.6,-71.9,0],[49.9,8.6,0],[46.1,5.1,0],[39.5,-87.3,0],[47.5,-114.9,0],[42.6,-83.1,0],[57.6,-3.6,0],[49.9,6.9,0],[53.3,10.0,0],[55.6,37.1,0],[-1.4,100.6,0],[40.2,-111.6,0],[34.0,-117.8,0],[44.8,16.7,0],[2.1,40.1,0],[48.1,2.1,0],[-32.9,151.7,0],[48.2,11.2,0],[39.8,32.7,0],[49.5,18.0,0],[52.4,-8.8,0],[62.0,34.1,0],[56.2,43.9,0],[56.3,44.0,0],[36.7,30.5,0],[60.0,30.4,0],[60.0,30.0,0],[52.2,-7.1,0],[44.7,-93.3,0],[49.0,17.2,0],[38.3,-0.7,0],[52.6,13.2,0],[56.3,101.7,0],[33.5,73.0,0],[-37.9,145.3,0],[40.2,-105.1,0],[30.1,-99.2,0],[42.0,-87.7,0],[39.0,-76.9,0],[60.2,24.8,0],[47.3,4.8,0],[42.7,23.3,0],[13.6,-15.6,0],[44.7,-93.3,0],[55.6,37.7,0],[46.4,20.0,0],[39.7,-75.1,0],[18.0,4.0,0],[50.8,0.2,0],[30.5,-97.7,0],[42.3,-83.2,0],[38.9,-94.6,0],[20.0,99.9,0],[40.2,-105.1,0],[-34.9,-56.2,0],[-26.3,152.9,0],[54.7,-8.2,0],[-31.9,116.2,0],[50.8,9.0,0],[47.0,28.8,0],[50.9,-114.3,0],[8.6,77.0,0],[40.5,-37.0,0],[53.5,-0.2,0],[43.6,5.1,0],[49.7,21.4,0],[-22.0,-47.9,0],[9.0,38.8,0],[-30.9,128.1,0],[13.6,100.6,0],[-33.8,151.3,0],[-6.2,106.7,0],[42.2,-83.6,0],[-20.7,116.8,0],[27.7,85.4,0],[6.0,42.0,0],[64.1,-21.8,0],[47.0,15.3,0],[5.1,100.5,0],[17.3,78.3,0],[-29.7,-51.1,0],[42.4,-88.1,0],[39.5,-104.9,0],[37.2,-80.0,0],[-34.6,-58.5,0],[52.9,-2.5,0],[35.4,-105.4,0],[44.4,26.1,0],[41.6,0.6,0],[27.7,85.4,0],[-35.0,138.9,0],[18.4,-65.7,0],[22.9,120.4,0],[39.5,-8.5,0],[55.4,-2.5,0],[-0.0,-0.0,0],[39.6,-104.8,0],[4.0,4.0,0],[56.1,-3.8,0],[-33.7,151.1,0],[34.2,-118.9,0],[44.8,-117.9,0],[33.6,-111.9,0],[45.8,4.9,0],[37.6,-105.4,0],[41.6,-87.8,0],[35.9,-5.3,0],[42.2,-83.8,0],[25.0,121.2,0],[39.9,32.7,0],[52.0,4.2,0],[52.2,5.4,0],[38.0,23.8,0],[51.3,-2.1,0],[64.9,-148.3,0],[39.0,-76.9,0],[51.5,5.5,0],[-3.7,128.2,0],[5.0,10.0,0],[43.7,-79.4,0],[43.5,-3.8,0],[44.8,-0.6,0],[43.5,-3.8,0],[51.5,4.2,0],[22.7,120.3,0],[42.0,-88.0,0],[52.1,-106.6,0],[37.9,23.8,0],[49.8,10.0,0],[30.1,-97.9,0],[47.1,-122.8,0],[14.1,100.6,0],[-32.9,-68.9,0],[47.4,8.5,0],[36.1,-78.9,0],[16.8,-93.1,0],[30.5,-87.9,0],[43.7,-79.6,0],[36.4,127.4,0],[-1.0,117.0,0],[-16.5,-71.5,0],[36.4,-76.1,0],[42.9,-2.7,0],[-31.9,116.1,0],[50.7,-2.1,0],[52.2,21.0,0],[37.7,-121.9,0],[37.1,-80.0,0],[56.8,9.7,0],[39.7,-75.0,0],[48.3,-4.7,0],[50.3,18.7,0],[17.4,78.5,0],[47.4,20.6,0],[16.2,80.6,0],[8.9,76.6,0],[51.7,0.8,0],[14.0,100.6,0],[15.5,8.4,0],[50.6,5.6,0],[39.6,2.8,0],[-16.5,-71.5,0],[45.7,8.5,0],[47.4,8.5,0],[40.1,-75.3,0],[47.2,9.6,0],[20.0,40.0,0],[41.0,-73.9,0],[48.8,2.2,0],[11.4,78.7,0],[52.3,-7.2,0],[60.0,30.4,0],[44.4,26.1,0],[56.2,10.2,0],[47.8,16.2,0],[38.0,23.7,0],[51.5,-2.6,0],[47.4,8.6,0],[30.6,-96.3,0],[-34.6,-58.5,0],[33.9,-118.4,0],[39.5,-104.9,0],[2.8,-60.7,0],[52.4,13.2,0],[60.0,30.4,0],[60.0,30.4,0],[60.0,30.4,0],[60.0,30.4,0],[55.7,37.5,0],[33.0,-96.8,0],[47.4,9.8,0],[53.0,-6.0,0],[50.9,4.4,0],[60.0,30.4,0],[60.0,30.4,0],[50.6,13.0,0],[-41.3,174.8,0],[51.6,7.0,0],[37.3,-122.0,0],[26.4,-80.1,0],[39.8,32.9,0],[28.4,77.0,0],[0.0,0.0,0],[43.6,79.6,0],[48.2,17.0,0],[44.9,11.1,0],[49.1,18.3,0],[52.3,5.6,0],[31.6,-8.0,0],[48.0,-1.5,0],[45.3,38.1,0],[53.9,-6.5,0],[37.0,22.1,0],[36.4,127.4,0],[55.3,-7.2,0],[39.7,2.8,0],[52.1,-10.4,0],[6.7,80.1,0],[51.5,-2.8,0],[-12.0,-77.0,0],[32.9,-105.9,0],[33.0,-106.0,0],[33.8,-79.2,0],[54.9,-112.3,0],[33.0,-106.0,0],[17.4,78.4,0],[48.5,9.1,0],[32.6,-16.9,0],[16.2,80.6,0],[38.7,-77.8,0],[51.0,13.8,0],[44.9,-123.1,0],[52.2,4.5,0],[35.9,-86.5,0],[36.1,-5.4,0],[51.2,4.4,0],[-7.9,110.1,0],[53.3,-6.1,0],[53.5,-7.4,0],[51.5,0.6,0],[53.3,-6.3,0],[42.8,10.4,0],[55.4,11.6,0],[46.5,6.6,0],[-41.0,-54.6,0],[-41.0,-54.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[55.4,11.6,0],[29.6,111.9,0],[53.8,10.3,0],[49.6,6.2,0],[41.5,13.0,0],[41.1,-0.5,0],[53.0,19.1,0],[-37.7,175.2,0],[55.4,37.5,0],[44.1,28.6,0],[38.9,-121.3,0],[-16.4,-71.5,0],[64.5,40.6,0],[-43.6,172.6,0],[33.2,-111.6,0],[64.9,-147.1,0],[52.2,21.0,0],[14.5,-90.5,0],[19.0,72.9,0],[37.4,-122.2,0],[28.4,77.1,0],[41.6,-87.8,0],[43.7,7.2,0],[45.5,-73.4,0],[53.3,-6.3,0],[32.6,-16.9,0],[45.5,-110.5,0],[0.0,0.0,0],[-6.7,-35.4,0],[50.9,-1.1,0],[47.2,7.6,0],[8.6,99.4,0],[25.0,121.2,0],[25.1,121.8,0],[53.5,-0.1,0],[19.5,75.0,0],[37.0,35.4,0],[44.8,20.4,0],[23.2,77.4,0],[48.5,10.8,0],[25.2,121.8,0],[53.6,-0.0,0],[39.8,-75.2,0],[49.8,6.4,0],[51.8,8.9,0],[53.0,36.1,0],[42.5,-71.2,0],[49.8,6.4,0],[47.0,8.3,0],[50.4,-4.2,0],[30.2,-95.7,0],[41.0,-5.7,0],[43.4,-5.8,0],[52.7,13.2,0],[15.0,59.0,0],[-2.6,-44.3,0],[17.1,54.2,0],[50.7,4.6,0],[-27.2,153.1,0],[16.8,-93.1,0],[23.8,90.4,0],[48.9,2.5,0],[43.2,-2.9,0],[45.7,3.1,0],[20.3,85.8,0],[47.4,18.9,0],[31.6,-8.0,0],[52.1,-0.5,0],[41.0,-5.7,0],[-1.6,103.5,0],[54.2,18.4,0],[13.0,77.6,0],[64.5,40.5,0],[48.7,2.2,0],[49.9,3.3,0],[48.9,2.5,0],[-28.9,121.9,0],[50.8,-1.9,0],[52.1,7.0,0],[-33.0,18.4,0],[45.6,9.2,0],[32.2,-96.1,0],[10.9,106.8,0],[-34.8,138.7,0],[26.4,-80.1,0],[43.3,-1.8,0],[37.2,-88.9,0],[45.7,25.5,0],[-33.9,151.2,0],[41.2,-8.7,0],[49.3,-122.9,0],[-33.9,151.2,0],[-23.5,-46.7,0],[38.9,-104.9,0],[39.6,-3.2,0],[45.9,22.9,0],[41.8,-88.0,0],[41.5,87.6,0],[41.5,87.6,0],[41.5,87.6,0],[41.5,87.6,0],[37.5,15.1,0],[42.8,-2.7,0],[-22.9,-43.3,0],[53.7,-6.7,0],[55.9,-3.7,0],[54.1,-1.7,0],[46.2,4.3,0],[48.7,2.2,0],[13.8,100.4,0],[14.6,-89.3,0],[-26.3,152.9,0],[55.7,12.6,0],[35.0,-106.0,0],[4.1,-76.2,0],[36.7,-4.3,0],[44.0,8.2,0],[42.5,12.9,0],[-16.7,-49.2,0],[-23.5,-46.7,0],[54.2,49.6,0],[44.6,-63.7,0],[0.0,0.0,0],[-31.4,-64.2,0],[12.7,78.3,0],[45.1,7.5,0],[-19.9,-44.6,0],[20.1,110.3,0],[35.7,139.5,0],[50.1,14.4,0],[12.3,76.6,0],[29.6,-95.1,0],[-23.3,-51.2,0],[0.0,0.0,0],[31.6,-8.0,0],[0.0,0.0,0],[53.0,-1.7,0],[0.0,0.0,0],[48.9,2.5,0],[49.8,14.7,0],[50.9,-1.5,0],[45.4,-75.7,0],[50.1,14.0,0],[48.7,2.2,0],[34.5,136.7,0],[39.2,-1.8,0],[37.2,127.1,0],[52.1,-0.9,0],[0.0,0.0,0],[53.8,-2.4,0],[48.1,11.3,0],[52.2,11.0,0],[4.8,-75.7,0],[48.5,-123.3,0],[21.3,-157.8,0],[37.4,-122.0,0],[19.1,72.9,0],[39.0,-2.5,0],[30.8,31.0,0],[10.4,-75.6,0],[46.0,-66.6,0],[41.4,2.2,0],[-16.6,-49.3,0],[-7.0,107.6,0],[45.6,8.9,0],[51.5,6.9,0],[30.4,-90.1,0],[30.1,-95.6,0],[48.3,11.7,0],[48.3,11.7,0],[48.5,11.9,0],[44.1,28.6,0],[59.3,18.1,0],[41.6,-72.5,0],[26.7,-81.7,0],[26.7,-81.7,0],[41.5,12.7,0],[-23.6,-46.3,0],[27.6,84.5,0],[39.9,32.6,0],[57.4,21.5,0],[34.1,-118.1,0],[35.4,139.3,0],[41.9,-88.2,0],[33.4,-111.9,0],[-32.1,115.8,0],[52.4,4.9,0],[35.0,135.7,0],[38.0,23.7,0],[0.0,0.0,0],[63.9,23.1,0],[44.5,-93.2,0],[29.0,-81.0,0],[18.5,-69.9,0],[27.9,78.1,0],[42.5,71.2,0],[35.3,139.5,0],[42.5,-71.2,0],[44.3,4.7,0],[0.0,0.0,0],[18.5,-69.9,0],[49.7,6.1,0],[42.5,-71.0,0],[48.6,8.0,0],[39.4,-84.3,0],[46.0,-66.6,0],[43.5,-71.5,0],[-15.8,-43.3,0],[45.8,126.7,0],[25.0,121.2,0],[38.7,-9.3,0],[37.2,-80.0,0],[38.7,-9.0,0],[14.7,-17.2,0],[54.2,-4.6,0],[43.6,-71.4,0],[42.2,88.0,0],[49.1,1.5,0],[50.6,-119.7,0],[45.3,-94.2,0],[0.0,0.0,0],[38.9,-9.0,0],[33.1,-96.7,0],[54.5,-6.0,0],[50.5,5.7,0],[24.8,121.0,0],[-26.1,28.0,0],[39.9,32.8,0],[-26.5,28.3,0],[-32.5,19.3,0],[33.0,-96.8,0],[35.7,-105.9,0],[33.7,-117.8,0],[12.3,7.6,0],[35.3,25.1,0],[41.9,12.5,0],[51.1,0.1,0],[52.5,13.3,0],[51.8,-1.3,0],[39.1,-76.8,0],[28.1,-80.6,0],[45.5,-122.6,0],[53.2,-3.0,0],[41.5,-8.3,0],[55.8,12.3,0],[19.1,-98.2,0],[61.6,-149.2,0],[29.3,48.0,0],[40.6,-83.1,0],[32.1,-110.9,0],[53.7,-0.4,0],[40.5,-8.1,0],[0.0,0.0,0],[45.0,-93.5,0],[39.9,32.7,0],[57.0,23.6,0],[44.3,9.3,0],[-30.9,128.1,0],[38.9,-9.0,0],[-32.0,116.0,0],[56.0,-4.9,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[-2.4,-80.7,0],[0.0,0.0,0],[52.2,16.8,0],[48.1,11.7,0],[52.2,5.2,0],[45.7,-109.4,0],[38.1,-121.4,0],[12.9,80.2,0],[53.1,8.8,0],[0.0,0.0,0],[38.7,-9.3,0],[0.0,0.0,0],[50.1,14.5,0],[50.1,14.5,0],[50.1,14.5,0],[45.3,8.9,0],[45.8,-108.6,0],[21.0,-89.6,0],[43.8,4.1,0],[41.6,-87.8,0],[48.7,2.0,0],[47.5,16.3,0],[42.8,-73.8,0],[0.0,0.0,0],[39.6,-76.0,0],[0.0,0.0,0],[43.8,4.1,0],[-26.1,27.9,0],[43.8,4.1,0],[43.8,4.1,0],[63.4,10.4,0],[53.3,-110.0,0],[1.3,103.8,0],[32.0,-102.2,0],[41.6,-8.4,0],[44.1,2.1,0],[35.1,-120.6,0],[50.3,15.0,0],[0.0,0.0,0],[45.2,5.7,0],[55.9,-4.3,0],[51.3,-0.1,0],[-31.9,115.8,0],[-23.6,-46.6,0],[-39.8,-73.2,0],[50.1,14.5,0],[53.8,10.3,0],[32.1,-81.1,0],[18.9,99.0,0],[49.0,12.4,0],[0.0,0.0,0],[0.0,0.0,0],[-40.9,175.7,0],[0.0,0.0,0],[35.9,79.1,0],[42.0,-87.7,0],[-32.0,115.9,0],[48.2,16.4,0],[46.6,17.6,0],[49.3,6.2,0],[25.7,-100.3,0],[51.7,-2.4,0],[38.9,-77.1,0],[-16.7,-49.2,0],[-34.9,138.5,0],[31.2,121.3,0],[0.0,0.0,0],[4.7,-74.1,0],[-34.6,-58.5,0],[40.0,-104.6,0],[0.0,0.0,0],[39.9,116.6,0],[-34.5,-58.5,0],[0.0,0.0,0],[43.1,-2.4,0],[36.8,-76.2,0],[29.8,-81.3,0],[37.2,-3.7,0],[48.2,16.3,0],[51.5,30.8,0],[33.6,-88.6,0],[13.4,77.7,0],[-34.9,-57.9,0],[0.0,0.0,0],[45.9,16.8,0],[0.0,0.0,0],[45.5,16.8,0],[46.1,16.9,0],[45.8,16.0,0],[44.2,5.9,0],[50.0,14.8,0],[-35.3,149.1,0],[40.2,44.6,0],[41.4,-87.3,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[45.8,16.0,0],[45.7,21.2,0],[48.5,-123.4,0],[39.5,-0.3,0],[47.2,38.9,0],[47.5,12.1,0],[48.2,16.3,0],[12.3,76.6,0],[26.6,84.2,0],[45.1,14.7,0],[0.0,0.0,0],[52.9,-0.6,0],[44.1,15.2,0],[-34.9,-58.1,0],[53.1,8.9,0],[21.3,-157.8,0],[47.7,19.6,0],[45.8,16.0,0],[0.0,0.0,0],[52.2,5.2,0],[41.0,40.6,0],[58.4,-3.1,0],[0.0,0.0,0],[47.8,-2.8,0],[45.1,14.1,0],[46.4,16.5,0],[48.5,8.9,0],[52.7,9.6,0],[37.8,-122.5,0],[0.0,0.0,0],[-32.0,115.9,0],[41.0,39.7,0],[39.9,-75.3,0],[0.0,0.0,0],[0.0,0.0,0],[30.6,116.1,0],[-34.7,138.7,0],[42.1,-8.5,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[43.5,5.4,0],[47.7,-122.3,0],[0.0,0.0,0],[37.4,-6.0,0],[55.9,-4.3,0],[51.4,4.5,0],[40.5,-3.5,0],[50.2,-5.1,0],[41.1,-96.1,0],[30.4,-87.2,0],[44.6,-69.6,0],[39.5,2.5,0],[48.7,9.3,0],[48.0,33.5,0],[49.7,12.1,0],[48.7,9.3,0],[21.3,-157.8,0],[42.7,23.3,0],[36.1,136.4,0],[42.3,-7.9,0],[46.5,-120.7,0],[29.4,-98.5,0],[-11.5,-77.0,0],[51.5,7.0,0],[0.0,0.0,0],[49.3,-124.1,0],[53.8,-1.6,0],[37.0,-7.9,0],[36.5,127.4,0],[0.0,0.0,0],[41.1,-112.0,0],[40.0,-6.7,0],[37.8,-122.4,0],[48.9,2.3,0],[42.4,13.0,0],[43.7,1.2,0],[47.2,-122.4,0],[42.8,-91.1,0],[43.5,-5.6,0],[47.7,-122.3,0],[55.8,37.7,0],[37.1,-113.6,0],[31.0,75.0,0],[50.1,19.8,0],[53.0,14.0,0],[50.5,5.6,0],[40.0,-75.4,0],[19.0,72.9,0],[0.0,0.0,0],[-32.0,115.9,0],[32.4,-110.9,0],[-37.8,145.3,0],[40.8,-82.4,0],[32.3,-111.0,0],[0.0,0.0,0],[45.6,-89.5,0],[46.1,3.5,0],[0.0,0.0,0],[-11.9,-77.0,0],[59.7,9.6,0],[33.7,-117.8,0],[35.9,-97.9,0],[36.5,127.2,0],[39.5,-0.4,0],[48.7,9.7,0],[0.0,0.0,0],[56.3,-177.3,0],[0.0,0.0,0],[21.0,105.9,0],[50.1,14.5,0],[48.9,2.2,0],[59.8,10.3,0],[-24.2,-53.0,0],[50.2,-5.1,0],[30.2,-85.6,0],[30.7,-88.3,0],[17.4,78.6,0],[60.0,30.0,0],[31.0,30.5,0],[6.5,51.4,0],[30.0,-97.2,0],[49.2,7.0,0],[-32.0,115.9,0],[0.0,0.0,0],[49.4,12.6,0],[54.7,20.5,0],[48.5,9.1,0],[55.9,38.2,0],[-7.8,110.4,0],[0.0,0.0,0],[49.5,11.1,0],[49.2,7.0,0],[25.0,25.0,0],[49.2,7.0,0],[50.9,-1.2,0],[41.4,69.2,0],[-37.8,145.0,0],[0.0,0.0,0],[31.1,121.4,0],[12.3,79.5,0],[55.6,37.1,0],[0.0,0.0,0],[27.9,78.1,0],[40.2,-78.9,0],[0.0,0.0,0],[15.5,73.8,0],[47.5,19.1,0],[39.9,32.7,0],[39.9,32.7,0],[39.9,32.7,0],[49.2,7.0,0],[51.2,17.4,0],[51.2,17.4,0],[60.4,24.4,0],[0.0,0.0,0],[0.0,0.0,0],[49.2,7.0,0],[52.3,6.7,0],[43.7,6.9,0],[-31.9,115.8,0],[46.6,6.6,0],[0.0,0.0,0],[49.1,-99.3,0],[0.0,0.0,0],[40.6,-83.1,0],[55.6,37.1,0],[38.8,-121.3,0],[0.0,0.0,0],[32.7,-99.8,0],[53.7,10.2,0],[53.2,-1.6,0],[51.3,-0.9,0],[-34.5,-58.5,0],[0.0,0.0,0],[36.4,127.4,0],[55.7,37.5,0],[37.9,23.7,0],[52.0,1.2,0],[22.4,114.0,0],[41.4,69.2,0],[52.5,13.4,0],[-2.1,106.1,0],[35.1,-106.7,0],[-33.9,18.6,0],[21.0,105.5,0],[0.0,0.0,0],[47.6,-121.9,0],[45.7,9.2,0],[6.3,107.0,0],[32.7,-99.8,0],[-11.9,-77.0,0],[39.9,-4.3,0],[60.1,32.3,0],[38.0,12.5,0],[36.5,127.4,0],[35.7,139.7,0],[35.7,139.7,0],[52.4,4.9,0],[39.4,-84.1,0],[52.1,21.1,0],[35.0,137.1,0],[45.6,13.8,0],[0.0,0.0,0],[0.0,0.0,0],[36.7,-4.4,0],[42.5,-70.9,0],[0.0,0.0,0],[34.0,-118.4,0],[48.9,9.1,0],[54.5,18.5,0],[38.8,-77.2,0],[30.0,31.0,0],[51.0,8.0,0],[-6.1,106.1,0],[33.4,-111.9,0],[51.6,-0.7,0],[52.1,22.2,0],[4.7,-74.1,0],[52.5,13.5,0],[25.0,121.2,0],[-2.6,140.7,0],[52.5,21.0,0],[-0.4,100.4,0],[50.6,29.9,0],[45.8,14.7,0],[0.0,0.0,0],[51.6,-1.8,0],[32.7,-97.1,0],[29.8,-95.4,0],[4.7,-74.1,0],[37.0,-122.0,0],[33.8,-79.2,0],[0.0,0.0,0],[38.9,-104.8,0],[39.0,104.8,0],[13.0,77.5,0],[52.0,7.6,0],[0.0,0.0,0],[0.0,0.0,0],[54.0,-3.2,0],[49.6,16.9,0],[29.5,-95.5,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[41.9,1.8,0],[41.4,2.1,0],[42.5,26.5,0],[41.7,-88.0,0],[0.0,0.0,0],[38.5,-94.2,0],[-5.4,105.3,0],[50.0,8.7,0],[49.7,4.7,0],[42.2,-87.8,0],[13.7,100.5,0],[-5.4,105.3,0],[35.0,-80.8,0],[50.4,30.5,0],[52.3,77.0,0],[42.7,23.3,0],[51.2,-0.4,0],[35.8,-78.7,0],[50.5,30.6,0],[0.0,0.0,0],[50.4,30.5,0],[42.4,-8.7,0],[51.8,-1.0,0],[12.9,77.6,0],[54.6,-1.3,0],[21.0,105.9,0],[50.0,4.0,0],[49.2,16.6,0],[49.2,16.6,0],[49.2,16.6,0],[49.2,16.6,0],[0.0,0.0,0],[18.5,73.9,0],[-16.0,-48.1,0],[0.0,0.0,0],[-32.0,115.9,0],[12.3,78.9,0],[35.7,139.8,0],[46.1,2.7,0],[48.8,2.2,0],[-21.4,-43.2,0],[34.0,117.6,0],[48.8,14.4,0],[39.9,32.9,0],[17.5,78.4,0],[49.2,16.6,0],[31.1,-97.7,0],[0.0,0.0,0],[39.9,32.9,0],[-24.8,-65.4,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[50.5,30.5,0],[45.4,-75.8,0],[13.0,77.6,0],[53.1,-1.2,0],[28.5,-81.2,0],[28.5,-81.2,0],[13.9,100.5,0],[38.7,-78.0,0],[0.0,0.0,0],[50.5,30.6,0],[52.5,13.3,0],[45.2,5.7,0],[21.0,105.9,0],[21.0,105.9,0],[41.7,25.0,0],[21.0,105.9,0],[52.8,18.1,0],[38.2,-6.3,0],[-32.9,-60.7,0],[53.3,-2.6,0],[45.5,15.6,0],[0.0,0.0,0],[26.7,-80.1,0],[53.1,8.9,0],[0.0,0.0,0],[0.0,0.0,0],[47.6,-65.8,0],[1.1,104.4,0],[13.4,77.7,0],[-16.7,-43.8,0],[44.4,-76.7,0],[45.5,-73.5,0],[32.2,-80.7,0],[13.0,77.5,0],[54.6,39.9,0],[0.0,0.0,0],[40.0,18.0,0],[51.1,6.5,0],[4.9,-74.1,0],[34.9,-82.4,0],[52.2,-0.9,0],[54.7,25.3,0],[49.3,-123.0,0],[0.0,0.0,0],[28.4,75.6,0],[33.7,-118.0,0],[37.8,-122.3,0],[41.6,9.0,0],[-34.9,138.5,0],[40.1,-75.1,0],[40.5,-81.5,0],[51.4,-0.3,0],[0.0,0.0,0],[0.0,0.0,0],[50.0,21.9,0],[56.4,-3.2,0],[51.4,-0.3,0],[47.2,5.0,0],[0.0,0.0,0],[50.6,7.6,0],[52.4,6.6,0],[-12.0,-77.1,0],[38.8,-94.3,0],[34.3,-118.3,0],[-34.9,138.6,0],[0.0,0.0,0],[42.7,23.3,0],[-23.3,150.5,0],[35.0,137.2,0],[49.1,6.2,0],[51.6,-3.7,0],[32.1,-81.1,0],[0.0,0.0,0],[52.8,4.8,0],[41.7,25.0,0],[29.6,-95.6,0],[-32.0,115.8,0],[41.1,-81.4,0],[-37.8,145.0,0],[43.3,28.0,0],[51.1,17.1,0],[0.0,0.0,0],[50.0,36.4,0],[54.9,-5.8,0],[0.0,0.0,0],[-32.0,115.9,0],[0.0,0.0,0],[-8.7,115.2,0],[38.0,23.7,0],[38.0,23.7,0],[38.0,-122.3,0],[35.6,139.7,0],[-31.9,115.8,0],[35.6,140.0,0],[-31.5,115.5,0],[40.5,-3.4,0],[45.5,-71.9,0],[0.0,0.0,0],[0.0,0.0,0],[53.5,-113.6,0],[50.1,14.5,0],[56.9,24.1,0],[35.7,139.8,0],[39.8,32.8,0],[37.6,-122.2,0],[47.5,19.2,0],[0.0,0.0,0],[38.0,-91.6,0],[0.0,0.0,0],[48.8,9.1,0],[39.0,-77.4,0],[53.3,7.7,0],[40.4,-3.7,0],[50.9,-1.2,0],[0.0,0.0,0],[48.1,11.1,0],[43.6,1.5,0],[44.7,8.7,0],[38.7,-9.1,0],[50.1,14.5,0],[38.0,23.7,0],[0.0,110.9,0],[45.7,11.5,0],[35.6,140.0,0],[36.0,139.6,0],[21.3,-157.8,0],[45.6,6.3,0],[39.9,32.8,0],[37.1,140.8,0],[49.6,5.8,0],[0.0,0.0,0],[10.1,76.5,0],[-22.6,27.1,0],[42.7,23.3,0],[35.3,139.6,0],[0.0,0.0,0],[52.4,-1.8,0],[49.7,13.4,0],[10.9,76.5,0],[4.7,-74.1,0],[52.2,21.0,0],[0.0,0.0,0],[0.0,0.0,0],[6.6,80.0,0],[48.5,25.7,0],[4.7,-74.1,0],[33.4,-111.9,0],[45.0,-93.2,0],[35.5,51.5,0],[36.3,-95.3,0],[55.9,-4.2,0],[0.0,0.0,0],[38.1,-7.5,0],[50.8,7.6,0],[35.4,51.5,0],[55.9,-4.2,0],[0.0,0.0,0],[47.5,19.1,0],[0.0,0.0,0],[36.4,105.6,0],[49.2,-124.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[29.5,-98.4,0],[0.0,0.0,0],[21.0,105.9,0],[47.5,19.1,0],[13.9,100.5,0],[37.0,-121.8,0],[13.9,100.5,0],[13.9,100.5,0],[48.5,7.5,0],[33.0,-97.1,0],[41.4,-72.0,0],[34.1,-118.0,0],[42.5,-83.9,0],[2.3,102.3,0],[0.0,0.0,0],[42.2,42.7,0],[36.4,140.4,0],[38.7,35.5,0],[0.0,0.0,0],[17.2,78.5,0],[40.5,-86.9,0],[-31.7,115.8,0],[40.7,-73.9,0],[35.0,137.1,0],[0.0,0.0,0],[0.0,0.0,0],[41.4,-87.4,0],[42.1,3.1,0],[-27.4,-65.6,0],[51.9,4.4,0],[48.0,7.3,0],[0.0,0.0,0],[-23.2,-45.9,0],[27.2,56.3,0],[40.5,-89.0,0],[44.7,-78.7,0],[0.0,0.0,0],[40.6,-8.7,0],[50.4,30.5,0],[37.6,127.1,0],[49.6,16.9,0],[25.5,81.7,0],[0.0,0.0,0],[-6.9,107.6,0],[0.0,0.0,0],[0.0,0.0,0],[52.8,1.5,0],[3.3,101.7,0],[38.0,23.7,0],[13.0,77.7,0],[52.2,15.8,0],[35.1,-118.6,0],[40.9,40.3,0],[51.7,-0.3,0],[46.6,10.8,0],[50.2,19.1,0],[55.7,12.5,0],[50.9,7.0,0],[49.1,-122.9,0],[37.3,-6.3,0],[33.3,44.4,0],[0.0,0.0,0],[43.6,3.9,0],[47.4,-53.3,0],[-3.7,-38.5,0],[-23.6,-46.7,0],[33.2,-116.4,0],[51.1,17.2,0],[-0.5,117.1,0],[0.0,0.0,0],[51.2,22.5,0],[49.4,5.5,0],[33.4,-111.9,0],[18.5,-69.9,0],[40.9,40.3,0],[27.7,85.3,0],[30.4,-97.7,0],[49.3,-123.0,0],[50.0,6.5,0],[0.0,0.0,0],[0.0,0.0,0],[49.3,-123.0,0],[0.0,0.0,0],[50.7,6.2,0],[47.6,8.9,0],[41.0,119.0,0],[47.5,-117.6,0],[50.1,-5.2,0],[-7.1,112.7,0],[35.8,14.5,0],[0.0,0.0,0],[49.4,18.0,0],[41.9,-87.7,0],[37.6,15.0,0],[51.0,5.8,0],[20.8,-156.3,0],[35.5,-95.5,0],[40.4,-3.7,0],[13.0,77.6,0],[51.6,-3.7,0],[40.4,-75.4,0],[51.7,19.8,0],[0.0,0.0,0],[49.2,4.0,0],[49.6,6.1,0],[40.5,-3.4,0],[39.6,-84.1,0],[36.8,3.1,0],[-62.1,-58.5,0],[0.0,0.0,0],[11.0,77.0,0],[0.0,0.0,0],[-62.1,-58.6,0],[42.1,24.8,0],[37.3,-6.0,0],[48.2,16.3,0],[42.0,21.4,0],[0.0,0.0,0],[40.4,-3.8,0],[-33.0,-60.7,0],[42.2,-8.7,0],[33.5,-84.8,0],[45.8,21.2,0],[0.0,0.0,0],[43.8,11.5,0],[47.7,7.3,0],[0.0,0.0,0],[-0.2,-78.5,0],[19.0,-98.2,0],[48.2,16.3,0],[25.4,51.5,0],[13.7,100.5,0],[-0.2,-78.5,0],[48.6,21.2,0],[25.3,51.5,0],[7.8,98.4,0],[3.1,101.7,0],[25.4,51.5,0],[21.6,-158.2,0],[24.7,46.7,0],[51.1,17.1,0],[31.0,-104.8,0],[41.1,24.9,0],[47.3,16.7,0],[0.0,0.0,0],[52.7,5.2,0],[17.2,78.5,0],[25.2,51.5,0],[-2.1,-79.6,0],[45.1,8.2,0],[35.3,-120.7,0],[35.7,-82.0,0],[51.5,-2.6,0],[36.8,10.2,0],[12.3,76.6,0],[33.4,-111.9,0],[48.2,-0.1,0],[59.7,30.4,0],[25.4,51.5,0],[0.0,0.0,0],[40.1,68.7,0],[40.4,-111.9,0],[35.0,-80.7,0],[18.8,99.0,0],[38.6,23.6,0],[40.6,-8.7,0],[20.7,-100.5,0],[25.3,51.6,0],[-42.9,147.3,0],[37.8,-107.7,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[28.1,120.7,0],[-37.7,176.2,0],[27.7,85.4,0],[45.4,8.8,0],[42.4,23.1,0],[51.1,5.0,0],[18.8,99.0,0],[50.6,9.7,0],[0.0,0.0,0],[50.6,2.8,0],[40.4,-111.8,0],[-43.0,147.3,0],[0.0,0.0,0],[49.2,16.6,0],[49.2,6.7,0],[22.8,108.3,0],[0.0,0.0,0],[27.7,85.4,0],[51.3,6.8,0],[45.5,9.1,0],[51.3,6.8,0],[43.6,-95.0,0],[49.5,5.9,0],[42.0,0.8,0],[49.5,5.9,0],[19.1,98.9,0],[2.9,101.7,0],[35.1,126.9,0],[47.0,-104.2,0],[35.8,128.5,0],[49.5,17.4,0],[49.6,6.2,0],[49.7,13.4,0],[40.1,-76.2,0],[33.0,-96.6,0],[48.2,9.4,0],[43.0,-83.1,0],[-26.5,29.2,0],[52.1,-106.6,0],[25.2,51.4,0],[38.6,23.6,0],[32.2,-110.8,0],[25.3,51.5,0],[42.1,23.1,0],[47.6,-122.2,0],[19.1,72.9,0],[0.0,0.0,0],[0.0,0.0,0],[42.8,13.7,0],[24.0,-104.7,0],[44.1,-79.1,0],[44.9,37.3,0],[52.6,6.3,0],[38.0,-121.4,0],[44.8,11.3,0],[46.9,7.5,0],[52.3,16.9,0],[55.0,-1.5,0],[48.0,11.2,0],[0.0,0.0,0],[0.0,0.0,0],[17.5,78.4,0],[11.0,-74.9,0],[51.5,4.3,0],[42.1,-72.3,0],[38.6,20.7,0],[51.1,17.0,0],[25.3,51.5,0],[44.3,26.0,0],[-37.0,174.9,0],[43.5,-5.7,0],[43.4,-5.8,0],[43.4,-5.8,0],[61.2,22.1,0],[34.6,-86.5,0],[55.8,37.7,0],[42.3,-3.7,0],[25.3,51.5,0],[0.0,0.0,0],[51.1,17.1,0],[0.0,0.0,0],[0.0,0.0,0],[-5.4,105.3,0],[51.1,17.1,0],[55.7,12.6,0],[25.3,51.5,0],[0.0,0.0,0],[-27.6,-48.6,0],[13.0,77.6,0],[-33.9,151.1,0],[46.6,15.6,0],[35.1,-81.7,0],[55.9,12.4,0],[43.6,1.3,0],[31.5,74.3,0],[-33.4,-70.6,0],[30.2,-97.4,0],[30.2,97.4,0],[50.9,5.1,0],[36.5,-105.7,0],[47.5,19.1,0],[4.6,-74.1,0],[43.9,25.9,0],[33.8,-118.4,0],[25.3,51.5,0],[13.2,77.8,0],[50.9,-114.3,0],[0.0,0.0,0],[38.6,-121.6,0],[34.1,-118.4,0],[0.0,0.0,0],[50.8,-2.0,0],[51.9,-0.5,0],[49.7,13.4,0],[0.0,0.0,0],[25.3,51.5,0],[57.6,18.3,0],[-28.6,-49.4,0],[13.2,77.7,0],[34.5,-87.6,0],[44.1,12.5,0],[0.0,0.0,0],[-37.8,144.8,0],[0.0,0.0,0],[34.5,-77.5,0],[34.5,-77.5,0],[30.2,120.2,0],[43.7,1.1,0],[29.7,-98.4,0],[39.7,-8.8,0],[31.8,117.3,0],[-27.6,-48.6,0],[0.0,0.0,0],[34.1,-117.8,0],[-27.4,-59.0,0],[0.0,0.0,0],[33.2,-97.2,0],[-8.6,115.2,0],[51.9,-0.5,0],[46.2,4.3,0],[0.0,0.0,0],[52.1,19.9,0],[40.3,-80.4,0],[42.5,11.8,0],[51.3,15.6,0],[42.3,-89.0,0],[11.9,79.8,0],[28.1,-15.6,0],[51.1,17.1,0],[0.0,0.0,0],[45.2,26.9,0],[-20.3,57.5,0],[0.0,0.0,0],[0.0,0.0,0],[41.3,69.2,0],[21.0,105.8,0],[28.7,77.1,0],[55.4,10.4,0],[43.6,1.4,0],[33.5,36.4,0],[39.8,-8.8,0],[42.9,-85.8,0],[-43.0,147.3,0],[42.9,-85.6,0],[34.7,-120.5,0],[49.1,13.8,0],[14.7,-17.2,0],[51.8,4.3,0],[43.0,-85.9,0],[52.4,16.8,0],[0.0,0.0,0],[41.8,12.8,0],[47.8,-3.3,0],[43.7,-7.9,0],[0.0,0.0,0],[49.1,15.6,0],[49.0,16.0,0],[50.9,5.7,0],[42.1,23.1,0],[49.2,-121.8,0],[34.0,-118.3,0],[60.2,24.8,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[-23.3,-47.7,0],[37.0,30.6,0],[48.7,7.8,0],[50.1,20.0,0],[48.1,11.6,0],[0.0,0.0,0],[39.9,22.2,0],[49.2,-121.8,0],[13.1,77.6,0],[49.2,-121.8,0],[33.4,-111.9,0],[41.8,-71.4,0],[-20.5,-43.7,0],[-20.5,-43.7,0],[49.3,-123.0,0],[47.0,15.2,0],[-2.2,-80.0,0],[40.1,-3.6,0],[39.1,117.2,0],[39.4,22.9,0],[32.8,12.7,0],[-0.2,-78.5,0],[-12.4,130.9,0],[36.0,120.2,0],[48.9,21.0,0],[0.0,0.0,0],[-33.4,-70.7,0],[-35.4,149.1,0],[0.0,0.0,0],[47.1,4.1,0],[0.0,0.0,0],[55.9,25.8,0],[39.9,32.8,0],[-16.5,-71.5,0],[0.0,0.0,0],[28.5,-16.4,0],[0.0,0.0,0],[11.0,77.0,0],[50.8,4.2,0],[49.5,17.5,0],[48.1,11.7,0],[49.5,17.7,0],[53.2,6.8,0],[18.5,100.2,0],[35.6,139.4,0],[40.6,-112.5,0],[43.0,23.9,0],[0.0,0.0,0],[0.0,0.0,0],[0.0,0.0,0],[18.5,100.2,0],[-38.0,-57.6,0],[-27.7,152.9,0],[0.0,0.0,0],[42.7,23.4,0],[0.0,0.0,0]],"counts":{"total":4402,"online":321},"dishes":[{"name":"KH6DAD-UHF EggNOG","lat":21.36,"lon":-158.03},{"name":"UVSD-SatNOGS","lat":48.46,"lon":-123.31},{"name":"KN6BKT-433","lat":34.12,"lon":-118.08},{"name":"Not Quite ESL","lat":38.58,"lon":-90.0},{"name":"LU3ARN","lat":-34.57,"lon":-58.48},{"name":"sat-rx","lat":51.9,"lon":-8.66},{"name":"EA3AGB","lat":40.69,"lon":0.57},{"name":"UX5UL","lat":50.36,"lon":30.39},{"name":"NUUGS2","lat":41.35,"lon":69.2},{"name":"HS0ZQS_900_Patch","lat":13.87,"lon":100.5},{"name":"Gemini_UHF","lat":23.0,"lon":120.22},{"name":"VK2BYF-VHF","lat":-34.85,"lon":150.6}],"sats":{"commercial":["ONEWEB-0012","ONEWEB-0010","ONEWEB-0008","ONEWEB-0007","ONEWEB-0006","ONEWEB-0011","ONEWEB-0013","ONEWEB-0017","ONEWEB-0020","ONEWEB-0021","ONEWEB-0023","ONEWEB-0024","ONEWEB-0025","ONEWEB-0026"],"earth-obs":["DMSP 5D-3 F16 (USA 172)","METEOSAT-9 (MSG-2)","DMSP 5D-3 F17 (USA 191)","FENGYUN 3A","EWS-G3 (GOES 14)","DMSP 5D-3 F18 (USA 210)","EWS-G2 (GOES 15)","COMS 1","FENGYUN 3B","SUOMI NPP","METEOSAT-10 (MSG-3)","METOP-B","INSAT-3D","FENGYUN 3C"],"science":["HST","POLAR","SWAS","CXO","XMM-NEWTON","TERRA","CLUSTER II-FM7 (SAMBA)","CLUSTER II-FM8 (TANGO)","ODIN","TIMED","CORIOLIS","SORCE","MOST","SCISAT 1"],"cubesat":["CUTE-1 (CO-55)","CUBESAT XI-IV (CO-57)","CUBESAT XI-V","CUTE-1.7+APD II (CO-65)","CANX-2","SEEDS II (CO-66)","SWISSCUBE","BEESAT-1","ITUPSAT1","TISAT 1","STRAND-1","BRITE-AUSTRIA","NEE-01 PEGASO","POPACS 2"]},"world":{"leo":15303,"online":321,"total":4402,"pair_minutes":935176342,"days":6},"taxonomy":{"weather":50,"earth-obs":352,"comms":42,"comms-mega":11417,"science":77,"cubesat-edu":150,"defence":33}};
 
-/* ─────────── agent roster ───────────
-   Four advocates with genuinely incompatible definitions of "urgent", plus a
-   safety officer. Safety uses the reserved critical colour, not a fifth
-   category hue — it is a state, not a constituency. */
-const AGENTS = [
-  {id:"commercial", name:"COMMERCIAL",  color:"var(--c1)", pop:D.taxonomy["comms-mega"]+D.taxonomy["comms"],
-   value:"Service continuity. A dropped relay is a subscriber outage on the ground.",
-   sats:D.sats.commercial},
-  {id:"earth-obs",  name:"EARTH OBS",   color:"var(--c2)", pop:D.taxonomy["earth-obs"]+D.taxonomy["weather"],
-   value:"Perishability. Storm and disaster imagery is worthless a day late.",
-   sats:D.sats["earth-obs"]},
-  {id:"science",    name:"SCIENCE",     color:"var(--c3)", pop:D.taxonomy["science"]+D.taxonomy["defence"],
-   value:"Irreplaceability. You cannot re-observe an event that already happened.",
-   sats:D.sats.science},
-  {id:"cubesat",    name:"CUBESAT/EDU", color:"var(--c4)", pop:D.taxonomy["cubesat-edu"],
-   value:"Access equity. No budget, no leverage — always bottom of a priority table.",
-   sats:D.sats.cubesat},
+/* ══════════ the constituencies ══════════ */
+const AG = [
+  {id:"commercial", name:"COMMERCIAL",  c:"#7592ff", pop:D.taxonomy["comms-mega"]+D.taxonomy["comms"], sats:D.sats.commercial},
+  {id:"earthobs",   name:"EARTH OBS",   c:"#fd853a", pop:D.taxonomy["earth-obs"]+D.taxonomy["weather"], sats:D.sats["earth-obs"]},
+  {id:"science",    name:"SCIENCE",     c:"#32d583", pop:D.taxonomy["science"]+D.taxonomy["defence"],   sats:D.sats.science},
+  {id:"cubesat",    name:"CUBESAT/EDU", c:"#7a5af8", pop:D.taxonomy["cubesat-edu"],                    sats:D.sats.cubesat},
 ];
-const SAFETY = {name:"SAFETY OFFICER",
-  value:"Overrules everyone — collision warnings, uncontrolled reentry, battery-critical passes."};
+document.getElementById('nsat').textContent  = D.world.leo.toLocaleString();
+document.getElementById('ndish').textContent = D.world.online.toLocaleString();
+document.getElementById('legend').innerHTML =
+  AG.map(a=>`<span><i style="background:${a.c}"></i>${a.name}</span>`).join('') +
+  `<span style="margin-left:auto">beam = holding the window · dotted = handed over</span>`;
 
-/* what escalates a request past fairness */
-const CRITICAL = [
-  ["CONJUNCTION","collision warning — minutes matter"],
-  ["REENTRY","uncontrolled descent, tracking needed"],
-  ["POWER-CRIT","battery below reserve, may not survive the orbit"],
-];
+/* ══════════ globe ══════════
+   Orthographic projection, drawn to canvas. No basemap image is fetched —
+   the 4,402 real ground-station coordinates trace the continents themselves,
+   which is a truer picture of where the network actually is than an outline. */
+const cv = document.getElementById('globe'), ctx = cv.getContext('2d');
+let W = cv.width, H = cv.height, R = 268, CX = W/2, CY = H/2;
 
-/* ─────────── stat tiles ─────────── */
-const perDish = (D.world.leo/D.world.online).toFixed(1);
-const avgInView = Math.round(D.world.pair_minutes/(D.world.online*D.world.days*1440));
-document.getElementById('stats').innerHTML = [
-  {k:"LEO satellites", v:D.world.leo.toLocaleString(), s:"active, period under 130 min"},
-  {k:"Dishes online", v:D.world.online.toLocaleString(),
-   s:`of ${D.world.total.toLocaleString()} registered — ${Math.round(100-100*D.world.online/D.world.total)}% are dark`, alert:true},
-  {k:"Satellites per dish", v:perDish+":1", s:"up from 0.5:1 in 2019", alert:true},
-  {k:"Avg in view at once", v:avgInView, s:"simultaneously above 10° at a typical dish"},
-].map(t=>`<div class="tile ${t.alert?'alert':''}"><span class="k">${t.k}</span>
-  <span class="v">${t.v}</span><span class="s">${t.s}</span></div>`).join('');
+function fit(){
+  const cssW = cv.clientWidth || 1280;
+  const dpr = Math.min(devicePixelRatio||1, 2);
+  cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssW*0.5625*dpr);
+  W = cv.width; H = cv.height; CX = W/2; CY = H/2;
+  R = Math.min(W,H)*0.40;
+  ctx.setTransform(1,0,0,1,0,0);
+}
+addEventListener('resize', fit); fit();
 
-document.getElementById('mapmeta').textContent =
-  `${D.counts.online} online · ${D.counts.total} registered`;
+const TILT = -0.38;                       // look slightly down on the north
+let spin = 0;
 
-/* ─────────── world map ─────────────
-   No basemap: 4,402 real station coordinates draw the coastlines themselves,
-   which is a truer picture than an outline would be. */
-const map = document.getElementById('map');
-const NS = "http://www.w3.org/2000/svg";
-const X = lon => (lon+180)/360*960, Y = lat => (90-lat)/180*470;
-let g = `<g stroke="var(--rule)" stroke-width=".6" opacity=".55">`;
-for(let lon=-150; lon<=150; lon+=30) g += `<line x1="${X(lon)}" y1="0" x2="${X(lon)}" y2="470"/>`;
-for(let lat=-60; lat<=60; lat+=30) g += `<line x1="0" y1="${Y(lat)}" x2="960" y2="${Y(lat)}"/>`;
-g += `</g>`;
-g += `<g fill="var(--ink-3)" opacity=".5">` +
-  D.stations.filter(s=>!s[2]).map(s=>`<circle cx="${X(s[1]).toFixed(1)}" cy="${Y(s[0]).toFixed(1)}" r="1.5"/>`).join('') + `</g>`;
-g += `<g fill="var(--ok)">` +
-  D.stations.filter(s=>s[2]).map(s=>`<circle cx="${X(s[1]).toFixed(1)}" cy="${Y(s[0]).toFixed(1)}" r="2.6"/>`).join('') + `</g>`;
-map.innerHTML = g;
-
-/* ─────────── growth chart ─────────── */
-const G = D.growth.filter(r=>r.year>=2015);
-const maxS = Math.max(...G.map(r=>r.cum_sats));
-const gx = i => 46 + i*(552/(G.length-1));
-const gy = v => 200 - (v/maxS)*168;
-const line = (key,color) => `<polyline fill="none" stroke="${color}" stroke-width="2"
-  stroke-linejoin="round" points="${G.map((r,i)=>`${gx(i).toFixed(1)},${gy(r[key]).toFixed(1)}`).join(' ')}"/>`;
-let gc = `<g stroke="var(--rule)" stroke-width="1">`;
-[0,5000,10000,15000].forEach(v=>{ gc += `<line x1="46" y1="${gy(v).toFixed(1)}" x2="598" y2="${gy(v).toFixed(1)}"/>`; });
-gc += `</g><g font-family="ui-monospace,Menlo,monospace" font-size="9.5" fill="var(--ink-3)">`;
-[0,5000,10000,15000].forEach(v=>{ gc += `<text x="40" y="${(gy(v)+3).toFixed(1)}" text-anchor="end">${v/1000||0}k</text>`; });
-G.forEach((r,i)=>{ if(r.year%2===1) gc += `<text x="${gx(i).toFixed(1)}" y="218" text-anchor="middle">${r.year}</text>`; });
-gc += `</g>` + line('cum_dishes','var(--c2)') + line('cum_sats','var(--c1)');
-gc += `<text x="598" y="${(gy(maxS)-7).toFixed(1)}" text-anchor="end" font-family="ui-monospace,Menlo,monospace"
-   font-size="11" font-weight="650" fill="var(--c1)">14,978 satellites</text>`;
-gc += `<text x="598" y="${(gy(G[G.length-1].cum_dishes)+16).toFixed(1)}" text-anchor="end"
-   font-family="ui-monospace,Menlo,monospace" font-size="11" font-weight="650" fill="var(--c2)">4,402 dishes</text>`;
-document.getElementById('growth').innerHTML = gc;
-
-/* ─────────── who is competing ─────────── */
-const totalPop = AGENTS.reduce((a,x)=>a+x.pop,0);
-document.getElementById('tax').innerHTML =
-  `<tr><th>Constituency</th><th>LEO satellites</th><th>Share</th></tr>` +
-  AGENTS.slice().sort((a,b)=>b.pop-a.pop).map(a=>
-    `<tr><td><i class="sw" style="background:${a.color}"></i>${a.name}</td>
-     <td>${a.pop.toLocaleString()}</td><td>${(100*a.pop/totalPop).toFixed(1)}%</td></tr>`).join('');
-
-/* ─────────── agent roster ─────────── */
-document.getElementById('agents').innerHTML =
-  AGENTS.map(a=>`<div class="agent" id="ag-${a.id}" style="--ac:${a.color}">
-    <div class="top"><span class="nm">${a.name}</span>
-      <span class="ct">${a.pop.toLocaleString()} sats</span></div>
-    <div class="val">${a.value}</div>
-    <div class="bar"><span style="width:0%"></span></div></div>`).join('') +
-  `<div class="agent safety"><div class="top"><span class="nm">${SAFETY.name}</span>
-     <span class="ct">veto</span></div><div class="val">${SAFETY.value}</div></div>`;
-
-/* ─────────── the decision feed ───────────
-   Deterministic, not random: the same sequence every run, so the thing can be
-   narrated live without surprises. Names are real satellites and real dishes. */
-const yielded = {};                       // "agent@dish" -> times given way
-let seed = 7, nDec = 0;
-const rnd = () => (seed = (seed*1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
-const pick = a => a[Math.floor(rnd()*a.length)];
-
-function contention(){
-  const dish = pick(D.dishes);
-  const n = 2 + Math.floor(rnd()*2.4);                     // 2-4 constituencies
-  const pool = AGENTS.slice().sort(()=>rnd()-.5).slice(0,n);
-
-  const crit = rnd() < 0.18 ? pick(CRITICAL) : null;
-  const critOn = crit ? pick(pool) : null;
-
-  const claims = pool.map(a=>{
-    const key = a.id+"@"+dish.name;
-    const gave = yielded[key] || 0;
-    // fairness dominates; population does NOT buy priority -- that is the point
-    const score = Math.min(0.97, 0.18 + gave*0.22 + rnd()*0.30);
-    return {a, gave, score, sat:pick(a.sats)};
-  }).sort((x,y)=>y.score-x.score);
-
-  let win = claims[0], veto = false, why;
-  if (win.gave > 0) why = `<b>${win.a.name}</b> yielded ${win.gave}× at this dish — its turn.`;
-  else why = `No history here. <b>${win.a.name}</b> made the strongest claim.`;
-
-  if (critOn && critOn.id !== win.a.id){
-    const c = claims.find(c=>c.a.id===critOn.id);
-    veto = true;
-    why = `<b>SAFETY VETO</b> — ${c.sat} has a ${crit[0]} (${crit[1]}). Fairness said ${win.a.name}; overruled.`;
-    win = c;
-  }
-
-  claims.forEach(c=>{ if(c.a.id!==win.a.id) yielded[c.a.id+"@"+dish.name]=(yielded[c.a.id+"@"+dish.name]||0)+1; });
-
-  const now = new Date();
-  const el = document.createElement('div');
-  el.className = 'dec';
-  el.innerHTML =
-    `<div class="hdr"><span class="t">${now.toISOString().slice(11,19)}</span>
-       <span class="st">${dish.name}</span>
-       <span class="tag ${veto?'veto':(win.gave>0?'memory':'')}">${veto?'VETO':(win.gave>0?'MEMORY':'FIRST PASS')}</span></div>` +
-    claims.map(c=>`<div class="arg ${c.a.id===win.a.id?'':'lost'}" style="--ac:${c.a.color}">
-       <span class="who">${c.a.name}</span><span class="sat">${c.sat}</span>
-       <span class="sc">${c.score.toFixed(2)}</span></div>`).join('') +
-    `<div class="verdict ${veto?'veto':''}">${why}</div>`;
-
-  const feed = document.getElementById('feed');
-  feed.prepend(el);
-  while (feed.children.length > 14) feed.lastChild.remove();
-  document.getElementById('deccount').textContent = `${++nDec} resolved`;
-
-  // reflect the winning constituency's standing in the roster bars
-  claims.forEach(c=>{
-    const bar = document.querySelector(`#ag-${c.a.id} .bar span`);
-    if (bar) bar.style.width = Math.round(c.score*100)+'%';
-  });
+function toXYZ(latDeg, lonDeg, alt=1){
+  const la = latDeg*Math.PI/180, lo = lonDeg*Math.PI/180 + spin;
+  return [alt*Math.cos(la)*Math.cos(lo), alt*Math.cos(la)*Math.sin(lo), alt*Math.sin(la)];
+}
+function project(p){
+  // rotate about x for tilt; +y is toward the viewer
+  const [x,y,z] = p;
+  const zz = z*Math.cos(TILT) - y*Math.sin(TILT);
+  const yy = z*Math.sin(TILT) + y*Math.cos(TILT);
+  return {sx: CX + x*R, sy: CY - zz*R, depth: yy};   // depth>0 = front face
 }
 
-/* ══════════════ NETWORK CONTACT VIEW ══════════════
-   Three dishes on one strip, each with its own sky. Satellites arc overhead
-   and only count above the 10 degree mask.
+/* ══════════ the fleet ══════════ */
+const SATS = AG.flatMap((a,ai)=>[0,1,2].map(k=>({
+  ag:a, name:a.sats[(ai*3+k*4)%a.sats.length],
+  inc: 52 + ((ai*13+k*29)%46),            // inclination, degrees
+  raan:(ai*97 + k*53) % 360,              // ascending node
+  u:   (ai*0.31 + k*0.44)%1,              // position along the orbit
+  rate:0.00055 + ((ai+k)%3)*0.00010,
+  alt: 1.14 + ((ai+k)%3)*0.035,
+  backlog: 14 + ((ai*7+k*11)%78),
+  yielded:0, held:0, handed:null,
+})));
 
-   The point of this panel is what happens to the LOSER. When a satellite is
-   denied at one dish, the coordinator agent triages it across the whole
-   network: it either re-homes it to another dish (an arc flies across the
-   strip) or decides waiting for its own next pass is genuinely better. That
-   second answer matters -- re-homing into a slot a more urgent satellite needs
-   in four minutes just moves the problem. */
-const sky = document.getElementById('sky');
-const GROUND = 236, DOME_RX = 132, DOME_RY = 104;
-const SITES = D.dishes.slice(0,3).map((d,i)=>({ ...d, x: 160 + i*320, queue: [] }));
+function satLatLon(s){
+  const u = s.u*2*Math.PI, inc = s.inc*Math.PI/180, raan = s.raan*Math.PI/180;
+  const lat = Math.asin(Math.sin(inc)*Math.sin(u));
+  const lon = raan + Math.atan2(Math.cos(inc)*Math.sin(u), Math.cos(u));
+  return [lat*180/Math.PI, ((lon*180/Math.PI + 540)%360)-180];
+}
 
-const FLEET = AGENTS.flatMap((a,ai) => [0,1,2].map(k => {
-  const site = (ai + k) % SITES.length;
-  return {
-    agent:a, site, name:a.sats[(ai*3+k*4) % a.sats.length],
-    phase:((ai*0.19 + k*0.37) % 1), speed:0.00042 + ((ai+k)%4)*0.00009,
-    height:0.70 + ((ai*2+k)%4)*0.10, backlog:12 + ((ai*11+k*17)%80),
-    yielded:0, rehomed:null, waiting:0,
-  };
-}));
+/* dishes we actually broker for — the named, globally spread ones */
+const DISH = D.dishes.map(d=>({...d, holder:null, queue:[]}));
 
-const elev = s => Math.sin(Math.PI*s.phase)*90*s.height;
-const posOf = s => {
-  const site = SITES[s.site];
-  return { x: site.x + Math.cos(Math.PI*(1-s.phase))*DOME_RX,
-           y: GROUND - Math.sin(Math.PI*s.phase)*DOME_RY*s.height };
+const angDist = (a,b) => {          // great-circle degrees between two lat/lons
+  const [la1,lo1]=a.map(v=>v*Math.PI/180), [la2,lo2]=b.map(v=>v*Math.PI/180);
+  return Math.acos(Math.max(-1,Math.min(1,
+    Math.sin(la1)*Math.sin(la2)+Math.cos(la1)*Math.cos(la2)*Math.cos(lo2-lo1))))*180/Math.PI;
 };
-const nextPassMin = s => Math.max(2, Math.round((1-s.phase+0.3)/s.speed/1000/5));
 
-let holders = SITES.map(()=>null), lastEval = 0, triage = [], evalCount = 0;
+let handovers = 0, current = null, lastDecide = 0;
 
-function staticLayer(){
-  const maskY = GROUND - Math.sin(Math.PI*(10/90))*DOME_RY;
-  let h = '';
-  SITES.forEach(site=>{
-    h += `<path d="M ${site.x-DOME_RX} ${GROUND} A ${DOME_RX} ${DOME_RY} 0 0 1 ${site.x+DOME_RX} ${GROUND}"
-            fill="none" stroke="var(--rule)" stroke-width="1"/>`;
-    h += `<line x1="${site.x-DOME_RX}" y1="${maskY.toFixed(1)}" x2="${site.x+DOME_RX}" y2="${maskY.toFixed(1)}"
-            stroke="var(--rule)" stroke-width="1" stroke-dasharray="3 4"/>`;
-    h += `<g transform="translate(${site.x},${GROUND})">
-        <path d="M -15 0 A 15 15 0 0 1 15 0 Z" fill="var(--ink-3)" opacity=".45"/>
-        <line x1="0" y1="0" x2="0" y2="14" stroke="var(--ink-3)" stroke-width="2.5"/>
-        <line x1="-10" y1="14" x2="10" y2="14" stroke="var(--ink-3)" stroke-width="2.5"/></g>`;
-    h += `<text x="${site.x}" y="${GROUND+30}" text-anchor="middle"
-            font-family="ui-monospace,Menlo,monospace" font-size="10" font-weight="650"
-            fill="var(--ink-2)">${site.name}</text>`;
-  });
-  h += `<line x1="0" y1="${GROUND}" x2="960" y2="${GROUND}" stroke="var(--ink-3)" stroke-width="1.5"/>`;
-  h += `<text x="12" y="${(maskY-6).toFixed(1)}" font-family="ui-monospace,Menlo,monospace"
-          font-size="9" fill="var(--ink-3)">10° mask</text>`;
-  h += `<g id="rehome"></g><g id="sats"></g><g id="coord"></g>`;
-  sky.innerHTML = h;
-}
-staticLayer();
+function decide(now){
+  let contested = 0;
+  DISH.forEach(d=>{
+    const inRange = SATS.filter(s => angDist([d.lat,d.lon], satLatLon(s)) < 22);
+    if (inRange.length > 1) contested++;
+    if (!inRange.length){ d.holder = null; return; }
 
-document.getElementById('skylegend').innerHTML =
-  AGENTS.map(a=>`<span><i style="background:${a.color}"></i>${a.name}</span>`).join('') +
-  `<span style="margin-left:auto">solid beam = holds the window · arc = coordinator re-homed it</span>`;
+    // a satellite is critical only occasionally — an emergency, not a state
+    inRange.forEach(s=>s.crit=false);
+    if (Math.random() < 0.10) inRange[Math.floor(Math.random()*inRange.length)].crit = true;
 
-/* the coordinator's rule, mirroring rentechau~coordinator's brief:
-   never re-home into a worse fight; waiting is a legitimate answer. */
-function coordinate(loser, now){
-  const options = SITES.map((site,i)=>{
-    if (i === loser.site) return null;
-    const incoming = FLEET.filter(f => f.site===i && elev(f)>10 && f!==loser);
-    const blocker = incoming.find(f => f.agent.id==='earth-obs' || f.critical);
-    const free = SITES[i].queue.length;
-    return {i, site, eta: 3 + free*4 + i*2, blocker, free};
-  }).filter(Boolean).sort((a,b)=>a.eta-b.eta);
+    const crit = inRange.find(s=>s.crit);
+    // FAIRNESS: whoever has given way most often here. Population buys nothing.
+    const win = crit || inRange.slice().sort((a,b)=> b.yielded-a.yielded || b.backlog-a.backlog)[0];
 
-  const usable = options.find(o => !o.blocker);
-  const own = nextPassMin(loser);
+    if (d.holder && d.holder !== win) handovers++;
+    d.holder = win; win.held++;
 
-  if (!usable || own < usable.eta){
-    loser.rehomed = null; loser.waiting = own;
-    return {action:'wait', sat:loser,
-      text:`waits ${own} min for its own pass — ${usable? 'alternatives are contested':'no free dish'}`};
-  }
-  loser.rehomed = {to: usable.i, until: now + 2600};
-  loser.waiting = 0;
-  return {action:'rehome', sat:loser, to:usable.site.name,
-    text:`re-homed to ${usable.site.name} in ${usable.eta} min`};
-}
+    const losers = inRange.filter(s=>s!==win);
+    losers.forEach(s=>{ s.yielded++; s.handed = {at:now, from:d}; });
 
-function frame(now){
-  FLEET.forEach(s => s.phase = (s.phase + s.speed) % 1);
-
-  if (now - lastEval > 4200){
-    lastEval = now; triage = []; evalCount++;
-    FLEET.forEach(s => s.critical = false);
-    SITES.forEach(s => s.queue = []);
-
-    SITES.forEach((site, i) => {
-      const up = FLEET.filter(s => s.site===i && elev(s)>10);
-      if (!up.length){ holders[i] = null; return; }
-      if (Math.random() < 0.16) up[Math.floor(Math.random()*up.length)].critical = true;
-
-      const crit = up.find(s => s.critical);
-      const win = crit || up.slice().sort((a,b)=> b.yielded-a.yielded || b.backlog-a.backlog)[0];
-      holders[i] = win;
-      // everyone else is deprioritised -- and that is what the coordinator picks up
-      up.filter(s => s!==win).forEach(s => {
-        s.yielded++; site.queue.push(s);
-        triage.push(coordinate(s, now));
-      });
-    });
-  }
-
-  // satellites + beams
-  document.getElementById('sats').innerHTML = FLEET.map(s => {
-    const p = posOf(s), up = elev(s) > 10, held = holders[s.site]===s;
-    let g = '';
-    if (held){
-      const site = SITES[s.site];
-      g += `<line x1="${site.x}" y1="${GROUND-4}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}"
-        stroke="${s.critical?'var(--crit)':s.agent.color}" stroke-width="2"
-        stroke-dasharray="7 5" stroke-dashoffset="${(-now/45)%12}"/>`;
+    if (inRange.length > 1 && (!current || now - current.t > 3400)){
+      current = {t:now, dish:d, win, losers, crit:!!crit,
+        why: crit ? `<b>SAFETY OVERRIDE</b> — ${win.name} is carrying a conjunction warning; it cannot wait an orbit.`
+           : (win.yielded>0 ? `<b>${win.ag.name}</b> has given way ${win.yielded}× at this dish — its turn.`
+                            : `No history here. <b>${win.ag.name}</b> holds the strongest claim.`)};
     }
-    g += `<g opacity="${up?1:.22}">
-      <circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="${held?6.5:4.5}"
-        fill="${s.critical?'var(--crit)':s.agent.color}" stroke="var(--surface)" stroke-width="2"/>
-      ${up?`<text x="${p.x.toFixed(1)}" y="${(p.y-11).toFixed(1)}" text-anchor="middle"
-        font-family="ui-monospace,Menlo,monospace" font-size="8.5"
-        fill="${held?'var(--ink)':'var(--ink-3)'}">${s.name.slice(0,14)}</text>`:''}</g>`;
-    return g;
-  }).join('');
-
-  // re-home arcs flying between dishes
-  document.getElementById('rehome').innerHTML = FLEET.filter(s=>s.rehomed && now < s.rehomed.until)
-    .map(s=>{
-      const from = posOf(s), to = SITES[s.rehomed.to];
-      const mx = (from.x+to.x)/2, my = Math.min(from.y, GROUND-DOME_RY) - 34;
-      const t = 1 - (s.rehomed.until - now)/2600;
-      const bx = (1-t)*(1-t)*from.x + 2*(1-t)*t*mx + t*t*to.x;
-      const by = (1-t)*(1-t)*from.y + 2*(1-t)*t*my + t*t*(GROUND-10);
-      return `<path d="M ${from.x.toFixed(1)} ${from.y.toFixed(1)} Q ${mx.toFixed(1)} ${my.toFixed(1)}
-          ${to.x} ${GROUND-10}" fill="none" stroke="${s.agent.color}" stroke-width="1.3"
-          stroke-dasharray="4 4" opacity=".55"/>
-        <circle cx="${bx.toFixed(1)}" cy="${by.toFixed(1)}" r="3.5" fill="${s.agent.color}"/>`;
-    }).join('');
-
-  // coordinator panel under the horizon
-  const rows = triage.slice(0,4);
-  document.getElementById('coord').innerHTML =
-    `<text x="14" y="${GROUND+62}" font-family="ui-monospace,Menlo,monospace" font-size="9.5"
-       letter-spacing=".1em" fill="var(--ink-3)">COORDINATOR · TRIAGING ${triage.length} DEPRIORITISED — EVAL #${evalCount}</text>` +
-    rows.map((r,i)=>`<g transform="translate(14,${GROUND+82+i*22})">
-      <circle cx="4" cy="-4" r="4" fill="${r.sat.agent.color}"/>
-      <text x="16" y="0" font-family="ui-monospace,Menlo,monospace" font-size="10"
-        fill="var(--ink-2)">${r.sat.name.slice(0,20)}</text>
-      <text x="210" y="0" font-family="ui-monospace,Menlo,monospace" font-size="9.5"
-        fill="var(--ink-3)">yielded ${r.sat.yielded}×</text>
-      <text x="300" y="0" font-family="ui-monospace,Menlo,monospace" font-size="10"
-        fill="${r.action==='rehome'?'var(--ok)':'var(--c2)'}">${r.action==='rehome'?'REHOME':'WAIT'}</text>
-      <text x="372" y="0" font-family="ui-monospace,Menlo,monospace" font-size="9.5"
-        fill="var(--ink-3)">${r.text}</text></g>`).join('');
-
-  document.getElementById('skymeta').textContent =
-    `${FLEET.filter(s=>elev(s)>10).length} in view across ${SITES.length} dishes · ` +
-    `${triage.filter(t=>t.action==='rehome').length} re-homed, ${triage.filter(t=>t.action==='wait').length} waiting`;
-
-  if (ANIMATE) requestAnimationFrame(frame);
-}
-const ANIMATE = !matchMedia('(prefers-reduced-motion: reduce)').matches;
-if (ANIMATE) requestAnimationFrame(frame);
-else { frame(0); setInterval(()=>frame(performance.now()), 4200); }
-
-const tick = () => { document.getElementById('utc').textContent = new Date().toISOString().slice(11,19); };
-tick(); setInterval(tick, 1000);
-
-/* ─────────── LIVE MODE ───────────
-   Served locally alongside src/live_feed.py, the feed shows decisions that
-   really came back from Guild.ai. If that file is absent -- which it always is
-   on the published artifact, where the sandbox blocks outbound calls -- fall
-   back to the scripted replay and SAY SO in the header. A replay must never be
-   mistaken for live agent output. */
-const feedEl = document.getElementById('feed');
-const modeEl = document.getElementById('mode');
-let liveSeen = new Set(), replayTimer = null;
-
-function renderLive(list){
-  feedEl.innerHTML = list.slice(0,14).map(d=>{
-    const names = Object.keys(d.backlogs||{});
-    const rows = names.map(n=>{
-      const a = AGENTS.find(x=>x.name===n) || {color:'var(--ink-3)'};
-      return `<div class="arg ${n===d.winner?'':'lost'}" style="--ac:${a.color}">
-        <span class="who">${n}</span>
-        <span class="sat">${(d.sats&&d.sats[n])||''}</span>
-        <span class="sc">${d.backlogs[n]} GB</span></div>`;
-    }).join('');
-    return `<div class="dec"><div class="hdr">
-        <span class="t">${d.ts.slice(11,19)}</span>
-        <span class="st">${d.dish}</span>
-        <span class="tag ${d.veto?'veto':''}">${d.veto?'VETO':'RESOLVED'}</span></div>
-      ${rows}
-      <div class="verdict ${d.veto?'veto':''}">${d.why.replace(/^SAFETY VETO/,'<b>SAFETY VETO</b>')}</div>
-      <div class="src">guild.ai · ${d.seconds}s round trip</div></div>`;
-  }).join('');
-  document.getElementById('deccount').textContent = `${list.length} resolved`;
+  });
+  document.getElementById('ncont').textContent = contested;
+  document.getElementById('nhand').textContent = handovers;
 }
 
-async function pollLive(){
-  try{
-    const r = await fetch('live_decisions.json?t='+Date.now(), {cache:'no-store'});
-    if(!r.ok) throw 0;
-    const j = await r.json();
-    if(!j.decisions || !j.decisions.length) throw 0;
-    if(replayTimer){ clearInterval(replayTimer); replayTimer=null; feedEl.innerHTML=''; }
-    modeEl.textContent = 'LIVE · GUILD.AI';
-    modeEl.classList.add('live');
-    renderLive(j.decisions);
-    return true;
-  }catch(e){ return false; }
+function renderNow(){
+  if (!current) return;
+  const c = current, rows = [c.win, ...c.losers].slice(0,4);
+  document.getElementById('now').innerHTML =
+    `<div class="top"><span class="dish">${c.dish.name}</span>
+       <span class="badge ${c.crit?'veto':(c.win.yielded>0?'mem':'')}">${c.crit?'SAFETY OVERRIDE':(c.win.yielded>0?'MEMORY':'FIRST CONTACT')}</span></div>` +
+    rows.map(s=>`<div class="row ${s===c.win?'win':'lost'} ${s.crit?'crit':''}" style="--ac:${s.ag.c}">
+        <span class="nm">${s.ag.name}</span><span class="sat">${s.name}</span>
+        <span class="out">${s===c.win?'▲ GRANTED':`handed over · yielded ${s.yielded}×`}</span></div>`).join('') +
+    `<div class="why ${c.crit?'veto':''}">${c.why}</div>`;
 }
 
-async function boot(){
-  const live = await pollLive();
-  if(live){ setInterval(pollLive, 2500); return; }
-  modeEl.textContent = 'REPLAY · SCRIPTED';
-  contention(); contention();
-  replayTimer = setInterval(contention, 3200);
-  setInterval(async ()=>{ if(!replayTimer) return; await pollLive(); }, 6000);
+function draw(now){
+  spin += 0.00042;
+  ctx.clearRect(0,0,W,H);
+
+  // limb
+  ctx.beginPath(); ctx.arc(CX,CY,R,0,7); ctx.fillStyle = 'rgba(78,143,224,0.055)'; ctx.fill();
+  ctx.strokeStyle = 'rgba(120,150,190,0.35)'; ctx.lineWidth = 1; ctx.stroke();
+
+  // graticule, front face only
+  ctx.strokeStyle = 'rgba(120,150,190,0.14)';
+  for (let lat=-60; lat<=60; lat+=30){
+    ctx.beginPath(); let started=false;
+    for (let lon=-180; lon<=180; lon+=4){
+      const p = project(toXYZ(lat,lon));
+      if (p.depth<=0){ started=false; continue; }
+      started ? ctx.lineTo(p.sx,p.sy) : (ctx.moveTo(p.sx,p.sy), started=true);
+    }
+    ctx.stroke();
+  }
+  for (let lon=-180; lon<180; lon+=30){
+    ctx.beginPath(); let started=false;
+    for (let lat=-88; lat<=88; lat+=4){
+      const p = project(toXYZ(lat,lon));
+      if (p.depth<=0){ started=false; continue; }
+      started ? ctx.lineTo(p.sx,p.sy) : (ctx.moveTo(p.sx,p.sy), started=true);
+    }
+    ctx.stroke();
+  }
+
+  // every registered dish — these dots draw the continents
+  for (const st of D.stations){
+    const p = project(toXYZ(st[0], st[1]));
+    if (p.depth <= 0) continue;
+    const shade = 0.30 + 0.70*p.depth;
+    ctx.fillStyle = st[2] ? `rgba(63,168,114,${0.55+0.45*p.depth})`
+                          : `rgba(120,140,165,${0.16*shade})`;
+    ctx.beginPath(); ctx.arc(p.sx, p.sy, st[2]?1.9:1.1, 0, 7); ctx.fill();
+  }
+
+  // brokered dishes
+  for (const d of DISH){
+    const p = project(toXYZ(d.lat,d.lon));
+    if (p.depth <= 0) continue;
+    ctx.beginPath(); ctx.arc(p.sx,p.sy,4.5,0,7);
+    ctx.fillStyle = d.holder ? d.holder.ag.c : 'rgba(150,170,195,.55)'; ctx.fill();
+    ctx.strokeStyle = 'rgba(8,12,18,.9)'; ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.font = '600 10px ui-monospace,Menlo,monospace';
+    ctx.fillStyle = 'rgba(147,163,182,.85)'; ctx.textAlign = 'center';
+    ctx.fillText(d.name.slice(0,16), p.sx, p.sy + 17);
+  }
+
+  // orbit traces + satellites, back hemisphere first so depth reads correctly
+  SATS.forEach(s => s.u = (s.u + s.rate) % 1);
+  const drawn = SATS.map(s=>{
+    const [la,lo] = satLatLon(s);
+    return {s, p: project(toXYZ(la,lo,s.alt)), la, lo};
+  }).sort((a,b)=>a.p.depth-b.p.depth);
+
+  for (const {s,p,la,lo} of drawn){
+    const front = p.depth > 0;
+    // faint orbit path
+    ctx.beginPath(); let started=false;
+    for (let k=0;k<=90;k++){
+      const uu = k/90, save = s.u; s.u = uu;
+      const [a,b] = satLatLon(s); s.u = save;
+      const q = project(toXYZ(a,b,s.alt));
+      if (q.depth<=0 && Math.hypot(q.sx-CX,q.sy-CY) < R){ started=false; continue; }
+      started ? ctx.lineTo(q.sx,q.sy) : (ctx.moveTo(q.sx,q.sy), started=true);
+    }
+    ctx.strokeStyle = s.ag.c + '22'; ctx.lineWidth = 1; ctx.stroke();
+
+    // link beam to whichever dish it is serving
+    const serving = DISH.find(d=>d.holder===s);
+    if (serving && front){
+      const dp = project(toXYZ(serving.lat, serving.lon));
+      if (dp.depth > 0){
+        ctx.beginPath(); ctx.moveTo(dp.sx,dp.sy); ctx.lineTo(p.sx,p.sy);
+        ctx.strokeStyle = s.crit ? '#f97066' : s.ag.c;
+        ctx.lineWidth = 1.8; ctx.setLineDash([]); ctx.globalAlpha = .95;
+        ctx.stroke(); ctx.globalAlpha = 1;
+      }
+    }
+    // a recent handover shows as a dotted link to the dish it just lost
+    if (s.handed && now - s.handed.at < 2600 && front){
+      const dp = project(toXYZ(s.handed.from.lat, s.handed.from.lon));
+      if (dp.depth > 0){
+        ctx.beginPath(); ctx.moveTo(dp.sx,dp.sy); ctx.lineTo(p.sx,p.sy);
+        ctx.strokeStyle = s.ag.c; ctx.lineWidth = 1; ctx.setLineDash([3,4]);
+        ctx.globalAlpha = .45 * (1 - (now-s.handed.at)/2600);
+        ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha = 1;
+      }
+    }
+
+    const held = !!serving;
+    ctx.globalAlpha = front ? 1 : 0.20;
+    ctx.beginPath(); ctx.arc(p.sx,p.sy, held?5.5:3.6, 0, 7);
+    ctx.fillStyle = s.crit ? '#f97066' : s.ag.c; ctx.fill();
+    if (held){ ctx.strokeStyle='rgba(232,238,246,.85)'; ctx.lineWidth=1.4; ctx.stroke(); }
+    if (front && held){
+      ctx.font='10px ui-monospace,Menlo,monospace'; ctx.textAlign='center';
+      ctx.fillStyle='rgba(232,238,246,.9)';
+      ctx.fillText(s.name.slice(0,16), p.sx, p.sy-11);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  if (now - lastDecide > 1400){ lastDecide = now; decide(now); renderNow(); }
+  requestAnimationFrame(draw);
 }
-boot();
+decide(0); renderNow(); requestAnimationFrame(draw);
+
+setInterval(()=>{ document.getElementById('clock').textContent =
+  new Date().toISOString().slice(11,19)+' UTC'; }, 1000);
+
+/* ══════════ the framework ══════════
+   Factory's method, from their Memory Meets Motion talk, with what each step
+   is in this system. Their wording on the left, ours on the right. */
+const STEPS = [
+  ["01","Start with the outcome",
+   "Define each job by the result it must produce, not the steps to get there.",
+   "A <b>contested pass</b> defines the job — “who gets this window” — not how to schedule it.", "var(--c1)"],
+  ["02","Split the responsibility",
+   "Give every agent exactly one judgment to own, so no decision has two masters.",
+   "Four <b>advocates</b> own the claim, a <b>safety officer</b> owns the veto, a <b>coordinator</b> owns network placement. One judgment each.", "var(--c2)"],
+  ["03","Pass real artifacts",
+   "Agents hand each other records that can be checked later — never loose conversation.",
+   "JSON claims, <b>YIELDED edges</b> in the graph, and tasking commands carry the work — not chat.", "var(--c3)"],
+  ["04","Verify every handoff",
+   "Nothing takes effect until an independent check has seen it.",
+   "The safety officer reviews <b>every</b> verdict before it executes, and can reverse it.", "var(--c4)"],
+  ["05","Loop on findings",
+   "Every outcome is fed back in, so the next decision starts smarter than the last.",
+   "The concession is <b>written back to the graph</b> and changes the next decision. That loop is the memory.", "var(--c1)"],
+  ["06","Reuse the pattern",
+   "The method is domain-agnostic — swap the nouns and it still holds.",
+   "This engine ran a <b>smart home</b> this morning. Same logic, different graph — we only swapped the domain.", "var(--c2)"],
+];
+document.getElementById('steps').innerHTML = STEPS.map(([n,h,them,us,c])=>
+  `<div class="step" style="--ac:${c}"><span class="n">${n}</span><h3>${h}</h3>
+   <p class="them">${them}</p><p class="us">${us}</p></div>`).join('');
+
+/* ══════════ asset topology, in their shape ══════════
+   Theirs runs Modem → Switch → Firewall → Access point → devices.
+   Ours is the ground segment: the chain a byte of science data travels. */
+document.getElementById('chain').innerHTML =
+  `<span class="node fill" style="--ac:var(--c1)">Constituency</span>
+   <span class="arrow">→</span>
+   <span class="node" style="--ac:var(--c1)">Satellite</span>
+   <span class="arrow">→</span>
+   <span class="node" style="--ac:var(--c4)">Laser link</span>
+   <span class="arrow">→</span>
+   <span class="node" style="--ac:var(--c4)">Relay satellite</span>
+   <span class="arrow">→</span>
+   <span class="node" style="--ac:var(--c3)">Ground station</span>
+   <span class="arrow">→</span>
+   <span class="leaves">
+     <span class="node leaf">antenna</span>
+     <span class="node leaf">downlink window</span>
+     <span class="node leaf">payload</span>
+   </span>`;
+document.getElementById('chainstat').innerHTML =
+  `At present that is <b>${D.counts.total.toLocaleString()} station subgraphs</b>, ` +
+  `<b>${D.counts.online}</b> of them live, against <b>${D.world.leo.toLocaleString()}</b> satellites.`;
+
+document.getElementById('pathviz').innerHTML =
+  ['Dish','in view','SAT-A','YIELDED','SAT-B','in view','Dish']
+    .map(s=>`<span class="p">${s}</span>`).join('<span class="arrow">→</span>');
 
 document.getElementById('foot').innerHTML =
-  `Orbits <b>CelesTrak</b> TLE · ground stations <b>SatNOGS</b> network API · propagator <b>sgp4</b>. ` +
-  `Population and dish figures are measured, from ${D.world.days} sampled 24-hour windows across a year — ` +
-  `not a continuous year, because a TLE is only accurate for days to weeks. ` +
-  `The decision feed is a scripted replay of the broker's own logic over real satellite and dish names.`;
+  `Ground stations <b>SatNOGS</b> (${D.counts.total.toLocaleString()} registered, ${D.counts.online} online) · ` +
+  `population <b>CelesTrak</b> · propagator <b>sgp4</b>. The globe animates representative orbits, ` +
+  `not live positions — measured pass geometry lives in the 24-hour study. ` +
+  `Method from <b>Factory</b>'s Memory Meets Motion talk; grey is the principle, colour is how this system applies it.`;
 </script>
+
 
 </body>
 </html>
